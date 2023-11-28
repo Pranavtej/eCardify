@@ -1,6 +1,6 @@
 # eCardify
 
-Welcome to eCardify, your digital business card platform built with EJS.
+Welcome to eCardify, your digital business card platform .
 
 ## Overview
 
@@ -19,7 +19,7 @@ eCardify is a web application that allows users to create and share digital busi
 1. Clone the repository:
 
     ```bash
-    git clone https://github.com/your-username/eCardify.git
+    git clone
     ```
 
 2. Install dependencies:
