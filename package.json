@@ -9,14 +9,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/praneethmcr/IFL_BANK_APPLICATION.git"
+    "url": "git+https://github.com/Pranavtej/ecardify.git"
   },
   "author": "Pranav Teja",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/praneethmcr/IFL_BANK_APPLICATION/issues"
+    "url": "https://github.com/Pranavtej/ecardify/issues"
   },
-  "homepage": "https://github.com/praneethmcr/IFL_BANK_APPLICATION#readme",
+  "homepage": "https://github.com/Pranavtej/ecardify#readme",
   "dependencies": {
     "body-parser": "^1.20.2",
     "connect-memcached": "^2.0.0",
