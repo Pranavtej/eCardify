@@ -23,10 +23,9 @@ app.get("/",(req,res)=>{
     res.render("index.ejs");
 })
 
-
-
-
-
+app.get('/pranav',(req,res)=>{
+    res.send("hello");
+}
 
 app.listen(8000, function () {
     console.log('Server started at port 3000');
