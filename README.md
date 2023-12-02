@@ -34,7 +34,7 @@ eCardify is a web application that allows users to create and share digital busi
     npm start
     ```
 
-4. Open your browser and navigate to `http://localhost:3000` to access eCardify.
+4. Open your browser and navigate to `http://localhost:8000` to access eCardify.
 
 ## Usage
 
