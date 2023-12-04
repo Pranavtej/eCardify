@@ -1,0 +1,32 @@
+<!---create a login form with fields username and password -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/public/styles/style.css">
+
+</head>
+<body>
+    <div class="form-container">
+    <h2>Login</h2>
+    <form action="/login" method="POST">
+        <div class="form-group">
+            <label for="username">Username</label><br>
+            <input type="text" name="username" id="username" placeholder="Enter your username" required>
+        </div>
+        <div class="form-group"> 
+            <label for="password">Password</label><br>
+            <input type="password" name="password" id="password" placeholder="Enter your password" required>
+        </div>
+        <br>
+            <button type="submit" class="submit-btn">Login</button>
+    </form>
+    <p>Don't have an account? <a href="/register">Register</a></p>
+    </div>
+
+</body>
+</html>
