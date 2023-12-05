@@ -40,35 +40,31 @@ app.get('/register', async (req, res) => {
 );
 
 app.post('/register', async (req, res) => {
-    const data ={
+    const data = {
         username: req.body.username,
+        email: req.body.email,
         password: req.body.password
     }
 
-    // check if username already exists and password matches
+    // check if username or email already exists
+    const existingUser = await User.findOne({ $or: [{ username: data.username }, { email: data.email }] });
 
-    const exisitingUser = await User.findOne({username: data.username});
-    if(exisitingUser){
-        res.send("User already exists . please try again");
-
-    }
-    else{
-
-        // hashing the password 
-
+    if (existingUser) {
+        res.send("Username or email already exists. Please try again");
+    } else {
+        // hashing the password
         const saltRounds = 10;
         const hashedPassword = await bcrypt.hash(data.password, saltRounds);
 
         data.password = hashedPassword;
 
-       const user = new User(data);
-         await user.save();
-            res.send("User created successfully");
-            console.log("user");
+        const user = new User(data);
+        await user.save();
+        res.send("User created successfully");
+        console.log("user");
     }
 });
 
-//  user login route
 
 app.post('/login', async (req, res) => {
 

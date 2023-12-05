@@ -1,0 +1,39 @@
+/* Home 5: Hero */
+@media (min-width: 992px) {
+    .home-5_hero-image {
+      margin-right: -14%;
+    }
+  }
+  
+  @media (min-width: 992px) {
+    .home-9_hero-image {
+      margin: 0px -450px 0px 15px;
+    }
+  }
+  
+  /* Home 10: Hero */
+  @media (min-width: 992px) {
+    .home-10_hero-image {
+      margin-right: -7%;
+    }
+  }
+  
+  .home-10_service-video-block {
+    position: relative;
+  }
+  @media (min-width: 992px) {
+    .home-10_service-video-block .absolute-center {
+      top: 53%;
+      left: 44%;
+    }
+  }
+  .home-10_service-video-image img {
+    width: 100%;
+  }
+  @media (min-width: 992px) {
+    .home-10_service-video-image {
+      margin-left: -8%;
+      margin-right: 7%;
+    }
+  }
+  
