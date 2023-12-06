@@ -25,16 +25,24 @@ app.use(session({
     saveUninitialized: true
 }));
 
+
 app.get("/health", async (req, res) => {
     try {
-        // Check MongoDB connection
-        await conn.connection.db.admin().ping();
-        res.status(200).json({ status: 'MongoDB connection is healthy and running sucessful' });
+        
+        const result = await conn.connection.db.collection('users').find({}).limit(1).toArray();
+
+        console.log('MongoDB find query result:', result);
+        if (result && result.length > 0) {
+            res.status(200).json({ status: 'MongoDB connection is healthy and running successful' });
+        } else {
+            res.status(500).json({ status: 'MongoDB connection is healthy, but no data found' });
+        }
     } catch (error) {
         console.error('MongoDB connection error during health check:', error);
-        res.status(500).json({ status: 'MongoDB connection error'});
+        res.status(500).json({ status: 'MongoDB connection error' });
     }
 });
+
 
 
 app.get('/', function (req, res) {
