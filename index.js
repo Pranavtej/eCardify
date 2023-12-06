@@ -7,12 +7,15 @@ const app = express();
 const mongoose = require("mongoose");
 const User = require("./models/user");
 const bcrypt = require("bcrypt");
+const path = require('path');
+
 
 app.set("views", __dirname + "/views");
 app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
+
 
 app.use('/public', express.static(__dirname + "/public"));
 
@@ -32,12 +35,12 @@ app.get('/', function (req, res) {
 
 
 app.get('/login', async (req, res) => {
-    res.render('login');
+    res.render('login/login');
 }
 );
 
 app.get('/register', async (req, res) => {
-    res.render('register');
+    res.render('register/register');
 }
 );
 
@@ -97,18 +100,24 @@ app.post('/login', async (req, res) => {
 
 
 app.get('/about', function (req, res) {
-    res.render('about');
+    res.render('/views/about/about.ejs');
 });
 
 app.get('/contact', function (req, res) {
-    res.render('contact');
+    res.render('/views/contact/contact.ejs');
 }
 );
 
 
 
-
+app.get('/index.html', function (req, res) {
+    res.sendFile(path.join(__dirname,'views','admin','index.html'));
+}
+);
 
 app.listen(8000, function () {
     console.log('Server started at port 3000');
    })
+
+//admin login
+
