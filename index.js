@@ -62,10 +62,11 @@ app.post('/register', async (req, res) => {
 
         const user = new User(data);
         await user.save();
-        res.send("User created successfully");
-        console.log("user");
+
+        res.redirect('/login');
     }
 });
+
 
 app.post('/login', async (req, res) => {
     try {
