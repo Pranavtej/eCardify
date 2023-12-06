@@ -10,10 +10,12 @@ const bcrypt = require("bcrypt");
 
 app.set("views", __dirname + "/views");
 app.set("view engine", "ejs");
-app.use(express.static(__dirname + "public"));
+app.use(express.static(__dirname + "/public"));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
-app.use('/public', express.static('public'));
+
+app.use('/public', express.static(__dirname + "/public"));
+
 
 const defaultSessionSecret = 'mydefaultsecretkey';
 
@@ -65,30 +67,42 @@ app.post('/register', async (req, res) => {
     }
 });
 
-
 app.post('/login', async (req, res) => {
-
     try {
-        const check = await User.findOne({username: req.body.username});
-        if(!check){
-            res.send("User does not exist");
+        const input = req.body.usernameOrEmail;
+        const isEmail = /\S+@\S+\.\S+/.test(input);
+
+        let check;
+        if (isEmail) {
+            check = await User.findOne({ email: input });
+        } else {
+            check = await User.findOne({ username: input });
         }
-        else{
+
+        if (!check) {
+            res.send("User does not exist");
+        } else {
             const validPassword = await bcrypt.compare(req.body.password, check.password);
-            if(validPassword){
+            if (validPassword) {
                 res.redirect("/");
-            }
-            else{
+            } else {
                 res.send("Invalid password");
             }
         }
-    } catch  {
+    } catch (error) {
         res.status(400).send("Invalid username or password");
-
     }
 });
 
 
+app.get('/about', function (req, res) {
+    res.render('about');
+});
+
+app.get('/contact', function (req, res) {
+    res.render('contact');
+}
+);
 
 
 
