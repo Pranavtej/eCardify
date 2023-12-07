@@ -110,7 +110,7 @@ app.get('/contact', function (req, res) {
 
 
 
-app.get('/index.html', function (req, res) {
+app.get('/admin', function (req, res) {
     res.sendFile(path.join(__dirname,'views','admin','index.html'));
 }
 );
