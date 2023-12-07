@@ -6,9 +6,9 @@ const e = require('express');
 const app = express();
 const mongoose = require("mongoose");
 const User = require("./models/user");
+const Subplan1 = require("./models/subplan");
+const Bcard1 = require("./models/bcard");
 const bcrypt = require("bcrypt");
-const path = require('path');
-
 
 app.set("views", __dirname + "/views");
 app.set("view engine", "ejs");
@@ -63,11 +63,18 @@ app.get('/register', async (req, res) => {
 }
 );
 
+const fixedSubscriptionPlanId = new ObjectId('65713bcdd7d474d49b6823c4');
+const fixedExpiresAt = new Date('2023-12-31T23:59:59.999Z'); 
+
 app.post('/register', async (req, res) => {
     const data = {
         username: req.body.username,
         email: req.body.email,
-        password: req.body.password
+        password: req.body.password,
+        subscription : {
+            plan: fixedSubscriptionPlanId,
+            expiresAt: fixedExpiresAt
+        }
     }
 
     // check if username or email already exists
@@ -81,6 +88,7 @@ app.post('/register', async (req, res) => {
         const hashedPassword = await bcrypt.hash(data.password, saltRounds);
 
         data.password = hashedPassword;
+
 
         const user = new User(data);
         await user.save();
@@ -129,10 +137,7 @@ app.get('/contact', function (req, res) {
 
 
 
-app.get('/admin', function (req, res) {
-    res.sendFile(path.join(__dirname,'views','admin','index.html'));
-}
-);
+
 
 app.listen(8000, function () {
     console.log('Server started at port 3000');
