@@ -9,7 +9,7 @@ const User = require("./models/user");
 const Subplan1 = require("./models/subplan");
 const Bcard1 = require("./models/bcard");
 const bcrypt = require("bcrypt");
-
+const { ObjectId } = require('mongodb');
 app.set("views", __dirname + "/views");
 app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
@@ -134,9 +134,6 @@ app.get('/contact', function (req, res) {
     res.render('/views/contact/contact.ejs');
 }
 );
-
-
-
 
 
 app.listen(8000, function () {
