@@ -56,13 +56,16 @@
 * {
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
+  box-sizing:border-box;
+  width: auto;
+
 }
 
 body {
   font-family: var(--font-family-base);
   font-size: 1rem;
   line-height: 1.56;
+  height: 100%;
 }
 
 span,
@@ -6002,6 +6005,7 @@ li.nav-item-has-children.child-item:hover .fa-angle-right {
     cursor: pointer;
     align-items: center;
     justify-content: center;
+    position: fixed;
   }
   .site-header .mobile-menu-trigger span {
     display: block;
