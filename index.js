@@ -119,10 +119,13 @@ app.get('/contact', function (req, res) {
 
 
 app.listen(8000, function () {
-    console.log('Server started at port 3000');
+    console.log('Server started at port 8000');
    })
 
 //admin login
+
+
+
 
 app.get('/admin', async (req, res) => {
     try {
@@ -160,4 +163,5 @@ app.post('/admin', async (req, res) => {
         res.status(500).send("Internal Server Error");
     }
 });
+
 
