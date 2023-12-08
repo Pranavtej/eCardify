@@ -8,6 +8,7 @@ const mongoose = require("mongoose");
 const User = require("./models/user");
 const bcrypt = require("bcrypt");
 const path = require('path');
+const adminModel = require('./models/admin');
 
 
 app.set("views", __dirname + "/views");
@@ -43,6 +44,10 @@ app.get('/register', async (req, res) => {
     res.render('register/register');
 }
 );
+
+app.get('/adminlogin', async (req, res) => {
+    res.sendFile(path.join(__dirname,'views','admin','index.html'));
+});
 
 app.post('/register', async (req, res) => {
     const data = {
@@ -110,14 +115,49 @@ app.get('/contact', function (req, res) {
 
 
 
-app.get('/admin', function (req, res) {
-    res.sendFile(path.join(__dirname,'views','admin','index.html'));
-}
-);
+
+
 
 app.listen(8000, function () {
     console.log('Server started at port 3000');
    })
 
 //admin login
+
+app.get('/admin', async (req, res) => {
+    try {
+        const admin = await adminModel.findOne({ username: 'admins', password: 'admin' });
+
+        if (admin) {
+            // If the admin credentials are found, render the admin dashboard
+            res.sendFile(__dirname + '/views/admin/index.html');
+        } else {
+            // If admin credentials are not found, serve the login page from the admin folder
+            res.sendFile(__dirname + '/views/admin/login.html');
+        }
+    } catch (error) {
+        // Handle any errors, e.g., display an error page or redirect to login
+        console.error(error);
+        res.redirect('/');
+    }
+});
+
+app.post('/admin', async (req, res) => {
+    try {
+        const { username, password } = req.body;
+
+        const user = await adminModel.findOne({ username });
+
+        if (!user) {
+            res.send("User does not exist");
+        } else if (password === user.password) {
+            res.sendFile(__dirname + '/views/admin/index.html');
+        } else {
+            res.send("Invalid password");
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Internal Server Error");
+    }
+});
 
