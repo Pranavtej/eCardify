@@ -8,6 +8,8 @@ const mongoose = require("mongoose");
 const User = require("./models/user");
 const Subplan1 = require("./models/subplan");
 const Bcard1 = require("./models/bcard");
+const cardt = require("./models/card");
+const temp = require("./models/templates");
 const bcrypt = require("bcrypt");
 const { ObjectId } = require('mongodb');
 app.set("views", __dirname + "/views");
@@ -29,22 +31,7 @@ app.use(session({
 }));
 
 
-app.get("/health", async (req, res) => {
-    try {
-        
-        const result = await conn.connection.db.collection('users').find({}).limit(1).toArray();
 
-        console.log('MongoDB find query result:', result);
-        if (result && result.length > 0) {
-            res.status(200).json({ status: 'MongoDB connection is healthy and running successful' });
-        } else {
-            res.status(500).json({ status: 'MongoDB connection is healthy, but no data found' });
-        }
-    } catch (error) {
-        console.error('MongoDB connection error during health check:', error);
-        res.status(500).json({ status: 'MongoDB connection error' });
-    }
-});
 
 
 

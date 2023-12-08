@@ -8,8 +8,16 @@ const businessCardSchema = new mongoose.Schema({
   phone: String,
   email: String,
   address: String,
-  subscriptionFeatures: [{ logoUrl: String }], // Features tied to the subscription plan
-  // Additional customizable fields
+  selectedCardType: { type: mongoose.Schema.Types.ObjectId, ref: 'CardType', required: true },
+  selectedTemplate: { type: mongoose.Schema.Types.ObjectId, ref: 'Template', required: true },
+  selectedSubscriptionPlan: { type: mongoose.Schema.Types.ObjectId, ref: 'SubscriptionPlan', required: true },
+  // Additional customizable fields based on the selected template
+  templateFields: [
+    {
+      fieldName: String,  // Field name from the selected template
+      fieldValue: String, // User-entered value for the field
+    },
+  ],
 });
 
 const BusinessCard = mongoose.model('BusinessCard', businessCardSchema);
