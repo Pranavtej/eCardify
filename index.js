@@ -1,16 +1,21 @@
-const express = require('express');
 const conn = require('./connection');
+const express = require('express');
 const session = require('express-session');
 const bodyParser = require("body-parser");
 const e = require('express');
 const app = express();
 const mongoose = require("mongoose");
 const User = require("./models/user");
+const Subplan1 = require("./models/subplan");
+const Bcard1 = require("./models/bcard");
+const cardt = require("./models/card");
+const temp = require("./models/templates");
 const bcrypt = require("bcrypt");
 const path = require('path');
 const adminModel = require('./models/admin');
 
 
+const { ObjectId } = require('mongodb');
 app.set("views", __dirname + "/views");
 app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
@@ -28,6 +33,10 @@ app.use(session({
     resave: false,
     saveUninitialized: true
 }));
+
+
+
+
 
 
 app.get('/', function (req, res) {
@@ -53,7 +62,11 @@ app.post('/register', async (req, res) => {
     const data = {
         username: req.body.username,
         email: req.body.email,
-        password: req.body.password
+        password: req.body.password,
+        subscription : {
+            plan: fixedSubscriptionPlanId,
+            expiresAt: fixedExpiresAt
+        }
     }
 
     // check if username or email already exists
@@ -67,6 +80,7 @@ app.post('/register', async (req, res) => {
         const hashedPassword = await bcrypt.hash(data.password, saltRounds);
 
         data.password = hashedPassword;
+
 
         const user = new User(data);
         await user.save();
