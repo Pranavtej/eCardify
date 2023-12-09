@@ -11,6 +11,10 @@ const Bcard1 = require("./models/bcard");
 const cardt = require("./models/card");
 const temp = require("./models/templates");
 const bcrypt = require("bcrypt");
+const path = require('path');
+const adminModel = require('./models/admin');
+
+
 const { ObjectId } = require('mongodb');
 app.set("views", __dirname + "/views");
 app.set("view engine", "ejs");
@@ -50,8 +54,9 @@ app.get('/register', async (req, res) => {
 }
 );
 
-const fixedSubscriptionPlanId = new ObjectId('65713bcdd7d474d49b6823c4');
-const fixedExpiresAt = new Date('2023-12-31T23:59:59.999Z'); 
+app.get('/adminlogin', async (req, res) => {
+    res.sendFile(path.join(__dirname,'views','admin','index.html'));
+});
 
 app.post('/register', async (req, res) => {
     const data = {
@@ -123,9 +128,54 @@ app.get('/contact', function (req, res) {
 );
 
 
+
+
+
+
 app.listen(8000, function () {
-    console.log('Server started at port 3000');
+    console.log('Server started at port 8000');
    })
 
 //admin login
+
+
+
+
+app.get('/admin', async (req, res) => {
+    try {
+        const admin = await adminModel.findOne({ username: 'admins', password: 'admin' });
+
+        if (admin) {
+            // If the admin credentials are found, render the admin dashboard
+            res.sendFile(__dirname + '/views/admin/index.html');  
+        } else {
+            // If admin credentials are not found, serve the login page from the admin folder
+            res.sendFile(__dirname + '/views/admin/login.html');
+        }
+    } catch (error) {
+        // Handle any errors, e.g., display an error page or redirect to login
+        console.error(error);
+        res.redirect('/');
+    }
+});
+
+app.post('/admin', async (req, res) => {
+    try {
+        const { username, password } = req.body;
+
+        const user = await adminModel.findOne({ username });
+
+        if (!user) {
+            res.send("User does not exist");
+        } else if (password === user.password) {
+            res.sendFile(__dirname + '/views/admin/index.html');
+        } else {
+            res.send("Invalid password");
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Internal Server Error");
+    }
+});
+
 
