@@ -15,12 +15,17 @@ const path = require('path');
 const adminModel = require('./models/admin');
 
 
+// app.set("views", __dirname + "/views");
+// app.set("view engine", "ejs");
 const { ObjectId } = require('mongodb');
 app.set("views", __dirname + "/views");
 app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
+
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));  
 
 
 app.use('/public', express.static(__dirname + "/public"));
@@ -54,9 +59,7 @@ app.get('/register', async (req, res) => {
 }
 );
 
-app.get('/adminlogin', async (req, res) => {
-    res.sendFile(path.join(__dirname,'views','admin','index.html'));
-});
+
 
 app.post('/register', async (req, res) => {
     const data = {
@@ -146,11 +149,11 @@ app.get('/admin', async (req, res) => {
         const admin = await adminModel.findOne({ username: 'admins', password: 'admin' });
 
         if (admin) {
-            // If the admin credentials are found, render the admin dashboard
-            res.sendFile(__dirname + '/views/admin/index.html');  
+            // If the admin credentials are found, render the admin dashboard using EJS
+            res.render('admin/index');  
         } else {
-            // If admin credentials are not found, serve the login page from the admin folder
-            res.sendFile(__dirname + '/views/admin/login.html');
+            // If admin credentials are not found, serve the login page from the admin folder using EJS
+            res.render('admin/login');
         }
     } catch (error) {
         // Handle any errors, e.g., display an error page or redirect to login
@@ -168,7 +171,7 @@ app.post('/admin', async (req, res) => {
         if (!user) {
             res.send("User does not exist");
         } else if (password === user.password) {
-            res.sendFile(__dirname + '/views/admin/index.html');
+            res.render('admin/index');  // Render the admin dashboard using EJS
         } else {
             res.send("Invalid password");
         }
@@ -178,4 +181,7 @@ app.post('/admin', async (req, res) => {
     }
 });
 
-
+app.get('/teachers',async (req, res) =>{
+    res.render('/views/admin/teachers');
+}
+);
