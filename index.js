@@ -133,7 +133,7 @@ app.get('/admin', async (req, res) => {
 
         if (admin) {
             // If the admin credentials are found, render the admin dashboard
-            res.sendFile(__dirname + '/views/admin/index.html');
+            res.sendFile(__dirname + '/views/admin/index.html');  
         } else {
             // If admin credentials are not found, serve the login page from the admin folder
             res.sendFile(__dirname + '/views/admin/login.html');
