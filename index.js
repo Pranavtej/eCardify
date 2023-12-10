@@ -181,7 +181,143 @@ app.post('/admin', async (req, res) => {
     }
 });
 
-app.get('/teachers',async (req, res) =>{
-    res.render('/views/admin/teachers');
-}
-);
+app.get('/subscription',async (req, res) =>{
+
+    const subscriptionPlans = await Subplan1.find();
+    res.render('admin/subscription', { subscriptionPlans });
+});
+
+app.post('/subscription', async (req, res) => {
+    try {
+        const { name, price, duration } = req.body;
+
+        const subscriptionPlan = new Subplan1({ name, price, duration });
+        await subscriptionPlan.save();
+
+        res.redirect('/subscription');
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Internal Server Error");
+    }
+});
+
+// app.get('edit-subscription', async (req, res) => {
+//     try {
+//         // const subscriptionPlan = await Subplan1.findById(req.params.id);
+
+//         res.render('admin/edit-subscription');
+//     } catch (error) {
+//         console.error(error);
+//         res.status(500).send("Internal Server Error");
+//     }
+// });
+
+app.post('/edit-subscription/:id', async (req, res) => {
+    try {
+        const { name, price, duration } = req.body;
+
+        await Subplan1.findByIdAndUpdate(req.params.id, { name, price, duration });
+
+        res.redirect('/subscription');
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Internal Server Error");
+    }
+});
+
+app.get('/add-subscription', async (req, res) => {
+    try {
+        res.render('admin/add-subscription');
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Internal Server Error");
+    }
+});
+
+
+
+app.post('/add-subscription', async (req, res) => {
+    try {
+        const { id, name, price, features } = req.body;
+
+        // Handle the case where features might not be a valid JSON string
+        let parsedFeatures;
+        try {
+            parsedFeatures = JSON.parse(features);
+        } catch (jsonError) {
+            console.error('Error parsing JSON:', jsonError);
+            return res.status(400).send('Invalid JSON in features field');
+        }
+
+        const subscriptionPlan = new SubscriptionPlan({ id, name, price, features: parsedFeatures });
+        await subscriptionPlan.save();
+
+        res.redirect('/subscription');
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+
+app.get('/edit-subscription', async (req, res) => {
+    try {
+        // Your logic for fetching subscription plan data if needed
+        // const subscriptionPlan = await Subplan1.findById(req.params.id);
+
+        res.render('admin/edit-subscription');
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Internal Server Error");
+    }
+});
+
+
+app.get('/add-user', async (req, res) => {
+    try {
+        // Your logic for fetching subscription plan data if needed
+        // const subscriptionPlan = await Subplan1.findById(req.params.id);
+
+        res.render('admin/user');
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Internal Server Error");
+    }
+});
+
+app.get('/user-details', async (req, res) => {
+    try {
+        // Your logic for fetching subscription plan data if needed
+        // const subscriptionPlan = await Subplan1.findById(req.params.id);
+
+        res.render('admin/user-details');
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Internal Server Error");
+    }
+});
+
+
+app.get('/user', async (req, res) => {
+    try {
+        // Your logic for fetching subscription plan data if needed
+        // const subscriptionPlan = await Subplan1.findById(req.params.id);
+
+        res.render('admin/user');
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Internal Server Error");
+    }
+});
+
+app.get('/user-grid', async (req, res) => {
+    try {
+        // Your logic for fetching subscription plan data if needed
+        // const subscriptionPlan = await Subplan1.findById(req.params.id);
+
+        res.render('admin/user-grid');
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Internal Server Error");
+    }
+});

@@ -3,11 +3,11 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
-        <title>Preskool - Students</title>
+        <title>Preskool - Dashboard</title>
 		
 		<!-- Favicon -->
         <link rel="shortcut icon" href="/public/assets/admin/img/favicon.png">
-	
+		
 		<!-- Fontfamily -->
 		<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,700;0,900;1,400;1,500;1,700&display=swap" rel="stylesheet">
 		
@@ -23,9 +23,6 @@
 		<!-- Fontawesome CSS -->
 		<link rel="stylesheet" href="/public/assets/admin/plugins/fontawesome/css/fontawesome.min.css">
 		<link rel="stylesheet" href="/public/assets/admin/plugins/fontawesome/css/all.min.css">
-
-		<!-- Datatables CSS -->
-		<link rel="stylesheet" href="/public/assets/admin/plugins/datatables/datatables.min.css">
 		
 		<!-- Main CSS -->
         <link rel="stylesheet" href="/public/assets/admin/css/style.css">
@@ -56,12 +53,12 @@
 				</div>
 				
 				<!-- Search Bar -->
-				<div class="top-nav-search">
+				<!--<div class="top-nav-search">
 					<form>
 						<input type="text" class="form-control" placeholder="Search here">
 						<button class="btn" type="submit"><i class="fas fa-search"></i></button>
 					</form>
-				</div>
+				</div>-->
 				<!-- /Search Bar -->
 				
 				<!-- Mobile Menu Toggle -->
@@ -195,7 +192,7 @@
 			<!-- /Header -->
 			
 			<!-- Sidebar -->
-            <%- include('sidebar.ejs') %>
+				<%- include('sidebar.ejs') %>
 			<!-- /Sidebar -->
 			
 			<!-- Page Wrapper -->
@@ -204,15 +201,13 @@
 				
 					<!-- Page Header -->
 					<div class="page-header">
-						<div class="row">
-							<div class="col-sm-12">
-								<div class="page-sub-header">
-									<h3 class="page-title">Users</h3>
-									<ul class="breadcrumb">
-										<li class="breadcrumb-item"><a href="/user">User</a></li>
-										<li class="breadcrumb-item active">All Users</li>
-									</ul>
-								</div>
+						<div class="row align-items-center">
+							<div class="col">
+								<h3 class="page-title">Add Subscription</h3>
+								<ul class="breadcrumb">
+									<li class="breadcrumb-item"><a href="/subscription">Subscription plan </a></li>
+									<li class="breadcrumb-item active">Add Subscription</li>
+								</ul>
 							</div>
 						</div>
 					</div>
@@ -221,180 +216,114 @@
 					<div class="row">
 						<div class="col-sm-12">
 						
-							<div class="card card-table comman-shadow">
-								<div class="card-body pb-0">
-								
-									<!-- Page Header -->
-									<div class="page-header">
-										<div class="row align-items-center">
-											<div class="col">
-												<h3 class="page-title">User</h3>
-											</div>
-											<div class="col-auto text-end float-end ms-auto download-grp">
-												<a href="/user" class="btn btn-outline-gray me-2"><i class="feather-list"></i></a>
-												<a href="/user-grid" class="btn btn-outline-gray me-2 active"><i class="feather-grid "></i></a>
-											</div>
-										</div>
-									</div>
-									<!-- /Page Header -->
-									
-									<div class="student-pro-list">
+							<div class="card">
+								<div class="card-body">
+									<form action="/add-subscription" method="post">
 										<div class="row">
-											<div class="col-xl-3 col-lg-4 col-md-6 d-flex">
-												<div class="card">
-													<div class="card-body">
-														<div class="student-box flex-fill">
-															<div class="student-img">
-																<a href="user-details.ejs">
-																	<img class="img-fluid" alt="Students Info" src="/public/assets/admin/img/profiles/avatar-03.jpg">
-																</a>
-															</div>
-															<div class="student-content pb-0">												
-																<h5><a href="student-details.ejs">Malynne</a></h5>
-																<h6>User</h6>
-															</div>
-														</div>
-													</div>
+											<div class="col-12">
+												<h5 class="form-title"><span>Basic Details</span></h5>
+											</div>
+											<div class="col-12 col-sm-4">  
+												<div class="form-group local-forms">
+													<label>Plan ID<span class="login-danger">*</span></label>
+													<input name="id" class="form-control" type="text" id="planid" placeholder="Plan ID" required>
 												</div>
 											</div>
-											<div class="col-xl-3 col-lg-4 col-md-6 d-flex">
-												<div class="card">
-													<div class="card-body">
-														<div class="student-box flex-fill">
-															<div class="student-img">
-																<a href="student-details.ejs">
-																	<img class="img-fluid" alt="Students Info" src="/public/assets/admin/img/profiles/avatar-04.jpg">
-																</a>
-															</div>
-															<div class="student-content pb-0">												
-																<h5><a href="student-details.ejs">Levell Scott</a></h5>
-																<h6>user</h6>
-															</div>
-														</div>
-													</div>
+											<div class="col-12 col-sm-4">
+												<div class="form-group local-forms">
+													<label>Plan Name <span class="login-danger">*</span></label>
+													<input name="name" class="form-control" type="text" id="name" placeholder="Enter Plan Name" required>
 												</div>
 											</div>
-											<div class="col-xl-3 col-lg-4 col-md-6 d-flex">
-												<div class="card">
-													<div class="card-body">
-														<div class="student-box flex-fill">
-															<div class="student-img">
-																<a href="student-details.ejs">
-																	<img class="img-fluid" alt="Students Info" src="/public/assets/admin/img/profiles/avatar-05.jpg">
-																</a>
-															</div>
-															<div class="student-content pb-0">												
-																<h5><a href="student-details.ejs">Minnie</a></h5>
-																<h6>user</h6>
-															</div>
-														</div>
-													</div>
-												</div>
-											</div>
-											<div class="col-xl-3 col-lg-4 col-md-6 d-flex">
-												<div class="card">
-													<div class="card-body">
-														<div class="student-box flex-fill">
-															<div class="student-img">
-																<a href="student-details.ejs">
-																	<img class="img-fluid" alt="Students Info" src="/public/assets/admin/img/profiles/avatar-06.jpg">
-																</a>
-															</div>
-															<div class="student-content pb-0">												
-																<h5><a href="student-details.ejs">Lois A</a></h5>
-																<h6>User</h6>
-															</div>
-														</div>
-													</div>
-												</div>
-											</div>
-											<div class="col-xl-3 col-lg-4 col-md-6 d-flex">
-												<div class="card">
-													<div class="card-body">
-														<div class="student-box flex-fill">
-															<div class="student-img">
-																<a href="student-details.ejs">
-																	<img class="img-fluid" alt="Students Info" src="/public/assets/admin/img/profiles/avatar-07.jpg">
-																</a>
-															</div>
-															<div class="student-content pb-0">												
-																<h5><a href="student-details.ejs">Calvin</a></h5>
-																<h6>User</h6>
-															</div>
-														</div>
-													</div>
-												</div>
-											</div>
-											<div class="col-xl-3 col-lg-4 col-md-6 d-flex">
-												<div class="card">
-													<div class="card-body">
-														<div class="student-box flex-fill">
-															<div class="student-img">
-																<a href="student-details.ejs">
-																	<img class="img-fluid" alt="Students Info" src="/public/assets/admin/img/profiles/avatar-08.jpg">
-																</a>
-															</div>
-															<div class="student-content pb-0">												
-																<h5><a href="student-details.ejs">Charles Dickens</a></h5>
-																<h6>User</h6>
-															</div>
-														</div>
-													</div>
-												</div>
-											</div>
-											<div class="col-xl-3 col-lg-4 col-md-6 d-flex">
-												<div class="card">
-													<div class="card-body">
-														<div class="student-box flex-fill">
-															<div class="student-img">
-																<a href="student-details.ejs">
-																	<img class="img-fluid" alt="Students Info" src="/public/assets/admin/img/profiles/avatar-09.jpg">
-																</a>
-															</div>
-															<div class="student-content pb-0">												
-																<h5><a href="student-details.ejs">Joe Kelley</a></h5>
-																<h6>User</h6>
-															</div>
-														</div>
-													</div>
-												</div>
-											</div>
-											<div class="col-xl-3 col-lg-4 col-md-6 d-flex">
-												<div class="card">
-													<div class="card-body">
-														<div class="student-box flex-fill">
-															<div class="student-img">
-																<a href="student-details.ejs">
-																	<img class="img-fluid" alt="Students Info" src="/public/assets/admin/img/profiles/avatar-10.jpg">
-																</a>
-															</div>
-															<div class="student-content pb-0">												
-																<h5><a href="student-details.ejs">Charles Dickens</a></h5>
-																<h6>User</h6>
-															</div>
-														</div>
-													</div>
+											<div class="col-12 col-sm-4">  
+												<div class="form-group local-forms">
+													<label>Price<span class="login-danger">*</span></label>
+													<input name="price" class="form-control" type="number" id="price" placeholder="Enter Price" required>
 												</div>
 											</div>
 										</div>
-									</div>
+									
+										<div class="row">
+											<div class="col-12 button-container">
+												<button type="button" id="addFeature">Add feature</button>
+											</div>
+										</div>
+									
+										<div class="row" id="additionalFeatures">
+											<!-- Dynamic features will be added here -->
+										</div>
+									
+										<div class="row">
+											<div class="col-12 button-container">
+												<div class="student-submit">
+													<button name="submit" type="submit" class="btn btn-primary">Submit</button>
+												</div>
+											</div>
+										</div>
+									</form>
+									
 								</div>
-							</div>							
+							</div>
 						</div>					
 					</div>					
 				</div>
-
-				<!-- Footer -->
-				<footer>
-					<p>Copyright © 2022 Dreamguys.</p>					
-				</footer>
-				<!-- /Footer -->				
+				
 			</div>
 			<!-- /Page Wrapper -->
-			
-        </div>
+
+
 		<!-- /Main Wrapper -->
 		
+		<!-- jQuery -->
+
+		<style>
+			.button-container {
+			  margin-bottom: 15px; /* Add some margin between buttons */
+			}
+		  </style>
+
+
+		<script>
+			document.addEventListener('DOMContentLoaded', function () {
+			  const form = document.getElementById('subscriptionForm');
+			  const additionalFeaturesContainer = document.getElementById('additionalFeatures');
+			  const addFeatureBtn = document.getElementById('addFeature');
+			
+			  addFeatureBtn.addEventListener('click', function () {
+				additionalFeaturesContainer.innerHTML += `
+				  <div class="row">
+					<div class="col-12">
+					  <div class="form-group">
+						<label>Feature Name<span class="login-danger">*</span></label>
+						<input name="featureNames[]" class="form-control" type="text" placeholder="Enter Feature Name" required>
+					  </div>
+					</div>
+					<div class="col-12 col-sm-4">
+					  <button type="button" class="delete-feature-btn">Delete</button>
+					</div>
+				  </div>
+				`;
+			
+				const deleteButtons = document.querySelectorAll('.delete-feature-btn');
+				deleteButtons.forEach(button => {
+				  button.addEventListener('click', function () {
+					this.closest('.row').remove();
+				  });
+				});
+			  });
+			
+			  form.addEventListener('submit', function (event) {
+				event.preventDefault();
+			
+				// Process the form data, e.g., send it to the server using AJAX
+				const formData = new FormData(form);
+				// ... Perform the necessary actions ...
+			
+				// Reset the form or redirect the user as needed
+				form.reset();
+			  });
+			});
+			</script>
 		<!-- jQuery -->
         <script src="/public/assets/admin/js/jquery-3.6.0.min.js"></script>
 		
@@ -405,10 +334,14 @@
 		<script src="/public/assets/admin/js/feather.min.js"></script>
 		
 		<!-- Slimscroll JS -->
-		<script src="/public/assets/admin/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+        <script src="/public/assets/admin/plugins/slimscroll/jquery.slimscroll.min.js"></script>	
+
+        <!-- Select2 JS -->
+		<script src="/public/assets/admin/plugins/select2/js/select2.min.js"></script>	
 		
-		<!-- Datatables JS -->
-		<script src="/public/assets/admin/plugins/datatables/datatables.min.js"></script>
+		<!-- Datepicker Core JS -->
+		<script src="/public/assets/admin/plugins/moment/moment.min.js"></script>
+		<script src="/public/assets/admin/js/bootstrap-datetimepicker.min.js"></script>
 		
 		<!-- Custom JS -->
 		<script src="/public/assets/admin/js/script.js"></script>
