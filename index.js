@@ -224,7 +224,7 @@ app.post('/edit-subscription/:id', async (req, res) => {
     }
 });
 
-app.get('add-subscription', async (req, res) => {
+app.get('/add-subscription', async (req, res) => {
     try {
         res.render('admin/add-subscription');
     } catch (error) {
@@ -234,6 +234,19 @@ app.get('add-subscription', async (req, res) => {
 });
 
 
+app.post('/add-subscription', async (req, res) => {
+    try {
+        const { name, price, duration } = req.body;
+
+        const subscriptionPlan = new Subplan1({ name, price, duration });
+        await subscriptionPlan.save();
+
+        res.redirect('/subscription');
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Internal Server Error");
+    }
+});
 
 
 app.get('/edit-subscription', async (req, res) => {
@@ -247,6 +260,7 @@ app.get('/edit-subscription', async (req, res) => {
         res.status(500).send("Internal Server Error");
     }
 });
+
 
 
 
