@@ -278,7 +278,7 @@ app.get('/add-user', async (req, res) => {
         // Your logic for fetching subscription plan data if needed
         // const subscriptionPlan = await Subplan1.findById(req.params.id);
 
-        res.render('admin/user');
+        res.render('admin/add-user');
     } catch (error) {
         console.error(error);
         res.status(500).send("Internal Server Error");
