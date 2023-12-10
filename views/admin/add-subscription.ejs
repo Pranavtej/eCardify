@@ -1,17 +1,12 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
-        <title>Preskool - Subscription plan</title>
+        <title>ecardify-add subscription</title>
 		
 		<!-- Favicon -->
         <link rel="shortcut icon" href="assets/img/favicon.png">
-
-		<meta http-equiv="Content-Security-Policy" content="default-src 'none'; font-src http://localhost:8000/">
-
 	
 		<!-- Fontfamily -->
 		<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,700;0,900;1,400;1,500;1,700&display=swap" rel="stylesheet">
@@ -25,12 +20,15 @@
 		<!-- Pe7 CSS -->
 		<link rel="stylesheet" href="assets/plugins/icons/flags/flags.css">
 		
+		<!-- Datepicker CSS -->
+		<link rel="stylesheet" href="assets/css/bootstrap-datetimepicker.min.css">
+		
 		<!-- Fontawesome CSS -->
 		<link rel="stylesheet" href="assets/plugins/fontawesome/css/fontawesome.min.css">
 		<link rel="stylesheet" href="assets/plugins/fontawesome/css/all.min.css">
 
-		<!-- Datatables CSS -->
-		<link rel="stylesheet" href="assets/plugins/datatables/datatables.min.css">
+		<!-- Select CSS -->
+		<link rel="stylesheet" href="assets/plugins/select2/css/select2.min.css">
 		
 		<!-- Main CSS -->
         <link rel="stylesheet" href="assets/css/style.css">
@@ -211,45 +209,45 @@
 								<a href="#"><i class="feather-grid"></i> <span> Dashboard</span> <span class="menu-arrow"></span></a>
 								<ul>
 									<li><a href="index.ejs">Admin Dashboard</a></li>
-									<!-- <li><a href="teacher-dashboard.ejs">subscription plan</a></li>
-									<li><a href="student-dashboard.ejs">Student Dashboard</a></li> -->
+									<li><a href="teacher-dashboard.ejs">subscription plan </a></li>
+									<li><a href="student-dashboard.ejs">users</a></li>
 								</ul>
 							</li>
 							<li class="submenu">
-								<a href="#"><i class="fas fa-graduation-cap"></i> <span>users</span> <span class="menu-arrow"></span></a>
+								<a href="#"><i class="fas fa-graduation-cap"></i> <span> users</span> <span class="menu-arrow"></span></a>
 								<ul>
-									<li><a href="students.ejs">users list</a></li>
-									<!-- <li><a href="student-details.ejs">user  View</a></li> -->
-									<li><a href="add-student.ejs">add user</a></li>
-									<!-- <li><a href="edit-student.ejs"> Edit user</a></li> -->
+									<li><a href="students.ejs">users List</a></li>
+									<!--<li><a href="student-details.ejs">Student View</a></li>-->
+									<li><a href="add-student.ejs">Add user</a></li>
+									<li><a href="edit-student.ejs"> Edit User</a></li>
 								</ul>
 							</li>
 							<li class="submenu active">
-								<a href="#"><i class="fas fa-chalkboard-teacher"></i> <span> subscription plan </span> <span class="menu-arrow"></span></a>
+								<a href="#"><i class="fas fa-chalkboard-teacher"></i> <span> Subscription plan </span> <span class="menu-arrow"></span></a>
 								<ul>
-									<li><a href="/teachers" class="active">subscription  List</a></li>
+									<li><a href="/teachers">subscription List</a></li>
 									<!--<li><a href="teacher-details.ejs">Teacher View</a></li>-->
-									<li><a href="add-teacher.ejs">Add subscription</a></li>
-									<!-- <li><a href="edit-teacher.ejs">Edit subscription</a></li> -->
+									<li><a href="add-teacher.ejs" class="active"> Add subscription</a></li>
+									<!--<li><a href="edit-teacher.ejs">Teacher Edit</a></li>-->
 								</ul>
 							</li>
-							<!--<li class="submenu">
+							<li class="submenu">
 								<a href="#"><i class="fas fa-building"></i> <span> Departments</span> <span class="menu-arrow"></span></a>
 								<ul>
-									<li><a href="departments.ejs">subscription list </a></li>
-									<li><a href="add-department.ejs"> Add subscription </a></li>
-									<li><a href="edit-department.ejs"> Edit subscription</a></li>
+									<li><a href="departments.ejs">Department List</a></li>
+									<li><a href="add-department.ejs">Department Add</a></li>
+									<li><a href="edit-department.ejs">Department Edit</a></li>
 								</ul>
-							</li>-->
-							<!--<li class="submenu">
+							</li>
+							<li class="submenu">
 								<a href="#"><i class="fas fa-book-reader"></i> <span> Subjects</span> <span class="menu-arrow"></span></a>
 								<ul>
 									<li><a href="subjects.ejs">Subject List</a></li>
 									<li><a href="add-subject.ejs">Subject Add</a></li>
 									<li><a href="edit-subject.ejs">Subject Edit</a></li>
 								</ul>
-							</li>-->
-							<!--<li class="submenu">
+							</li>
+							<li class="submenu">
 								<a href="#"><i class="fas fa-clipboard"></i> <span> Invoices</span> <span class="menu-arrow"></span></a>
 								<ul>
 									<li><a href="invoices.ejs">Invoices List</a></li>
@@ -259,8 +257,8 @@
 									<li><a href="view-invoice.ejs">Invoices Details</a></li>
 									<li><a href="invoices-settings.ejs">Invoices Settings</a></li>
 								</ul>
-							</li>-->
-							<!--<li class="menu-title"> 
+							</li>
+							<li class="menu-title"> 
 								<span>Management</span>
 							</li>
 
@@ -274,8 +272,8 @@
 									<li><a href="add-expenses.ejs">Add Expenses</a></li>
 									<li><a href="add-salary.ejs">Add Salary</a></li>
 								</ul>
-							</li>-->
-							<!--<li> 
+							</li>
+							<li> 
 								<a href="holiday.ejs"><i class="fas fa-holly-berry"></i> <span>Holiday</span></a>
 							</li>
 							<li> 
@@ -292,8 +290,8 @@
 							</li>
 							<li> 
 								<a href="library.ejs"><i class="fas fa-book"></i> <span>Library</span></a>
-							</li>-->
-							<!--<li class="submenu">
+							</li>
+							<li class="submenu">
                                 <a href="#"><i class="fa fa-newspaper"></i> <span> Blogs</span>
                                     <span class="menu-arrow"></span>
                                 </a>
@@ -303,15 +301,15 @@
                                     <li><a href="edit-blog.ejs">Edit Blog</a></li>
                                     
                                 </ul>
-                            </li>-->
-							<!--<li> 
+                            </li>
+							<li> 
 								<a href="settings.ejs"><i class="fas fa-cog"></i> <span>Settings</span></a>
-							</li>-->
-							<!--<li class="menu-title"> 
+							</li>
+							<li class="menu-title"> 
 								<span>Pages</span>
-							</li>-->
+							</li>
 
-							<!--<li class="submenu">
+							<li class="submenu">
 								<a href="#"><i class="fas fa-shield-alt"></i> <span> Authentication </span> <span class="menu-arrow"></span></a>
 								<ul>
 									<li><a href="login.ejs">Login</a></li>
@@ -319,8 +317,8 @@
 									<li><a href="forgot-password.ejs">Forgot Password</a></li>
 									<li><a href="error-404.ejs">Error Page</a></li>
 								</ul>
-							</li>-->
-							<!--<li> 
+							</li>
+							<li> 
 								<a href="blank-page.ejs"><i class="fas fa-file"></i> <span>Blank Page</span></a>
 							</li>
 
@@ -336,11 +334,11 @@
 							</li>
 							<li> 
 								<a href="transport.ejs"><i class="fas fa-bus"></i> <span>Transport</span></a>
-							</li>-->
-							<!--<li class="menu-title"> 
+							</li>
+							<li class="menu-title"> 
 								<span>UI Interface</span>
-							</li>-->
-							<!--<li class="submenu">
+							</li>
+							<li class="submenu">
                                 <a href="#"><i class="fab fa-get-pocket"></i> <span>Base UI </span> <span class="menu-arrow"></span></a>
                                 <ul>
                                     <li><a href="alerts.ejs">Alerts</a></li>                                    
@@ -372,8 +370,8 @@
                                     <li><a href="typography.ejs">Typography</a></li>
                                     <li><a href="video.ejs">Video</a></li>
                                 </ul>
-                            </li>-->
-                           <!-- <li class="submenu">
+                            </li>
+                            <li class="submenu">
                                 <a href="#"><i data-feather="box"></i> <span>Elements </span> <span class="menu-arrow"></span></a>
                                 <ul>
                                     <li><a href="ribbon.ejs">Ribbon</a></li>
@@ -389,8 +387,8 @@
                                     <li><a href="horizontal-timeline.ejs">Horizontal Timeline</a></li>
                                     <li><a href="form-wizard.ejs">Form Wizard</a></li>
                                 </ul>
-                            </li>-->
-							<!--<li class="submenu">
+                            </li>
+							<li class="submenu">
 								<a href="#"><i data-feather="bar-chart-2"></i> <span> Charts </span> <span class="menu-arrow"></span></a>
 								<ul>
 									<li><a href="chart-apex.ejs">Apex Charts</a></li>
@@ -400,8 +398,8 @@
 									<li><a href="chart-peity.ejs">Peity Charts</a></li>
 									<li><a href="chart-c3.ejs">C3 Charts</a></li>
 								</ul>
-							</li>-->
-							<!--<li class="submenu">
+							</li>
+							<li class="submenu">
 								<a href="#"><i data-feather="award"></i> <span> Icons </span> <span class="menu-arrow"></span></a>
 								<ul>
 									<li><a href="icon-fontawesome.ejs">Fontawesome Icons</a></li>
@@ -415,8 +413,8 @@
 									<li><a href="icon-typicon.ejs">Typicon Icons</a></li>
 									<li><a href="icon-flag.ejs">Flag Icons</a></li>
 								</ul>
-							</li>-->
-							<!--<li class="submenu">
+							</li>
+							<li class="submenu">
 								<a href="#"><i class="fas fa-columns"></i> <span> Forms </span> <span class="menu-arrow"></span></a>
 								<ul>
 									<li><a href="form-basic-inputs.ejs">Basic Inputs </a></li>
@@ -433,8 +431,8 @@
 									<li><a href="tables-basic.ejs">Basic Tables </a></li>
 									<li><a href="data-tables.ejs">Data Table </a></li>
 								</ul>
-							</li>-->
-							<!--<li class="submenu">
+							</li>
+							<li class="submenu">
 								<a href="javascript:void(0);"><i class="fas fa-code"></i> <span>Multi Level</span> <span class="menu-arrow"></span></a>
 								<ul>
 									<li class="submenu">
@@ -453,7 +451,7 @@
 									</li>
 									<li>
 										<a href="javascript:void(0);"> <span>Level 1</span></a>
-									</li>-->
+									</li>
 								</ul>
 							</li>
 						</ul>
@@ -470,367 +468,127 @@
 					<div class="page-header">
 						<div class="row align-items-center">
 							<div class="col">
-								<h3 class="page-title">subscription plan</h3>
+								<h3 class="page-title">Add Subscription</h3>
 								<ul class="breadcrumb">
-									<li class="breadcrumb-item"><a href="index.ejs">Dashboard</a></li>
-									<li class="breadcrumb-item active">subscription plan</li>
+									<li class="breadcrumb-item"><a href="/subscription">Subscription plan </a></li>
+									<li class="breadcrumb-item active">Add Subscription</li>
 								</ul>
 							</div>
 						</div>
 					</div>
 					<!-- /Page Header -->
-					
-					<div class="student-group-form">
-						<div class="row">
-							<div class="col-lg-3 col-md-6">  
-								<div class="form-group">
-									<input type="text" class="form-control" placeholder="Search by ID or NAME">
-								</div>
-							</div>
-							<!--<div class="col-lg-3 col-md-6">  
-								<div class="form-group">
-									<input type="text" class="form-control" placeholder="Search by Name ...">
-								</div>
-							</div>
-							<div class="col-lg-4 col-md-6">  
-								<div class="form-group">
-									<input type="text" class="form-control" placeholder="Search by Phone ...">
-								</div>
-							</div>-->
-							<div class="col-lg-2">  
-								<div class="search-student-btn">
-									<button type="btn" class="btn btn-primary">Search</button>
-								</div>
-							</div>
-						</div>
-					</div>
 				
 					<div class="row">
 						<div class="col-sm-12">
 						
-							<div class="card card-table">
+							<div class="card">
 								<div class="card-body">
-								
-									<!-- Page Header -->
-									<div class="page-header">
-										<div class="row align-items-center">
-											<div class="col">
-												<h3 class="page-title">subscription plan </h3>
+									<form id="subscriptionForm">
+										<div class="row">
+											<div class="col-12">
+												<h5 class="form-title"><span>Basic Details</span></h5>
 											</div>
-											<div class="col-auto text-end float-end ms-auto download-grp">
-												<a href="/teachers" class="btn btn-outline-gray me-2 active"><i class="feather-list"></i></a>
-												<a href="teachers-grid.ejs" class="btn btn-outline-gray me-2"><i class="feather-grid"></i></a>
-												<!--<a href="#" class="btn btn-outline-primary me-2"><i class="fas fa-download"></i> Download</a>-->
-												<a href="add-teacher.ejs" class="btn btn-primary"><i class="fas fa-plus"></i></a>
+											<div class="col-12 col-sm-4">  
+												<div class="form-group local-forms">
+													<label>Plan ID<span class="login-danger">*</span></label>
+													<input name="address" class="form-control" type="text" placeholder="Plan ID" required>
+												</div>
+											</div>
+											<div class="col-12 col-sm-4">
+												<div class="form-group local-forms">
+													<label>plan Name <span class="login-danger">*</span></label>
+													<input name="customer" value="" class="form-control" type="text" placeholder="Edit plan Name" required>
+												</div>
+											</div>
+								
+											<div class="col-12 col-sm-4">  
+												<div class="form-group local-forms">
+													<label>Price<span class="login-danger">*</span></label>
+													<input name="phone" value="" class="form-control" type="num" placeholder="Edit price" required>
+												</div>
 											</div>
 										</div>
-									</div>
-									<!-- /Page Header -->
-									
-									<div class="table-responsive">
-										<table class="table border-0 star-student table-hover table-center mb-0 datatable table-striped">
-											<thead class="student-thread">
-												<tr>
-													<!-- <th>
-														<div class="form-check check-tables">
-															<input class="form-check-input" type="number"  value="">
-														</div>
-													</th> -->
-													<th>S.No</th>
-        <th>Plan Name</th>
-        <th>Features</th>
-        <th>Price</th>
-       
-        <th class="text-end">Edit/View</th>
-    </tr>
-</thead>
-<tbody>
-    <tr>
-        <td>1</td>
-        <td>PRE2209</td>
-        <td>Aaliyah</td>
-        <td>10</td>
-        <td class="text-end">
-            <div class="actions">
-                <a href="javascript:;" class="btn btn-sm bg-success-light me-2">
-                    <i class="feather-eye"></i>
-                </a>
-                <a href="edit-teacher.ejs" class="btn btn-sm bg-danger-light">
-                    <i class="feather-edit"></i>
-                </a>
-            </div>
-        </td>
-    </tr>
-												<!-- <tr>
-													<td>
-														<div class="form-check check-tables">
-															<input class="form-check-input" type="number"  value="2">
-														</div>
-													</td>
-													<td>PRE2213</td>
-													<td>malya</td>
-											
-													
-													<td>10</td>
-													<td class="text-end">
-													
-														<div class="actions">
-															<a href="javascript:;" class="btn btn-sm bg-success-light me-2">
-																<i class="feather-eye"></i>
-															</a>
-															<a href="edit-teacher.ejs" class="btn btn-sm bg-danger-light">
-																<i class="feather-edit"></i>
-															</a>
-														</div>
-													</td>
-												</tr>
-												<tr>
-													<td>
-														<div class="form-check check-tables">
-															<input class="form-check-input" type="number"  value="3">
-														</div>
-													</td>
-													<td>PRE2143</td>
-													<td>
-														subha
-													</td>
-													<td>10</td>
-													<td class="text-end">
-													
-														<div class="actions">
-															<a href="javascript:;" class="btn btn-sm bg-success-light me-2">
-																<i class="feather-eye"></i>
-															</a>
-															<a href="edit-teacher.ejs" class="btn btn-sm bg-danger-light">
-																<i class="feather-edit"></i>
-															</a>
-														</div>
-													</td>
-												</tr>
-												<tr>
-													<td>
-														<div class="form-check check-tables">
-															<input class="form-check-input" type="number"  value="4">
-														</div>
-													</td>
-													<td>PRE2431</td>
-													<td>
-														yawar
-													</td>
-													<td>11</td>
-													
-													<td class="text-end">
-														<div class="actions">
-															<a href="javascript:;" class="btn btn-sm bg-success-light me-2">
-																<i class="feather-eye"></i>
-															</a>
-															<a href="edit-teacher.ejs" class="btn btn-sm bg-danger-light">
-																<i class="feather-edit"></i>
-															</a>
-														</div>
-													</td>
-												</tr> -->
-												<!--<tr>
-													<td>
-														<div class="form-check check-tables">
-															<input class="form-check-input" type="checkbox"  value="something">
-														</div>
-													</td>
-													<td>PRE1534</td>
-													<td>
-														<h2 class="table-avatar">
-															<a href="teacher-details.ejs" class="avatar avatar-sm me-2"><img class="avatar-img rounded-circle" src="assets/img/profiles/avatar-06.jpg" alt="User Image"></a>
-															<a href="teacher-details.ejs">Lois A</a>
-														</h2>
-													</td>
-													<td>10</td>
-													<td>Female</td>
-													<td>English</td>
-													<td>B</td>
-													<td>413 289 1314</td>
-													<td>2844 Leverton Cove Road, Palmer</td>
-													<td class="text-end">
-														<div class="actions">
-															<a href="javascript:;" class="btn btn-sm bg-success-light me-2">
-																<i class="feather-eye"></i>
-															</a>
-															<a href="edit-teacher.ejs" class="btn btn-sm bg-danger-light">
-																<i class="feather-edit"></i>
-															</a>
-														</div>
-													</td>
-												</tr>
-												<tr>
-													<td>
-														<div class="form-check check-tables">
-															<input class="form-check-input" type="checkbox"  value="something">
-														</div>
-													</td>
-													<td>PRE2153</td>
-													<td>
-														<h2 class="table-avatar">
-															<a href="teacher-details.ejs" class="avatar avatar-sm me-2"><img class="avatar-img rounded-circle" src="assets/img/profiles/avatar-07.jpg" alt="User Image"></a>
-															<a href="teacher-details.ejs">Calvin</a>
-														</h2>
-													</td>
-													<td>9</td>
-													<td>Male</td>
-													<td>Mathematics</td>
-													<td>C</td>
-													<td>701 753 3810</td>
-													<td>1900  Hidden Meadow Drive, Crete</td>
-													<td class="text-end">
-														<div class="actions">
-															<a href="javascript:;" class="btn btn-sm bg-success-light me-2">
-																<i class="feather-eye"></i>
-															</a>
-															<a href="edit-teacher.ejs" class="btn btn-sm bg-danger-light">
-																<i class="feather-edit"></i>
-															</a>
-														</div>
-													</td>
-												</tr>
-												<tr>
-													<td>
-														<div class="form-check check-tables">
-															<input class="form-check-input" type="checkbox"  value="something">
-														</div>
-													</td>
-													<td>PRE1434</td>
-													<td>
-														<h2 class="table-avatar">
-															<a href="teacher-details.ejs" class="avatar avatar-sm me-2"><img class="avatar-img rounded-circle" src="assets/img/profiles/avatar-08.jpg" alt="User Image"></a>
-															<a href="teacher-details.ejs">Vincent</a>
-														</h2>
-													</td>
-													<td>10</td>
-													<td>Male</td>
-													<td>Mathematics</td>
-													<td>C</td>
-													<td>402 221 7523</td>
-													<td>3979  Ashwood Drive, Omaha</td>
-													<td class="text-end">
-														<div class="actions">
-															<a href="javascript:;" class="btn btn-sm bg-success-light me-2">
-																<i class="feather-eye"></i>
-															</a>
-															<a href="edit-teacher.ejs" class="btn btn-sm bg-danger-light">
-																<i class="feather-edit"></i>
-															</a>
-														</div>
-													</td>
-												</tr>
-												<tr>
-													<td>
-														<div class="form-check check-tables">
-															<input class="form-check-input" type="checkbox"  value="something">
-														</div>
-													</td>
-													<td>PRE2345</td>
-													<td>
-														<h2 class="table-avatar">
-															<a href="teacher-details.ejs" class="avatar avatar-sm me-2"><img class="avatar-img rounded-circle" src="assets/img/profiles/avatar-09.jpg" alt="User Image"></a>
-															<a href="teacher-details.ejs">Kozma  Tatari</a>
-														</h2>
-													</td>
-													<td>9</td>
-													<td>Female</td>
-													<td>Science</td>
-													<td>A</td>
-													<td>04 2239 968</td>
-													<td>Rruga E Kavajes, Condor Center, Tirana</td>
-													<td class="text-end">
-														<div class="actions">
-															<a href="javascript:;" class="btn btn-sm bg-success-light me-2">
-																<i class="feather-eye"></i>
-															</a>
-															<a href="edit-teacher.ejs" class="btn btn-sm bg-danger-light">
-																<i class="feather-edit"></i>
-															</a>
-														</div>
-													</td>
-												</tr>
-												<tr>
-													<td>
-														<div class="form-check check-tables">
-															<input class="form-check-input" type="checkbox"  value="something">
-														</div>
-													</td>
-													<td>PRE2365</td>
-													<td>
-														<h2 class="table-avatar">
-															<a href="teacher-details.ejs" class="avatar avatar-sm me-2"><img class="avatar-img rounded-circle" src="assets/img/profiles/avatar-10.jpg" alt="User Image"></a>
-															<a href="teacher-details.ejs">John Chambers</a>
-														</h2>
-													</td>
-													<td>11</td>
-													<td>Male</td>
-													<td>Botony</td>
-													<td>B</td>
-													<td>870 663 2334</td>
-													<td>4667 Sunset Drive, Pine Bluff</td>
-													<td class="text-end">
-														<div class="actions">
-															<a href="javascript:;" class="btn btn-sm bg-success-light me-2">
-																<i class="feather-eye"></i>
-															</a>
-															<a href="edit-teacher.ejs" class="btn btn-sm bg-danger-light">
-																<i class="feather-edit"></i>
-															</a>
-														</div>
-													</td>
-												</tr>
-												<tr>
-													<td>
-														<div class="form-check check-tables">
-															<input class="form-check-input" type="checkbox"  value="something">
-														</div>
-													</td>
-													<td>PRE1234</td>
-													<td>
-														<h2 class="table-avatar">
-															<a href="teacher-details.ejs" class="avatar avatar-sm me-2"><img class="avatar-img rounded-circle" src="assets/img/profiles/avatar-11.jpg" alt="User Image"></a>
-															<a href="teacher-details.ejs">Nathan Humphries</a>
-														</h2>
-													</td>
-													<td>10</td>
-													<td>Male</td>
-													<td>Biology</td>
-													<td>A</td>
-													<td>077 3499 9959</td>
-													<td>86 Lamphey Road, Thelnetham</td>
-													<td class="text-end">
-														<div class="actions">
-															<a href="javascript:;" class="btn btn-sm bg-success-light me-2">
-																<i class="feather-eye"></i>
-															</a>
-															<a href="edit-teacher.ejs" class="btn btn-sm bg-danger-light">
-																<i class="feather-edit"></i>
-															</a>
-														</div>
-													</td>
-												</tr>-->
-											</tbody>
-										</table>
-									</div>
+								
+										<div class="row">
+											<div class="col-12 button-container">
+												<button type="button" id="addFeature">Add feature</button>
+											</div>
+										</div>
+								
+										<div class="row" id="additionalFeatures">
+											<!-- Dynamic features  will be added here -->
+								        </div>
+										
+										<div class="row">
+											<div class="col-12 button-container">
+												<div class="student-submit">
+													<button name="submit" type="submit" class="btn btn-primary">Submit</button>
+												</div>
+											</div>
+										</div>
+									</form>
 								</div>
-							</div>							
+							</div>
 						</div>					
 					</div>					
 				</div>
-
-				<!-- Footer -->
-				<!--<footer>
-					<p>Copyright © 2022 Dreamguys.</p>					
-				</footer>-->
-				<!-- /Footer -->
 				
 			</div>
 			<!-- /Page Wrapper -->
-			
-        </div>
+
+
 		<!-- /Main Wrapper -->
 		
+		<!-- jQuery -->
+
+		<style>
+			.button-container {
+			  margin-bottom: 15px; /* Add some margin between buttons */
+			}
+		  </style>
+
+
+		<script>
+			document.addEventListener('DOMContentLoaded', function () {
+			  const form = document.getElementById('subscriptionForm');
+			  const additionalFeaturesContainer = document.getElementById('additionalFeatures');
+			  const addFeatureBtn = document.getElementById('addFeature');
+			
+			  addFeatureBtn.addEventListener('click', function () {
+				additionalFeaturesContainer.innerHTML += `
+				  <div class="row">
+					<div class="col-12">
+					  <div class="form-group">
+						<label>Feature Name<span class="login-danger">*</span></label>
+						<input name="featureNames[]" class="form-control" type="text" placeholder="Enter Feature Name" required>
+					  </div>
+					</div>
+					<div class="col-12 col-sm-4">
+					  <button type="button" class="delete-feature-btn">Delete</button>
+					</div>
+				  </div>
+				`;
+			
+				const deleteButtons = document.querySelectorAll('.delete-feature-btn');
+				deleteButtons.forEach(button => {
+				  button.addEventListener('click', function () {
+					this.closest('.row').remove();
+				  });
+				});
+			  });
+			
+			  form.addEventListener('submit', function (event) {
+				event.preventDefault();
+			
+				// Process the form data, e.g., send it to the server using AJAX
+				const formData = new FormData(form);
+				// ... Perform the necessary actions ...
+			
+				// Reset the form or redirect the user as needed
+				form.reset();
+			  });
+			});
+			</script>
 		<!-- jQuery -->
         <script src="assets/js/jquery-3.6.0.min.js"></script>
 		
@@ -841,10 +599,14 @@
 		<script src="assets/js/feather.min.js"></script>
 		
 		<!-- Slimscroll JS -->
-        <script src="assets/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+        <script src="assets/plugins/slimscroll/jquery.slimscroll.min.js"></script>	
 
-		<!-- Datatables JS -->
-		<script src="assets/plugins/datatables/datatables.min.js"></script>
+        <!-- Select2 JS -->
+		<script src="assets/plugins/select2/js/select2.min.js"></script>	
+		
+		<!-- Datepicker Core JS -->
+		<script src="assets/plugins/moment/moment.min.js"></script>
+		<script src="assets/js/bootstrap-datetimepicker.min.js"></script>
 		
 		<!-- Custom JS -->
 		<script src="assets/js/script.js"></script>

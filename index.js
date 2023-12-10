@@ -15,11 +15,11 @@ const path = require('path');
 const adminModel = require('./models/admin');
 
 
-// app.set("views", __dirname + "/views");
-// app.set("view engine", "ejs");
-const { ObjectId } = require('mongodb');
 app.set("views", __dirname + "/views");
 app.set("view engine", "ejs");
+const { ObjectId } = require('mongodb');
+//app.set("views", __dirname + "/views");
+//app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
@@ -132,10 +132,7 @@ app.get('/contact', function (req, res) {
 
 
 
-app.get('/admin', function (req, res) {
-    res.sendFile(path.join(__dirname,'views','admin','index.html'));
-}
-);
+
 
 app.listen(8000, function () {
     console.log('Server started at port 3000');
@@ -183,7 +180,73 @@ app.post('/admin', async (req, res) => {
     }
 });
 
-app.get('/teachers',async (req, res) =>{
-    res.render('/views/admin/teachers');
-}
-);
+app.get('/subscription',async (req, res) =>{
+
+    const subscriptionPlans = await Subplan1.find();
+    res.render('admin/subscription', { subscriptionPlans });
+});
+
+app.post('/subscription', async (req, res) => {
+    try {
+        const { name, price, duration } = req.body;
+
+        const subscriptionPlan = new Subplan1({ name, price, duration });
+        await subscriptionPlan.save();
+
+        res.redirect('/subscription');
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Internal Server Error");
+    }
+});
+
+// app.get('edit-subscription', async (req, res) => {
+//     try {
+//         // const subscriptionPlan = await Subplan1.findById(req.params.id);
+
+//         res.render('admin/edit-subscription');
+//     } catch (error) {
+//         console.error(error);
+//         res.status(500).send("Internal Server Error");
+//     }
+// });
+
+app.post('/edit-subscription/:id', async (req, res) => {
+    try {
+        const { name, price, duration } = req.body;
+
+        await Subplan1.findByIdAndUpdate(req.params.id, { name, price, duration });
+
+        res.redirect('/subscription');
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Internal Server Error");
+    }
+});
+
+app.get('add-subscription', async (req, res) => {
+    try {
+        res.render('admin/add-subscription');
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Internal Server Error");
+    }
+});
+
+
+
+
+app.get('/edit-subscription', async (req, res) => {
+    try {
+        // Your logic for fetching subscription plan data if needed
+        // const subscriptionPlan = await Subplan1.findById(req.params.id);
+
+        res.render('admin/edit-subscription');
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Internal Server Error");
+    }
+});
+
+
+
