@@ -6,7 +6,7 @@ const e = require('express');
 const app = express();
 const mongoose = require("mongoose");
 const User = require("./models/user");
-const Subplan1 = require("./models/subplan");
+const SubscriptionPlan = require('./models/subplan');
 const Bcard1 = require("./models/bcard");
 const cardt = require("./models/card");
 const temp = require("./models/templates");
@@ -18,11 +18,13 @@ const adminModel = require('./models/admin');
 // app.set("views", __dirname + "/views");
 // app.set("view engine", "ejs");
 const { ObjectId } = require('mongodb');
+
 app.set("views", __dirname + "/views");
 app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));  
@@ -181,12 +183,16 @@ app.post('/admin', async (req, res) => {
     }
 });
 
-
-app.get('/subscription',async (req, res) =>{
-
-    const subscriptionPlans = await Subplan1.find();
-    res.render('admin/subscription', { subscriptionPlans });
+app.get('/subscription', async (req, res) => {
+    try {
+        const subscriptionPlans = await SubscriptionPlan.find(); // Fix typo here
+        res.render('admin/subscription', { subscriptionPlans });
+    } catch (error) {
+        console.error('Error fetching subscription plans:', error);
+        res.status(500).send('Internal Server Error');
+    }
 });
+
 
 app.post('/subscription', async (req, res) => {
     try {
@@ -201,17 +207,6 @@ app.post('/subscription', async (req, res) => {
         res.status(500).send("Internal Server Error");
     }
 });
-
-// app.get('edit-subscription', async (req, res) => {
-//     try {
-//         // const subscriptionPlan = await Subplan1.findById(req.params.id);
-
-//         res.render('admin/edit-subscription');
-//     } catch (error) {
-//         console.error(error);
-//         res.status(500).send("Internal Server Error");
-//     }
-// });
 
 app.post('/edit-subscription/:id', async (req, res) => {
     try {
@@ -236,29 +231,26 @@ app.get('/add-subscription', async (req, res) => {
 });
 
 
-
 app.post('/add-subscription', async (req, res) => {
     try {
-        const { id, name, price, features } = req.body;
+        
+      const { name, price, features } = req.body;
 
-        // Handle the case where features might not be a valid JSON string
-        let parsedFeatures;
-        try {
-            parsedFeatures = JSON.parse(features);
-        } catch (jsonError) {
-            console.error('Error parsing JSON:', jsonError);
-            return res.status(400).send('Invalid JSON in features field');
-        }
-
-        const subscriptionPlan = new SubscriptionPlan({ id, name, price, features: parsedFeatures });
-        await subscriptionPlan.save();
-
-        res.redirect('/subscription');
+      const newPlan = new SubscriptionPlan({
+        name,
+        price,
+        features: features.map(feature => ({ logoUrl: feature })),
+      });
+  
+      // Save the document to MongoDB
+      await newPlan.save();
+  
+      res.status(200).send('Subscription plan added successfully!');
     } catch (error) {
-        console.error(error);
-        res.status(500).send('Internal Server Error');
+      console.error('Error saving subscription plan:', error);
+      res.status(500).send('Internal Server Error');
     }
-});
+  });
 
 
 app.get('/edit-subscription', async (req, res) => {
@@ -322,3 +314,4 @@ app.get('/user-grid', async (req, res) => {
         res.status(500).send("Internal Server Error");
     }
 });
+
