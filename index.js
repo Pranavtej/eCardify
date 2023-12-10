@@ -182,16 +182,21 @@ app.post('/admin', async (req, res) => {
 });
 
 app.get('/subscription',async (req, res) =>{
-
-    const subscriptionPlans = await SubscriptionPlan.find();
-    res.render('admin/subscription', { subscriptionPlans });
+    try{
+        const subscriptionPlans = await SubscriptionPlan.find();
+        res.render('admin/subscription',{subscriptionPlans});
+    }
+    catch(error){
+        console.error('Error fetching subscription plans:',error);
+        res.status(500).send('Internal server Error');
+    }
 });
 
 app.post('/subscription', async (req, res) => {
     try {
-        const { name, price, duration } = req.body;
+        const { planId,name, price, duration } = req.body;
 
-        const subscriptionPlan = new Subplan1({ name, price, duration });
+        const subscriptionPlan = new Subplan1({ planId,name, price, duration });
         await subscriptionPlan.save();
 
         res.redirect('/subscription');
@@ -273,5 +278,52 @@ app.get('/edit-subscription', async (req, res) => {
 });
 
 
+app.get('/add-user', async (req, res) => {
+    try {
+        // Your logic for fetching subscription plan data if needed
+        // const subscriptionPlan = await Subplan1.findById(req.params.id);
 
+        res.render('admin/add-user');
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Internal Server Error");
+    }
+});
+
+app.get('/user-details', async (req, res) => {
+    try {
+        // Your logic for fetching subscription plan data if needed
+        // const subscriptionPlan = await Subplan1.findById(req.params.id);
+
+        res.render('admin/user-details');
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Internal Server Error");
+    }
+});
+
+
+app.get('/user', async (req, res) => {
+    try {
+        // Your logic for fetching subscription plan data if needed
+        // const subscriptionPlan = await Subplan1.findById(req.params.id);
+
+        res.render('admin/user');
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Internal Server Error");
+    }
+});
+
+app.get('/user-grid', async (req, res) => {
+    try {
+        // Your logic for fetching subscription plan data if needed
+        // const subscriptionPlan = await Subplan1.findById(req.params.id);
+
+        res.render('admin/user-grid');
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Internal Server Error");
+    }
+});
 
