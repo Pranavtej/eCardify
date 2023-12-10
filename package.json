@@ -17,7 +17,7 @@
     "url": "https://github.com/Pranavtej/ecardify/issues"
   },
   "homepage": "https://github.com/Pranavtej/ecardify#readme",
-  "dependencies": {
+  "dependencies": { 
     "bcrypt": "^5.1.1",
     "body-parser": "^1.20.2",
     "connect-memcached": "^2.0.0",
