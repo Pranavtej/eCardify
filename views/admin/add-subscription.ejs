@@ -220,48 +220,41 @@
 								<div class="card-body">
 									<form action="/add-subscription" method="post">
 										<div class="row">
-											<div class="col-12">
-												<h5 class="form-title"><span>Basic Details</span></h5>
+										  <div class="col-12">
+											<h5 class="form-title"><span>Basic Details</span></h5>
+										  </div>
+										  <div class="col-12 col-sm-4">
+											<div class="form-group local-forms">
+											  <label>Plan Name <span class="login-danger">*</span></label>
+											  <input name="name" class="form-control" type="text" id="name" placeholder="Enter Plan Name" required>
 											</div>
-											<div class="col-12 col-sm-4">  
-												<div class="form-group local-forms">
-													<label>Plan ID<span class="login-danger">*</span></label>
-													<input name="id" class="form-control" type="text" id="planid" placeholder="Plan ID" required>
-												</div>
+										  </div>
+										  <div class="col-12 col-sm-4">
+											<div class="form-group local-forms">
+											  <label>Price<span class="login-danger">*</span></label>
+											  <input name="price" class="form-control" type="number" id="price" placeholder="Enter Price" required>
 											</div>
-											<div class="col-12 col-sm-4">
-												<div class="form-group local-forms">
-													<label>Plan Name <span class="login-danger">*</span></label>
-													<input name="name" class="form-control" type="text" id="name" placeholder="Enter Plan Name" required>
-												</div>
-											</div>
-											<div class="col-12 col-sm-4">  
-												<div class="form-group local-forms">
-													<label>Price<span class="login-danger">*</span></label>
-													<input name="price" class="form-control" type="number" id="price" placeholder="Enter Price" required>
-												</div>
-											</div>
+										  </div>
 										</div>
-									
+									  
 										<div class="row">
-											<div class="col-12 button-container">
-												<button type="button" id="addFeature">Add feature</button>
-											</div>
+										  <div class="col-12 button-container">
+											<button type="button" id="addFeature">Add feature</button>
+										  </div>
 										</div>
-									
+									  
 										<div class="row" id="additionalFeatures">
-											<!-- Dynamic features will be added here -->
+										  <!-- Dynamic features will be added here -->
 										</div>
-									
+									  
 										<div class="row">
-											<div class="col-12 button-container">
-												<div class="student-submit">
-													<button name="submit" type="submit" class="btn btn-primary">Submit</button>
-												</div>
+										  <div class="col-12 button-container">
+											<div class="student-submit">
+											  <button name="submit" type="submit" class="btn btn-primary">Submit</button>
 											</div>
+										  </div>
 										</div>
-									</form>
-									
+									  </form>  
 								</div>
 							</div>
 						</div>					
