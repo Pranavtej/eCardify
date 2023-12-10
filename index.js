@@ -181,6 +181,7 @@ app.post('/admin', async (req, res) => {
     }
 });
 
+
 app.get('/subscription',async (req, res) =>{
 
     const subscriptionPlans = await Subplan1.find();
