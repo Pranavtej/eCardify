@@ -6,13 +6,14 @@ const e = require('express');
 const app = express();
 const mongoose = require("mongoose");
 const User = require("./models/user");
-const Subplan1 = require("./models/subplan");
+const SubscriptionPlan = require("./models/subplan");
 const Bcard1 = require("./models/bcard");
 const cardt = require("./models/card");
 const temp = require("./models/templates");
 const bcrypt = require("bcrypt");
 const path = require('path');
 const adminModel = require('./models/admin');
+
 
 
 app.set("views", __dirname + "/views");
@@ -182,7 +183,7 @@ app.post('/admin', async (req, res) => {
 
 app.get('/subscription',async (req, res) =>{
 
-    const subscriptionPlans = await Subplan1.find();
+    const subscriptionPlans = await SubscriptionPlan.find();
     res.render('admin/subscription', { subscriptionPlans });
 });
 
@@ -234,17 +235,27 @@ app.get('/add-subscription', async (req, res) => {
 });
 
 
+
 app.post('/add-subscription', async (req, res) => {
     try {
-        const { name, price, duration } = req.body;
+        const { id, name, price, features } = req.body;
 
-        const subscriptionPlan = new Subplan1({ name, price, duration });
+        // Handle the case where features might not be a valid JSON string
+        let parsedFeatures;
+        try {
+            parsedFeatures = JSON.parse(features);
+        } catch (jsonError) {
+            console.error('Error parsing JSON:', jsonError);
+            return res.status(400).send('Invalid JSON in features field');
+        }
+
+        const subscriptionPlan = new SubscriptionPlan({ id, name, price, features: parsedFeatures });
         await subscriptionPlan.save();
 
         res.redirect('/subscription');
     } catch (error) {
         console.error(error);
-        res.status(500).send("Internal Server Error");
+        res.status(500).send('Internal Server Error');
     }
 });
 
