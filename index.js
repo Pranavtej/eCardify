@@ -211,11 +211,11 @@ app.post('/subscription', async (req, res) => {
     }
 });
 
-app.post('/edit-subscription/:id', async (req, res) => {
+app.post('/edit-subscription', async (req, res) => {
     try {
         const { name, price, duration } = req.body;
 
-        await Subplan1.findByIdAndUpdate(req.params.id, { name, price, duration });
+        await SubscriptionPlan.findByIdAndUpdate(req.params.id, { name, price, duration });
 
         res.redirect('/subscription');
     } catch (error) {
