@@ -218,7 +218,7 @@
 						
 							<div class="card">
 								<div class="card-body">
-									<form action="/edit-subscription/<%= subscriptionPlan._id" method="post">
+									<form action="/edit-subscription/<%= plan._id %>" method="post">
 										<div class="row">
 											<div class="col-12">
 												<h5 class="form-title"><span>Basic Details</span></h5>
@@ -226,33 +226,37 @@
 											<div class="col-12 col-sm-4">
 												<div class="form-group local-forms">
 													<label>plan Name <span class="login-danger">*</span></label>
-													<input name="customer" value="" class="form-control" type="text" placeholder="Edit plan Name" required>
+													<input name="name" value="<%= plan.name %>" class="form-control" type="text" placeholder="Edit plan Name" required>
 												</div>
 											</div>
 								
 											<div class="col-12 col-sm-4">  
 												<div class="form-group local-forms">
 													<label>Price<span class="login-danger">*</span></label>
-													<input name="phone" value="" class="form-control" type="num" placeholder="Edit price" required>
-												</div>
-											</div>
-											<div class="col-12 col-sm-4">  
-												<div class="form-group local-forms">
-													<label>Feature<span class="login-danger">*</span></label>
-													<input name="address" class="form-control" type="text" placeholder="Edit Feature" required>
+													<input name="price" value="<%= plan.price %>" class="form-control" type="num" placeholder="Edit price" required>
 												</div>
 											</div>
 										</div>
-								
-										<div class="row">
-											<div class="col-12 button-container">
-												<button type="button" id="addFeature">Add feature</button>
+											<div class="row">
+												<div class="col-12">
+													<h5 class="form-title"><span>Existing Features</span></h5>
+												</div>
+												
+													<div class="col-12">
+														<div class="form-group">
+															<label>Feature Name<span class="login-danger">*</span></label>
+															<input name="existingFeatures" id="existingFeatures" class="form-control" type="text" value="<%= plan.features ? plan.features.join(', ') : '' %>" >
+															
+														</div>
+														
+													</div>
+												
 											</div>
-										</div>
+										
 								
-										<div class="row" id="additionalFeatures">
-											<!-- Dynamic features  will be added here -->
-								        </div>
+										
+								
+										
 										
 										<div class="row">
 											<div class="col-12 button-container">
@@ -283,48 +287,63 @@
 		  </style>
 
 
-		<script>
-			document.addEventListener('DOMContentLoaded', function () {
-			  const form = document.getElementById('subscriptionForm');
-			  const additionalFeaturesContainer = document.getElementById('additionalFeatures');
-			  const addFeatureBtn = document.getElementById('addFeature');
-			
-			  addFeatureBtn.addEventListener('click', function () {
-				additionalFeaturesContainer.innerHTML += `
-				  <div class="row">
-					<div class="col-12">
-					  <div class="form-group">
-						<label>Feature Name<span class="login-danger">*</span></label>
-						<input name="featureNames[]" class="form-control" type="text" placeholder="Enter Feature Name" required>
-					  </div>
-					</div>
-					<div class="col-12 col-sm-4">
-					  <button type="button" class="delete-feature-btn">Delete</button>
-					</div>
-				  </div>
-				`;
-			
-				const deleteButtons = document.querySelectorAll('.delete-feature-btn');
-				deleteButtons.forEach(button => {
-				  button.addEventListener('click', function () {
-					this.closest('.row').remove();
-				  });
-				});
-			  });
-			
-			  form.addEventListener('submit', function (event) {
-				event.preventDefault();
-			
-				// Process the form data, e.g., send it to the server using AJAX
-				const formData = new FormData(form);
-				// ... Perform the necessary actions ...
-			
-				// Reset the form or redirect the user as needed
-				form.reset();
-			  });
-			});
-			</script>
-
+<script>
+	document.addEventListener('DOMContentLoaded', function () {
+	  const form = document.getElementById('subscriptionForm');
+	  const additionalFeaturesContainer = document.getElementById('additionalFeatures');
+	  const addFeatureBtn = document.getElementById('addFeature');
+  
+	  function registerDeleteButtons() {
+		const deleteButtons = document.querySelectorAll('.delete-feature-btn');
+		deleteButtons.forEach(button => {
+		  button.addEventListener('click', function () {
+			this.closest('.row').remove();
+		  });
+		});
+	  }
+  
+	  addFeatureBtn.addEventListener('click', function () {
+		additionalFeaturesContainer.innerHTML += `
+		  <div class="row">
+			<div class="col-12">
+			  <div class="form-group">
+				<label>Feature Name<span class="login-danger">*</span></label>
+				<input name="existingFeatures[]" class="form-control" type="text" placeholder="Enter Feature Name" required>
+			  </div>
+			</div>
+			<div class="col-12 col-sm-4 button-container">
+			  <button type="button" class="delete-feature-btn">Delete</button>
+			</div>
+		  </div>
+		`;
+  
+		registerDeleteButtons(); // Register event listeners for newly added delete buttons
+	  });
+  
+	  form.addEventListener('submit', function (event) {
+		event.preventDefault();
+  
+		// Process the form data, e.g., send it to the server using AJAX
+		const formData = new FormData(form);
+		// ... Perform the necessary actions ...
+  
+		// Reset the form or redirect the user as needed
+		form.reset();
+	  });
+  
+	  // Delegate the event handling to a parent container (use the closest common parent)
+	  additionalFeaturesContainer.addEventListener('click', function (event) {
+		if (event.target.classList.contains('delete-feature-btn')) {
+		  event.target.closest('.row').remove();
+		}
+	  });
+  
+	  // Register initial delete buttons
+	  registerDeleteButtons();
+	});
+  </script>
+         
+		 
 
 
         <script src="/public/assets/admin/js/jquery-3.6.0.min.js"></script>
