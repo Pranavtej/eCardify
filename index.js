@@ -230,24 +230,33 @@ app.get('/add-subscription', async (req, res) => {
 
 app.post('/add-subscription', async (req, res) => {
     try {
-        
-      const { name, price, features } = req.body;
+        console.log('Request Body:', req.body);
 
-      const newPlan = new SubscriptionPlan({
-        name,
-        price,
-        features: features.map(feature => ({ logoUrl: feature })),
-      });
-  
-      // Save the document to MongoDB
-      await newPlan.save();
-  
-      res.status(200).send('Subscription plan added successfully!');
+        const { name, price, featureNames } = req.body;
+
+        if (name === 'submit') {
+            res.status(400).send('Bad Request');
+            return;
+          }
+        const newPlan = new SubscriptionPlan({
+            name,
+            price,
+            features: featureNames.map(feature => ({ logoUrl: feature })),
+        });
+
+        console.log('New Plan:', newPlan);
+
+        // Save the document to MongoDB
+        const savedPlan = await newPlan.save();
+        console.log('Saved Plan:', savedPlan);
+
+        res.status(200).send('Subscription plan added successfully!');
     } catch (error) {
-      console.error('Error saving subscription plan:', error);
-      res.status(500).send('Internal Server Error');
+        console.error('Error saving subscription plan:', error);
+        res.status(500).send('Internal Server Error');
     }
-  });
+});
+
 
 
 app.get('/edit-subscription', async (req, res) => {
