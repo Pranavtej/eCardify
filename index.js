@@ -362,3 +362,27 @@ app.get('/user-grid', async (req, res) => {
 });
 
 
+app.get("/delete/:id",async(req,res)=>{
+    let planid = req.params.id;
+    try {
+        
+        if (!ObjectId.isValid(planid)) {
+          return res.status(400).json({ error: 'Invalid ObjectId' });
+        }
+    
+        
+        const deletedPlan = await SubscriptionPlan.findByIdAndDelete(planid);
+        const subscriptionPlans = await SubscriptionPlan.find();
+    
+        if (!deletedPlan) {
+          return res.status(404).json({ error: 'Subscription plan not found' });
+        }
+    
+        res.render('admin/subscription', { subscriptionPlans });
+      } catch (error) {
+        console.error('Error deleting subscription plan:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+      }
+    
+
+});
