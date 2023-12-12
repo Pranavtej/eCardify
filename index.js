@@ -18,6 +18,7 @@ const adminModel = require('./models/admin');
 // app.set("views", __dirname + "/views");
 // app.set("view engine", "ejs");
 const { ObjectId } = require('mongodb');
+
 app.set("views", __dirname + "/views");
 app.set("view engine", "ejs");
 //const { ObjectId } = require('mongodb');
@@ -174,7 +175,7 @@ app.post('/admin', async (req, res) => {
         if (!user) {
             res.send("User does not exist");
         } else if (password === user.password) {
-            res.render('admin/index');  // Render the admin dashboard using EJS
+            res.render('admin/index');  
         } else {
             res.send("Invalid password");
         }
@@ -183,6 +184,11 @@ app.post('/admin', async (req, res) => {
         res.status(500).send("Internal Server Error");
     }
 });
+
+app.get('/index',async(req,res)=>{
+   res.render('admin/index');
+});
+
 
 app.get('/subscription',async (req, res) =>{
 
@@ -193,9 +199,9 @@ app.get('/subscription',async (req, res) =>{
 
 app.post('/subscription', async (req, res) => {
     try {
-        const { planId,name, price, duration } = req.body;
+        const { name, price, duration } = req.body;
 
-        const subscriptionPlan = new SubscriptionPlan({ planId,name, price, duration });
+        const subscriptionPlan = new Subplan1({ name, price, duration });
         await subscriptionPlan.save();
 
         res.redirect('/subscription');
@@ -230,46 +236,74 @@ app.get('/add-subscription', async (req, res) => {
 
 app.post('/add-subscription', async (req, res) => {
     try {
-        console.log('Request Body:', req.body);
+        
+      const { name, price, features } = req.body;
 
-        const { name, price, featureNames } = req.body;
-
-        if (name === 'submit') {
-            res.status(400).send('Bad Request');
-            return;
-          }
-        const newPlan = new SubscriptionPlan({
-            name,
-            price,
-            features: featureNames.map(feature => ({ logoUrl: feature })),
-        });
-
-        console.log('New Plan:', newPlan);
-
-        // Save the document to MongoDB
-        const savedPlan = await newPlan.save();
-        console.log('Saved Plan:', savedPlan);
-
-        res.status(200).send('Subscription plan added successfully!');
+      const newPlan = new SubscriptionPlan({
+        name,
+        price,
+        features: features.map(feature => ({ logoUrl: feature })),
+      });
+  
+      // Save the document to MongoDB
+      await newPlan.save();
+  
+      res.status(200).send('Subscription plan added successfully!');
     } catch (error) {
-        console.error('Error saving subscription plan:', error);
-        res.status(500).send('Internal Server Error');
+      console.error('Error saving subscription plan:', error);
+      res.status(500).send('Internal Server Error');
     }
-});
+  });
 
 
 
-app.get('/edit-subscription', async (req, res) => {
+app.get('/edit-subscription/:id', async (req, res) => {
     try {
-        // Your logic for fetching subscription plan data if needed
-        // const subscriptionPlan = await Subplan1.findById(req.params.id);
-
-        res.render('admin/edit-subscription');
+        const plan = await SubscriptionPlan.findById(req.params.id);
+        if (!plan) {
+            return res.status(404).send('Subscription plan not found');
+        }
+        res.render('admin/edit-subscription', { plan });
     } catch (error) {
-        console.error(error);
-        res.status(500).send("Internal Server Error");
-    }
+        console.error('Error fetching subscription plan:', error);
+        res.status(500).send('Internal Server Error');
+}
 });
+
+app.post('/edit-subscription/:id', async (req, res) => {
+    const planId = req.params.id;
+  
+  try {
+    
+    const existingPlan = await SubscriptionPlan.findById(planId);
+
+    if (!existingPlan) {
+      return res.status(404).json({ error: 'Subscription plan not found' });
+    }
+
+   
+    const { name, price, existingFeatures } = req.body;
+
+    
+    const updatedFeatures = existingFeatures.split(',');
+
+   
+    existingPlan.name = name;
+    existingPlan.price = price;
+    existingPlan.features = updatedFeatures;
+
+    
+    await existingPlan.save();
+    const subscriptionPlans = await SubscriptionPlan.find();
+    res.render('admin/subscription', { subscriptionPlans });
+  } catch (error) {
+    console.error('Error updating subscription plan:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+    });
+    
+
+
 
 
 app.get('/add-user', async (req, res) => {
@@ -320,4 +354,5 @@ app.get('/user-grid', async (req, res) => {
         res.status(500).send("Internal Server Error");
     }
 });
+
 

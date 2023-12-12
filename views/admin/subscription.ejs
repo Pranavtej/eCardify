@@ -394,30 +394,30 @@
                         </tr>
                       </thead>
                       <tbody>
-						<% subscriptionPlans.forEach((plan, index) => { %>
-							<tr>
-							  <td><%= index + 1 %></td>
-							  <td><%= plan.name %></td>
-							  <td>
-								<ul>
-								  <% plan.features.forEach(feature => { %>
-									<li><%= feature.logoUrl %></li>
-								  <% }); %>
-								</ul>
-							  </td>
-							  <td>$<%= plan.price.toFixed(2) %></td>
-							  <td class="text-end">
-								<div class="actions">
-								  <a href="javascript:;" class="btn btn-sm bg-success-light me-2">
-									<i class="feather-eye"></i>
-								  </a>
-								  <a href="/edit-subscription" class="btn btn-sm bg-danger-light">
-									<i class="feather-edit"></i>
-								  </a>
-								</div>
-							  </td>
-							</tr>
-						  <% }); %>
+                        <% subscriptionPlans.forEach((plan, index) => { %>
+                          <tr>
+                            <td><%= index + 1 %></td>
+                            <td><%= plan.name %></td>
+                            <td>
+                              <ul>
+                                <% plan.features.forEach(feature => { %>
+                                  <li><%= feature.logoUrl %></li>
+                                <% }); %>
+                              </ul>
+                            </td>
+                            <td>$<%= plan.price.toFixed(2) %></td>
+                            <td class="text-end">
+                              <div class="actions">
+                                <a href="javascript:;" class="btn btn-sm bg-success-light me-2">
+                                  <i class="feather-eye"></i>
+                                </a>
+                                <a href="/edit-subscription/<%= plan._id %>" class="btn btn-sm bg-danger-light">
+                                  <i class="feather-edit"></i>
+                                </a>
+                              </div>
+                            </td>
+                          </tr>
+                        <% }); %>
                         <!-- <tr>
 													<td>
 														<div class="form-check check-tables">
