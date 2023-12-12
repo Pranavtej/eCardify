@@ -400,16 +400,20 @@
                             <td><%= plan.name %></td>
                             <td>
                               <ul>
-                                <% plan.features.forEach(feature => { %>
-                                  <li><%= feature.logoUrl %></li>
-                                <% }); %>
+                                <% if (plan.features && Array.isArray(plan.features)) { %>
+                                  <% plan.features.forEach(feature => { %>
+                                    <li><%= feature %></li>
+                                  <% }); %>
+                                <% } else { %>
+                                  <li>No features available</li>
+                                <% } %>
                               </ul>
                             </td>
                             <td>$<%= plan.price.toFixed(2) %></td>
                             <td class="text-end">
                               <div class="actions">
-                                <a href="javascript:;" class="btn btn-sm bg-success-light me-2">
-                                  <i class="feather-eye"></i>
+                                <a href="/delete/<%= plan._id %>" class="btn btn-sm bg-danger-light me-2">
+                                  <i class="feather-trash-2"></i> 
                                 </a>
                                 <a href="/edit-subscription/<%= plan._id %>" class="btn btn-sm bg-danger-light">
                                   <i class="feather-edit"></i>

@@ -18,6 +18,7 @@ const adminModel = require('./models/admin');
 // app.set("views", __dirname + "/views");
 // app.set("view engine", "ejs");
 const { ObjectId } = require('mongodb');
+const { rmSync } = require('fs');
 
 app.set("views", __dirname + "/views");
 app.set("view engine", "ejs");
@@ -173,7 +174,7 @@ app.post('/admin', async (req, res) => {
         if (!user) {
             res.send("User does not exist");
         } else if (password === user.password) {
-            res.render('admin/index');  // Render the admin dashboard using EJS
+            res.render('admin/index');  
         } else {
             res.send("Invalid password");
         }
@@ -182,6 +183,11 @@ app.post('/admin', async (req, res) => {
         res.status(500).send("Internal Server Error");
     }
 });
+
+app.get('/index',async(req,res)=>{
+   res.render('admin/index');
+});
+
 
 app.get('/subscription', async (req, res) => {
     try {
@@ -193,33 +199,46 @@ app.get('/subscription', async (req, res) => {
     }
 });
 
-
-app.post('/subscription', async (req, res) => {
+app.get("/delete/:id",async(req,res)=>{
+    let planid = req.params.id;
     try {
-        const { name, price, duration } = req.body;
+        
+        if (!ObjectId.isValid(planid)) {
+          return res.status(400).json({ error: 'Invalid ObjectId' });
+        }
+    
+        
+        const deletedPlan = await SubscriptionPlan.findByIdAndDelete(planid);
+        const subscriptionPlans = await SubscriptionPlan.find();
+    
+        if (!deletedPlan) {
+          return res.status(404).json({ error: 'Subscription plan not found' });
+        }
+    
+        res.render('admin/subscription', { subscriptionPlans });
+      } catch (error) {
+        console.error('Error deleting subscription plan:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+      }
+    
 
-        const subscriptionPlan = new Subplan1({ name, price, duration });
-        await subscriptionPlan.save();
-
-        res.redirect('/subscription');
-    } catch (error) {
-        console.error(error);
-        res.status(500).send("Internal Server Error");
-    }
 });
 
-app.post('/edit-subscription/:id', async (req, res) => {
-    try {
-        const { name, price, duration } = req.body;
 
-        await Subplan1.findByIdAndUpdate(req.params.id, { name, price, duration });
+// app.post('/subscription', async (req, res) => {
+//     try {
+//         const { name, price, duration } = req.body;
 
-        res.redirect('/subscription');
-    } catch (error) {
-        console.error(error);
-        res.status(500).send("Internal Server Error");
-    }
-});
+//         const subscriptionPlan = new Subplan1({ name, price, duration });
+//         await subscriptionPlan.save();
+
+//         res.redirect('/subscription');
+//     } catch (error) {
+//         console.error(error);
+//         res.status(500).send("Internal Server Error");
+//     }
+// });
+
 
 app.get('/add-subscription', async (req, res) => {
     try {
@@ -233,37 +252,81 @@ app.get('/add-subscription', async (req, res) => {
 
 app.post('/add-subscription', async (req, res) => {
     try {
+        const { name, price, featureNames } = req.body;
+    
         
-      const { name, price, features } = req.body;
-
-      const newPlan = new SubscriptionPlan({
-        name,
-        price,
-        features: features.map(feature => ({ logoUrl: feature })),
-      });
+        if (!name || !price || !featureNames || !Array.isArray(featureNames)) {
+          return res.status(400).json({ error: 'Invalid data format' });
+        }
+    
+        
+        const newSubscriptionPlan = new SubscriptionPlan({
+          name,
+          price,
+          features: featureNames,
+        });
+    
+        
+        await newSubscriptionPlan.save();
+    
+        const subscriptionPlans = await SubscriptionPlan.find();
+        res.render('admin/subscription', { subscriptionPlans });
+      } catch (error) {
+        console.error('Error adding subscription plan:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+      }
+    });
   
-      // Save the document to MongoDB
-      await newPlan.save();
-  
-      res.status(200).send('Subscription plan added successfully!');
-    } catch (error) {
-      console.error('Error saving subscription plan:', error);
-      res.status(500).send('Internal Server Error');
-    }
-  });
 
 
-app.get('/edit-subscription', async (req, res) => {
+
+app.get('/edit-subscription/:id', async (req, res) => {
     try {
-        // Your logic for fetching subscription plan data if needed
-        // const subscriptionPlan = await Subplan1.findById(req.params.id);
-
-        res.render('admin/edit-subscription');
+        const plan = await SubscriptionPlan.findById(req.params.id);
+        if (!plan) {
+            return res.status(404).send('Subscription plan not found');
+        }
+        res.render('admin/edit-subscription', { plan });
     } catch (error) {
-        console.error(error);
-        res.status(500).send("Internal Server Error");
-    }
+        console.error('Error fetching subscription plan:', error);
+        res.status(500).send('Internal Server Error');
+}
 });
+
+app.post('/edit-subscription/:id', async (req, res) => {
+    const planId = req.params.id;
+  
+  try {
+    
+    const existingPlan = await SubscriptionPlan.findById(planId);
+
+    if (!existingPlan) {
+      return res.status(404).json({ error: 'Subscription plan not found' });
+    }
+
+   
+    const { name, price, existingFeatures } = req.body;
+
+    
+    const updatedFeatures = existingFeatures.split(',');
+
+   
+    existingPlan.name = name;
+    existingPlan.price = price;
+    existingPlan.features = updatedFeatures;
+
+    
+    await existingPlan.save();
+    const subscriptionPlans = await SubscriptionPlan.find();
+    res.render('admin/subscription', { subscriptionPlans });
+  } catch (error) {
+    console.error('Error updating subscription plan:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+    });
+    
+
+
 
 
 app.get('/add-user', async (req, res) => {
