@@ -201,7 +201,7 @@ app.post('/subscription', async (req, res) => {
     try {
         const { name, price, duration } = req.body;
 
-        const subscriptionPlan = new Subplan1({ name, price, duration });
+        const subscriptionPlan = new SubscriptionPlan({ name, price, duration });
         await subscriptionPlan.save();
 
         res.redirect('/subscription');
