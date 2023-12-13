@@ -185,3 +185,26 @@ app.get('/teachers',async (req, res) =>{
     res.render('/views/admin/teachers');
 }
 );
+
+
+
+const router = express.Router();
+router.get('/user', async (req, res) => {
+    try {
+        // Fetch users from MongoDB
+        const users = await User.find({}, 'id name phoneNumber subscriptionStatus cardType');
+
+        // Render the 'user' EJS file and pass the users data
+        res.render('user', { users });
+    } catch (err) {
+        // Handle errors here
+        res.status(500).send(err.message);
+    }
+});
+
+module.exports = router;
+
+
+
+
+
