@@ -14,7 +14,7 @@ const bcrypt = require("bcrypt");
 const path = require('path');
 const adminModel = require('./models/admin');
 const multer = require('multer');
-const image = require('./models/imagesave');
+
 
 // app.set("views", __dirname + "/views");
 // app.set("view engine", "ejs");
