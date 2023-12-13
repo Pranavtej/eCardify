@@ -13,7 +13,8 @@ const temp = require("./models/templates");
 const bcrypt = require("bcrypt");
 const path = require('path');
 const adminModel = require('./models/admin');
-
+const multer = require('multer');
+const image = require('./models/imagesave');
 
 // app.set("views", __dirname + "/views");
 // app.set("view engine", "ejs");
@@ -45,6 +46,10 @@ app.use(session({
 }));
 
 
+// multer confuguration
+
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
 
 
 
@@ -379,4 +384,28 @@ app.get("/delete/:id",async(req,res)=>{
       }
     
 
+});
+
+
+app.post('/add-user',upload.single('photo') ,async (req, res) => {
+    try {
+        const newUser = new image({
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
+            gender: req.body.gender,
+            subscription: req.body.subscription,
+            email: req.body.email,
+            phone: req.body.phone,
+            photo: {
+              data: req.file.buffer,
+              contentType: req.file.mimetype,
+            },
+          });
+
+            await newUser.save();
+            res.redirect('/user');
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Internal Server Error");
+    }
 });
