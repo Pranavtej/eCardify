@@ -379,3 +379,31 @@ app.get('/user-grid', async (req, res) => {
 });
 
 
+//posting the user info
+
+// API endpoint to add a user
+app.post('/add-user', async (req, res) => {
+    try {
+      const { username, email, password } = req.body;
+  
+      if (!username || !email || !password) {
+        return res.status(400).json({ error: 'Username, email, and password are required' });
+      }
+  
+      // Check if the email already exists
+      const existingUser = await User.findOne({ email });
+      if (existingUser) {
+        return res.status(400).json({ error: 'Email already exists' });
+      }
+  
+      // Create a new user
+      const newUser = new User({ username, email, password });
+      await newUser.save();
+  
+      res.status(201).json({ message: 'User added successfully' });
+    } catch (error) {
+      console.error(error); // Log the actual error
+      res.status(500).json({ error: `Internal Server Error: ${error.message}` });
+    }
+  });
+  

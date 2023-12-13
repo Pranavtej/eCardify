@@ -226,7 +226,7 @@
 						
 							<div class="card comman-shadow">
 								<div class="card-body">
-									<form>
+									<form action="/add-user" method="post">
 										<div class="row">
 											<div class="col-12">
 												<h5 class="form-title student-info">User Information <span><a href="javascript:;"><i class="feather-more-vertical"></i></a></span></h5>
@@ -234,13 +234,19 @@
 											<div class="col-12 col-sm-4">  
 												<div class="form-group local-forms">
 													<label >Name <span class="login-danger">*</span></label>
-													<input class="form-control" type="text" placeholder="Enter Name" >
+													<input class="form-control" type="text" placeholder="Enter Name" id="username"  name="username"required>
+												</div>
+											</div>
+											<div class="col-12 col-sm-4">
+												<div class="form-group local-forms">
+													<label >Password<span class="login-danger">*</span></label>
+													<input class="form-control" type="text" placeholder="Enter Phone number" id="password" name="password" required>
 												</div>
 											</div>
 											<div class="col-12 col-sm-4">
 												<div class="form-group local-forms">
 													<label >Phone number<span class="login-danger">*</span></label>
-													<input class="form-control" type="text" placeholder="Enter Phone number" >
+													<input class="form-control" type="text" placeholder="Enter Phone number" id="password" required>
 												</div>
 											</div>
 											<div class="col-12 col-sm-4">
@@ -258,7 +264,7 @@
 											<div class="col-12 col-sm-4">
 												<div class="form-group local-forms">
 													<label>Email</label>
-													<input class="form-control" type="text" placeholder="Enter Email" >
+													<input class="form-control" type="text" placeholder="Enter Email" id="email" name="email" required>
 												</div>
 											</div>
 											<div class="col-12 col-sm-4">
