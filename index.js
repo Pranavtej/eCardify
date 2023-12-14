@@ -311,17 +311,19 @@ app.post('/edit-subscription/:id', async (req, res) => {
 
 
 
-app.get('/add-user', async (req, res) => {
-    try {
-        // Your logic for fetching subscription plan data if needed
-        // const subscriptionPlan = await Subplan1.findById(req.params.id);
-
-        res.render('admin/add-user');
-    } catch (error) {
-        console.error(error);
-        res.status(500).send("Internal Server Error");
-    }
-});
+    app.get('/add-user', async (req, res) => {
+        try {
+            // Fetch subscription plans, card types, and templates from the database
+            const subscriptionPlans = await SubscriptionPlan.find();
+            const cardTypes = await cardt.find();
+            const templates = await temp.find();
+    
+            res.render('admin/add-user', { subscriptionPlans, cardTypes, templates });
+        } catch (error) {
+            console.error('Error fetching data for user form:', error);
+            res.status(500).send('Internal Server Error');
+        }
+    });
 
 app.get('/user-details', async (req, res) => {
     try {
@@ -415,26 +417,44 @@ app.get("/delete/:id",async(req,res)=>{
 });
 
 
-app.post('/add-user',upload.single('photo') ,async (req, res) => {
+app.post('/add-user', async (req, res) => {
     try {
-        const newUser = new image({
-            firstName: req.body.firstName,
-            lastName: req.body.lastName,
-            gender: req.body.gender,
-            subscription: req.body.subscription,
-            email: req.body.email,
-            phone: req.body.phone,
-            photo: {
-              data: req.file.buffer,
-              contentType: req.file.mimetype,
-            },
-          });
+        const { username, email, number, subscriptionPlan, occasion, cardType, template } = req.body;
+        console.log(req.body);
+        // Validate the form data
+        // if (!username || !email || !phoneNumber || !subscriptionPlan || !occasion || !cardType || !template) {
+        //     return res.status(400).json({ error: 'Username, email, phone number, subscription plan, occasion, card type, and template are required' });
+        // }
 
-            await newUser.save();
-            res.redirect('/user');
+        // Create a new user
+        const Plan= new ObjectId(subscriptionPlan);
+        const card=new ObjectId(cardType);
+        const temp= new ObjectId(template);
+        const newUser = new User({
+            username,
+            email,
+            number,
+            selectedItems: [
+                {
+                    occasion,
+                    cardType: card,
+                    template: temp,
+                    subscriptionPlan: { 
+                        plan:Plan,
+                    },
+                },
+            ],
+        });
+
+        // Save the user to the database
+        const savedUser = await newUser.save();
+
+        // Redirect or respond as needed
+        console.log(savedUser);
+        res.render('admin/user'); // Redirect to a success page
     } catch (error) {
-        console.error(error);
-        res.status(500).send("Internal Server Error");
+        console.error('Error creating user:', error);
+        res.status(500).send('Internal Server Error');
     }
 });
 // >>>>>>> 72e0bd7342cf07c5e1806add5ed49b1659dc0abe
