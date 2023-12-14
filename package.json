@@ -34,8 +34,14 @@
     "memcached": "^2.2.2",
     "mongoose": "^8.0.2",
     "multer": "^1.4.5-lts.1",
+<<<<<<< HEAD
     "nodemon": "^3.0.1",
     "pdfkit": "^0.14.0",
+=======
+>>>>>>> 861162e0a03f8e2d5d7d14adebaca69a2909bab5
     "preline": "^2.0.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
   }
 }
