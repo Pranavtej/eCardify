@@ -145,7 +145,7 @@ app.get('/contact', function (req, res) {
 
 
 app.listen(8000, function () {
-    console.log('Server started at port 3000');
+    console.log('Server started at port 8000');
    })
 
 //admin login
