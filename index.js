@@ -276,7 +276,7 @@ app.get('/index',async(req,res)=>{
 
 
  //delete user from row
- app.delete('/delete-user/:id', async (req, res) => {
+ app.delete('/delete/:id', async (req, res) => {
     try {
         await User.findByIdAndDelete(req.params.id);
         res.redirect('/users'); // Redirect to users' page or handle response accordingly
@@ -304,14 +304,7 @@ const { MongoClient } = require('mongodb');
 const uri = 'mongodb://admin:QjwWaXvnnuIZ46MY@localhost:27017/node_crud';
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 app.get('/user_view', async (req, res) => {
-    try {
-      await client.connect(); // Connect to MongoDB
-      
-      const database = client.db('node_crud'); // Replace with your database name
-      const usersCollection = database.collection('users'); // Replace with your collection name
-      
-      const users = await usersCollection.find({}).toArray(); // Fetch users from collection
-      
+    try {  
       res.render('admin/user_view', { users, message: null }); // Render EJS template with fetched data
     } catch (error) {
       console.error('Error:', error);
