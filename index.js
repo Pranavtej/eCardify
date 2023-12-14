@@ -2,7 +2,6 @@ const conn = require('./connection');
 const express = require('express');
 const session = require('express-session');
 const bodyParser = require("body-parser");
-const e = require('express');
 const app = express();
 const mongoose = require("mongoose");
 const User = require("./models/user");
@@ -429,3 +428,84 @@ app.post('/add-user', async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 });
+
+
+app.get('/user-edit', async (req, res) => {
+    try {
+        // Fetch subscription plans, card types, and templates from the database
+        const subscriptionPlans = await SubscriptionPlan.find();
+        const cardTypes = await cardt.find();
+        const templates = await temp.find();
+
+        res.render('admin/user-edit', { subscriptionPlans, cardTypes, templates });
+    } catch (error) {
+        console.error('Error fetching data for user form:', error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+//update user
+app.get('/user-edit/:userId', async (req, res) => {
+    try {
+        const userId = req.params.userId;
+
+        // Fetch the user data from the database
+        const user = await User.findById(userId);
+
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        // Render the form for editing the user, you can customize this based on your needs
+        res.render('edit-user-form', { user });
+    } catch (error) {
+        console.error('Error fetching user for editing:', error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+// PUT endpoint for updating a user
+app.put('/user-edit/:userId', async (req, res) => {
+    try {
+        const userId = req.params.userId;
+        const { username, email, number, subscriptionPlan, occasion, cardType, template } = req.body;
+
+        // Validate the form data if needed
+        // if (!username || !email || !number || !subscriptionPlan || !occasion || !cardType || !template) {
+        //     return res.status(400).json({ error: 'All fields are required' });
+        // }
+
+        // Update the user in the database
+        const Plan = new ObjectId(subscriptionPlan);
+        const card = new ObjectId(cardType);
+        const temp = new ObjectId(template);
+
+        const updatedUser = await User.findByIdAndUpdate(
+            userId,
+            {
+                $set: {
+                    username,
+                    email,
+                    number,
+                    'selectedItems.0.occasion': occasion,
+                    'selectedItems.0.cardType': card,
+                    'selectedItems.0.template': temp,
+                    'selectedItems.0.subscriptionPlan.plan': Plan,
+                },
+            },
+            { new: true } // This option returns the modified document rather than the original
+        );
+
+        if (!updatedUser) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        // Respond with the updated user
+        res.json(updatedUser);
+    } catch (error) {
+        console.error('Error updating user:', error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+
