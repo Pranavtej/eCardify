@@ -30,6 +30,8 @@ app.set('views', path.join(__dirname, 'views'));
 
 app.use('/public', express.static(__dirname + "/public"));
 
+//route prefix
+
 
 const defaultSessionSecret = 'mydefaultsecretkey';
 
@@ -186,24 +188,142 @@ app.get('/teachers',async (req, res) =>{
 }
 );
 
+app.get('/index',async(req,res)=>{
+    res.render('admin/index');
+ });
+ 
+ 
+ app.get('/subscription',async (req, res) =>{
+ 
+     const subscriptionPlans = await SubscriptionPlan.find();
+     res.render('admin/subscription', { subscriptionPlans });
+ });
+ 
+ 
+ app.post('/subscription', async (req, res) => {
+     try {
+         const { name, price, duration } = req.body;
+ 
+         const subscriptionPlan = new Subplan1({ name, price, duration });
+         await subscriptionPlan.save();
+ 
+         res.redirect('/subscription');
+     } catch (error) {
+         console.error(error);
+         res.status(500).send("Internal Server Error");
+     }
+ });
+ 
+ app.post('/edit-subscription', async (req, res) => {
+     try {
+         const { name, price, duration } = req.body;
+ 
+         await SubscriptionPlan.findByIdAndUpdate(req.params.id, { name, price, duration });
+ 
+         res.redirect('/subscription');
+     } catch (error) {
+         console.error(error);
+         res.status(500).send("Internal Server Error");
+     }
+ });
+ 
+ app.get('/add-subscription', async (req, res) => {
+     try {
+         res.render('admin/add-subscription');
+     } catch (error) {
+         console.error(error);
+         res.status(500).send("Internal Server Error");
+     }
+ });
+ 
+ 
+ app.post('/add-subscription', async (req, res) => {
+     try {
+         
+       const { name, price, features } = req.body;
+ 
+       const newPlan = new SubscriptionPlan({
+         name,
+         price,
+         features: features.map(feature => ({ logoUrl: feature })),
+       });
+   
+       // Save the document to MongoDB
+       await newPlan.save();
+   
+       res.status(200).send('Subscription plan added successfully!');
+     } catch (error) {
+       console.error('Error saving subscription plan:', error);
+       res.status(500).send('Internal Server Error');
+     }
+   });
+ 
+ 
+ 
+ app.get('/edit-subscription/:id', async (req, res) => {
+     try {
+         const plan = await SubscriptionPlan.findById(req.params.id);
+         if (!plan) {
+             return res.status(404).send('Subscription plan not found');
+         }
+         res.render('admin/edit-subscription', { plan });
+     } catch (error) {
+         console.error('Error fetching subscription plan:', error);
+         res.status(500).send('Internal Server Error');
+ }
+ });
 
 
-const router = express.Router();
-router.get('/user', async (req, res) => {
+
+ //delete user from row
+ app.delete('/delete-user/:id', async (req, res) => {
     try {
-        // Fetch users from MongoDB
-        const users = await User.find({}, 'id name phoneNumber subscriptionStatus cardType');
-
-        // Render the 'user' EJS file and pass the users data
-        res.render('user', { users });
-    } catch (err) {
-        // Handle errors here
-        res.status(500).send(err.message);
+        await User.findByIdAndDelete(req.params.id);
+        res.redirect('/users'); // Redirect to users' page or handle response accordingly
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Internal Server Error");
     }
 });
 
-module.exports = router;
 
+
+
+
+
+// Sample message
+const message = {
+  type: 'success',
+  message: 'Data loaded successfully!',
+};
+
+
+const { MongoClient } = require('mongodb');
+// Create a MongoClient instance
+// MongoDB connection string (replace with your credentials and database name)
+const uri = 'mongodb://admin:QjwWaXvnnuIZ46MY@localhost:27017/node_crud';
+const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+app.get('/user_view', async (req, res) => {
+    try {
+      await client.connect(); // Connect to MongoDB
+      
+      const database = client.db('node_crud'); // Replace with your database name
+      const usersCollection = database.collection('users'); // Replace with your collection name
+      
+      const users = await usersCollection.find({}).toArray(); // Fetch users from collection
+      
+      res.render('admin/user_view', { users, message: null }); // Render EJS template with fetched data
+    } catch (error) {
+      console.error('Error:', error);
+      res.status(500).send('Internal Server Error');
+    } finally {
+      await client.close(); // Close the MongoDB connection
+    }
+  });
+  
+  app.listen(3000, () => {
+    console.log('Server is running on port 3000');
+  });
 
 
 

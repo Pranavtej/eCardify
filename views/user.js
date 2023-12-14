@@ -2,11 +2,26 @@
 const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
-    id: String,
-    name: String,
-    phoneNumber: String,
-    subscriptionStatus: String,
-    cardType: String
+    id:{
+        type: String,
+        required: true,
+    },
+    name:{
+        type: String,
+        required: true,
+    },
+    phoneNumber:{
+        type: String,
+        required: true,
+    },
+    subscriptionStatus:{
+        type: String,
+        required: true,
+    },
+    cardType: {
+        type: String,
+        required: true,
+    },
     // Other fields as needed...
 });
 

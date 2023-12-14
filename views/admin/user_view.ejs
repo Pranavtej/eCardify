@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>eCardify</title>
+    <link rel="stylesheet" href="/public/assets/test/css/demo.css">
+    <link rel="stylesheet" href="/public/assets/test/css/style.css">
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+    <!-- Custom CSS -->
+    <link href="https://cdn.datatables.net/v/dt/dt-1.13.8/datatables.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            border-spacing: 0;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #343a40;
+            color: #fff;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        tr:hover {
+            background-color: #ddd;
+        }
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+        a:hover {
+            color: #007bff;
+        }
+    </style>
+</head>
+<body>
+    <% include('layout/header') %>
+    <div class="container">
+        <div class="row my-4">
+            <div class="col-1g-12">
+                <% if (message) { %>
+                    <div class="alert alert-dismissible fade show alert-<%= message.type %> " role="alert">
+                        <button class="btn-close" type= "button" data-bs-dismiss="alert" aria-label="Close"></button>
+                        <strong><%= message.message %></strong>
+                    </div>
+                <% } %>
+                <div class="table-responsive">
+                    <table id="userTable" class="table table-striped text-center">
+                        <thead>
+                            <tr class="table-dark">
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Phone</th>
+                                <th>Subscription Status</th>
+                                <th>Card Type</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% users.forEach((row, index) =>{ %>
+                            <tr class="align-middle">
+                                <td><%= index + 1 %></td>
+                                <td><%= row.name %></td>
+                                <td><%= row.phone %></td>
+                                <td><%= row.subscriptionStatus %></td>
+                                <td><%= row.cardType %></td>
+                                <td>
+                                    <a href="/edit/<%= row._id %>" class="text-success"><i class="fas fa-edit fa-lg mx-1"></i></a>
+                                    <a href="/delete/<%= row._id %>" class="text-danger"><i class="fas fa-trash fa-lg mx-1"></i></a>
+                                </td>
+                            </tr>
+                            <% }) %>
+                        </tbody>
+                    </table>
+                </div>
+                <% if (!users || users.length === 0) { %>
+                    <h1 class="text-center text-secondary mt-5">No users found in the database!</h1>
+                <% } %>
+            </div>
+        </div>
+    </div>
+
+    <!-- DataTables JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+    <script src="https://cdn.datatables.net/v/dt/dt-1.13.8/datatables.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $("table").DataTable({
+                order:[0,'desc']
+            });
+        });
+      </script>
+</body>
+</html>
