@@ -14,7 +14,10 @@ const bcrypt = require("bcrypt");
 const path = require('path');
 const adminModel = require('./models/admin');
 const multer = require('multer');
-
+const Image = require('./models/image');
+const fs = require('fs');
+const { promisify } = require('util');
+const readFileAsync = promisify(fs.readFile);
 
 // app.set("views", __dirname + "/views");
 // app.set("view engine", "ejs");
@@ -36,7 +39,7 @@ app.set('views', path.join(__dirname, 'views'));
 
 app.use('/public', express.static(__dirname + "/public"));
 
-
+const uploadDirectory = path.join(__dirname, 'uploads');
 const defaultSessionSecret = 'mydefaultsecretkey';
 
 app.use(session({
@@ -48,10 +51,21 @@ app.use(session({
 
 // multer confuguration
 
-const storage = multer.memoryStorage();
-const upload = multer({ storage: storage });
 
+if (!fs.existsSync(uploadDirectory)) {
+    fs.mkdirSync(uploadDirectory);
+  }
 
+  const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+      cb(null, uploadDirectory);
+    },
+    filename: (req, file, cb) => {
+      cb(null, file.fieldname + '-' + Date.now());
+    },
+  });
+  
+  const upload = multer({ storage });
 
 
 app.get('/', function (req, res) {
@@ -100,6 +114,8 @@ app.post('/register', async (req, res) => {
 
         res.redirect('/login');
     }
+
+
 });
 
 
@@ -311,19 +327,17 @@ app.post('/edit-subscription/:id', async (req, res) => {
 
 
 
-    app.get('/add-user', async (req, res) => {
-        try {
-            // Fetch subscription plans, card types, and templates from the database
-            const subscriptionPlans = await SubscriptionPlan.find();
-            const cardTypes = await cardt.find();
-            const templates = await temp.find();
-    
-            res.render('admin/add-user', { subscriptionPlans, cardTypes, templates });
-        } catch (error) {
-            console.error('Error fetching data for user form:', error);
-            res.status(500).send('Internal Server Error');
-        }
-    });
+app.get('/add-user', async (req, res) => {
+    try {
+        // Your logic for fetching subscription plan data if needed
+        // const subscriptionPlan = await Subplan1.findById(req.params.id);
+
+        res.render('admin/add-user');
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Internal Server Error");
+    }
+});
 
 app.get('/user-details', async (req, res) => {
     try {
@@ -389,43 +403,60 @@ app.get("/delete/:id",async(req,res)=>{
 });
 
 
-app.post('/add-user', async (req, res) => {
+// app.post('/add-user',upload.single('photo') ,async (req, res) => {
+//     try {
+//         const newUser = new image({
+//             firstName: req.body.firstName,
+//             lastName: req.body.lastName,
+//             gender: req.body.gender,
+//             subscription: req.body.subscription,
+//             email: req.body.email,
+//             phone: req.body.phone,
+//             photo: {
+//               data: req.file.buffer,
+//               contentType: req.file.mimetype,
+//             },
+//           });
+
+//             await newUser.save();
+//             res.redirect('/user');
+//     } catch (error) {
+//         console.error(error);
+//         res.status(500).send("Internal Server Error");
+//     }
+// });
+
+
+  
+  app.get('/imageupload', async (req, res) => {
     try {
-        const { username, email, number, subscriptionPlan, occasion, cardType, template } = req.body;
-        console.log(req.body);
-        // Validate the form data
-        // if (!username || !email || !phoneNumber || !subscriptionPlan || !occasion || !cardType || !template) {
-        //     return res.status(400).json({ error: 'Username, email, phone number, subscription plan, occasion, card type, and template are required' });
-        // }
-
-        // Create a new user
-        const Plan= new ObjectId(subscriptionPlan);
-        const card=new ObjectId(cardType);
-        const temp= new ObjectId(template);
-        const newUser = new User({
-            username,
-            email,
-            number,
-            selectedItems: [
-                {
-                    occasion,
-                    cardType: card,
-                    template: temp,
-                    subscriptionPlan: { 
-                        plan:Plan,
-                    },
-                },
-            ],
-        });
-
-        // Save the user to the database
-        const savedUser = await newUser.save();
-
-        // Redirect or respond as needed
-        console.log(savedUser);
-        res.render('admin/user'); // Redirect to a success page
-    } catch (error) {
-        console.error('Error creating user:', error);
-        res.status(500).send('Internal Server Error');
+      const data = await Image.find({});
+      res.render('admin/image', { items: data });
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Internal Server Error');
     }
-});
+  });
+  
+  app.post('/imageupload', upload.single('image'), async (req, res) => {
+    try {
+      const obj = {
+        name: req.body.name,
+        desc: req.body.desc,
+        img: {
+          data: await readFileAsync(path.join(__dirname, 'uploads', req.file.filename)),
+          contentType: 'image/png',
+        },
+      };
+      await Image.create(obj);
+      res.redirect('/');
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Internal Server Error');
+    }
+  });
+
+  app.get('/templateimage', async (req, res) => {
+    res.render('admin/templateimage');
+    }
+    );
