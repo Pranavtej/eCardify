@@ -386,3 +386,43 @@ app.get("/delete/:id",async(req,res)=>{
     
 
 });
+
+// API endpoint to handle the form submission
+app.post('/add-user', async (req, res) => {
+    try {
+      // Extract data from the request body
+      const { username, email, password, cardType, template, occasion, subscriptionPlan } = req.body;
+  
+      // Validate required fields
+      if (!username || !email || !password || !subscriptionPlan || !subscriptionPlan.plan) {
+        return res.status(400).json({ error: 'Please provide all required fields.' });
+      }
+  
+      // Create a new user instance
+      const user = new User({
+        username,
+        email,
+        password,
+        selectedItems: [
+          {
+            occasion,
+            cardType,
+            template,
+            subscriptionPlan: {
+              plan: subscriptionPlan.plan,
+              expiresAt: null,
+            },
+          },
+        ],
+      });
+  
+      // Save the user to the database
+      await user.save();
+  
+      res.status(201).json({ message: 'User created successfully', user });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  });
+  
