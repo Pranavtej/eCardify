@@ -13,6 +13,7 @@ const temp = require("./models/templates");
 const bcrypt = require("bcrypt");
 const path = require('path');
 const adminModel = require('./models/admin');
+const multer = require('multer');
 
 
 // app.set("views", __dirname + "/views");
@@ -45,6 +46,10 @@ app.use(session({
 }));
 
 
+// multer confuguration
+
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
 
 
 
@@ -140,7 +145,7 @@ app.get('/contact', function (req, res) {
 
 
 app.listen(8000, function () {
-    console.log('Server started at port 3000');
+    console.log('Server started at port 8000');
    })
 
 //admin login
@@ -312,17 +317,19 @@ app.post('/edit-subscription/:id', async (req, res) => {
 
 
 
-app.get('/add-user', async (req, res) => {
-    try {
-        // Your logic for fetching subscription plan data if needed
-        // const subscriptionPlan = await Subplan1.findById(req.params.id);
-
-        res.render('admin/add-user');
-    } catch (error) {
-        console.error(error);
-        res.status(500).send("Internal Server Error");
-    }
-});
+    app.get('/add-user', async (req, res) => {
+        try {
+            // Fetch subscription plans, card types, and templates from the database
+            const subscriptionPlans = await SubscriptionPlan.find();
+            const cardTypes = await cardt.find();
+            const templates = await temp.find();
+    
+            res.render('admin/add-user', { subscriptionPlans, cardTypes, templates });
+        } catch (error) {
+            console.error('Error fetching data for user form:', error);
+            res.status(500).send('Internal Server Error');
+        }
+    });
 
 app.get('/user-details', async (req, res) => {
     try {
@@ -387,42 +394,44 @@ app.get("/delete/:id",async(req,res)=>{
 
 });
 
-// API endpoint to handle the form submission
+
 app.post('/add-user', async (req, res) => {
     try {
-      // Extract data from the request body
-      const { username, email, password, cardType, template, occasion, subscriptionPlan } = req.body;
-  
-      // Validate required fields
-      if (!username || !email || !password || !subscriptionPlan || !subscriptionPlan.plan) {
-        return res.status(400).json({ error: 'Please provide all required fields.' });
-      }
-  
-      // Create a new user instance
-      const user = new User({
-        username,
-        email,
-        password,
-        selectedItems: [
-          {
-            occasion,
-            cardType,
-            template,
-            subscriptionPlan: {
-              plan: subscriptionPlan.plan,
-              expiresAt: null,
-            },
-          },
-        ],
-      });
-  
-      // Save the user to the database
-      await user.save();
-  
-      res.status(201).json({ message: 'User created successfully', user });
+        const { username, email, number, subscriptionPlan, occasion, cardType, template } = req.body;
+        console.log(req.body);
+        // Validate the form data
+        // if (!username || !email || !phoneNumber || !subscriptionPlan || !occasion || !cardType || !template) {
+        //     return res.status(400).json({ error: 'Username, email, phone number, subscription plan, occasion, card type, and template are required' });
+        // }
+
+        // Create a new user
+        const Plan= new ObjectId(subscriptionPlan);
+        const card=new ObjectId(cardType);
+        const temp= new ObjectId(template);
+        const newUser = new User({
+            username,
+            email,
+            number,
+            selectedItems: [
+                {
+                    occasion,
+                    cardType: card,
+                    template: temp,
+                    subscriptionPlan: { 
+                        plan:Plan,
+                    },
+                },
+            ],
+        });
+
+        // Save the user to the database
+        const savedUser = await newUser.save();
+
+        // Redirect or respond as needed
+        console.log(savedUser);
+        res.render('admin/user'); // Redirect to a success page
     } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: 'Internal Server Error' });
+        console.error('Error creating user:', error);
+        res.status(500).send('Internal Server Error');
     }
-  });
-  
+});
