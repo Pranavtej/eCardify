@@ -109,7 +109,7 @@
 						
 							<div class="card comman-shadow">
 								<div class="card-body">
-									<form action="/add-user" method="post">
+									<form action="/edit-user/<%- user.id %>" method="post">
 										<div class="row">
 											<div class="col-12">
 												<h5 class="form-title student-info">User Information <span><a href="javascript:;"><i class="feather-more-vertical"></i></a></span></h5>
@@ -117,59 +117,65 @@
 											<div class="col-12 col-sm-4">  
 												<div class="form-group local-forms">
 													<label >Name <span class="login-danger">*</span></label>
-													<input class="form-control" type="text" placeholder="Enter Name" id="username"  name="username" required>
+													<input class="form-control" type="text"  id="username"  name="username" value="<%= user.username %>"required>
 												</div>
 											</div>
 											<div class="col-12 col-sm-4">
 												<div class="form-group local-forms">
 													<label>Email</label>
-													<input class="form-control" type="text" placeholder="Enter Email" id="email" name="email" required>
+													<input class="form-control" type="text" placeholder="Enter Email" id="email" name="email" value="<%= user.email %>" required>
 												</div>
 											</div>
 											<div class="col-12 col-sm-4">
 												<div class="form-group local-forms">
 													<label >Phone number<span class="login-danger">*</span></label>
-													<input class="form-control" type="text" placeholder="Enter Phone number" id="password" name="number" required>
+													<input class="form-control" type="text" placeholder="Enter password" id="password" name="number" value="<%=user.number%>" required>
 												</div>
 											</div>
 											<div class="col-12 col-sm-4">
 												<div class="form-group local-forms">
 													<label >Subscription Plan<span class="login-danger">*</span></label>
 													<select class="form-control select" name="subscriptionPlan">
-														<option>Select Plan</option>
-														<% subscriptionPlans.forEach(plan => { %>
-															<option value="<%= plan._id %>"><%= plan.name %></option>
-														<% }); %>
-													</select>
+                                                        <option></option>
+                                                        <% subscriptionPlans.forEach(plan => { %>
+                                                          <option value="<%= plan._id %>" <%=
+                                                            (user.selectedItems[0].subscriptionPlan.plan.toString() === plan._id.toString()) ? 'selected' : ''
+                                                          %>><%= plan.name %></option>
+                                                        <% }); %>
+                                                    </select>
 												</div>
 											</div>
 											
 											<!-- <div class="col-12 col-sm-4">
 												<div class="form-group local-forms">
 													<label >Occassion </label>
-													<input class="form-control" type="text" placeholder="Enter Occassion" name="occassion" >
+													<input class="form-control" type="text" placeholder="Enter Occassion" name="occassion" value="<%= user.occasion %>" >
 												</div>
 											</div> -->
 											<div class="col-12 col-sm-4">
 												<div class="form-group local-forms">
 													<label >Card Type<span class="login-danger">*</span></label>
 													<select class="form-control select" name="cardType">
-														<option>Select card</option>
-														<% cardTypes.forEach(cardType => { %>
-															<option value="<%= cardType._id %>"><%= cardType.name %></option>
-														<% }); %>
-													</select>
+                                                        <option>Select card</option>
+                                                        <% cardTypes.forEach(cardType => { %>
+                                                          <option value="<%= cardType._id %>" <%=
+                                                            (user.selectedItems[0].cardType && user.selectedItems[0].cardType.toString() === cardType._id.toString()) ? 'selected' : ''
+                                                          %>><%= cardType.name %></option>
+                                                        <% }); %>
+                                                      </select>
 												</div>
 											</div>
 											<div class="col-12 col-sm-4">
 												<div class="form-group local-forms">
 													<label >Template<span class="login-danger">*</span></label>
 													<select class="form-control select" name="template">
-														<option>Select Template</option>
-														<% templates.forEach(template => { %>
-															<option value="<%= template._id %>"><%= template.name %></option>
-														<% }); %>
-													</select>
+                                                        <option>Select Template</option>
+                                                        <% templates.forEach(template => { %>
+                                                          <option value="<%= template._id %>" <%=
+                                                            (user.selectedItems[0].template && user.selectedItems[0].template.toString() === template._id.toString()) ? 'selected' : ''
+                                                          %>><%= template.name %></option>
+                                                        <% }); %>
+                                                      </select>
 												</div>
 											</div>
 											<!-- <div class="col-12 col-sm-4">
@@ -219,7 +225,7 @@
 											</div> -->
 											<div class="col-12">
 												<div class="student-submit">
-													<button type="submit" class="btn btn-primary">Create User</button>
+													<button type="submit" class="btn btn-primary">Update User</button>
 												</div>
 											</div>
 										</div>
