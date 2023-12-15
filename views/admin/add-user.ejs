@@ -111,13 +111,14 @@
 								<div class="card-body">
 									<form action="/add-user" method="post">
 										<div class="row">
-										  <div class="col-12">
-											<h5 class="form-title student-info">User Information <span><a href="javascript:;"><i class="feather-more-vertical"></i></a></span></h5>
-										  </div>
-										  <div class="col-12 col-sm-4">
-											<div class="form-group local-forms">
-											  <label>Name <span class="login-danger">*</span></label>
-											  <input class="form-control" type="text" placeholder="Enter Name" id="username" required>
+											<div class="col-12">
+												<h5 class="form-title student-info">User Information <span><a href="javascript:;"><i class="feather-more-vertical"></i></a></span></h5>
+											</div>
+											<div class="col-12 col-sm-4">  
+												<div class="form-group local-forms">
+													<label >Name <span class="login-danger">*</span></label>
+													<input class="form-control" type="text" placeholder="Enter Name" id="username"  name="username" required>
+												</div>
 											</div>
 											<div class="col-12 col-sm-4">
 												<div class="form-group local-forms">
@@ -143,12 +144,12 @@
 												</div>
 											</div>
 											
-											<div class="col-12 col-sm-4">
+											<!-- <div class="col-12 col-sm-4">
 												<div class="form-group local-forms">
 													<label >Occassion </label>
 													<input class="form-control" type="text" placeholder="Enter Occassion" name="occassion" >
 												</div>
-											</div>
+											</div> -->
 											<div class="col-12 col-sm-4">
 												<div class="form-group local-forms">
 													<label >Card Type<span class="login-danger">*</span></label>
@@ -221,9 +222,8 @@
 													<button type="submit" class="btn btn-primary">Create User</button>
 												</div>
 											</div>
-										  </div>
 										</div>
-									  </form>
+									</form>
 								</div>
 							</div>							
 						</div>					

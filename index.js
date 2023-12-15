@@ -145,7 +145,7 @@ app.get('/contact', function (req, res) {
 
 
 app.listen(8000, function () {
-    console.log('Server started at port 8000');
+    console.log('Server started at port 3000');
    })
 
 //admin login
@@ -206,7 +206,7 @@ app.post('/subscription', async (req, res) => {
     try {
         const { name, price, duration } = req.body;
 
-        const subscriptionPlan = new SubscriptionPlan({ name, price, duration });
+        const subscriptionPlan = new Subplan1({ name, price, duration });
         await subscriptionPlan.save();
 
         res.redirect('/subscription');
@@ -241,30 +241,24 @@ app.get('/add-subscription', async (req, res) => {
 
 app.post('/add-subscription', async (req, res) => {
     try {
-        const { name, price, featureNames } = req.body;
-    
         
-        if (!name || !price || !featureNames || !Array.isArray(featureNames)) {
-          return res.status(400).json({ error: 'Invalid data format' });
-        }
-    
-        
-        const newSubscriptionPlan = new SubscriptionPlan({
-          name,
-          price,
-          features: featureNames,
-        });
-    
-        
-        await newSubscriptionPlan.save();
-    
-        const subscriptionPlans = await SubscriptionPlan.find();
-        res.render('admin/subscription', { subscriptionPlans });
-      } catch (error) {
-        console.error('Error adding subscription plan:', error);
-        res.status(500).json({ error: 'Internal Server Error' });
-      }
-    });
+      const { name, price, features } = req.body;
+
+      const newPlan = new SubscriptionPlan({
+        name,
+        price,
+        features: features.map(feature => ({ logoUrl: feature })),
+      });
+  
+      // Save the document to MongoDB
+      await newPlan.save();
+  
+      res.status(200).send('Subscription plan added successfully!');
+    } catch (error) {
+      console.error('Error saving subscription plan:', error);
+      res.status(500).send('Internal Server Error');
+    }
+  });
 
 
 
@@ -314,10 +308,7 @@ app.post('/edit-subscription/:id', async (req, res) => {
     });
     
 
-
-
-
-    app.get('/add-user', async (req, res) => {
+app.get('/add-user', async (req, res) => {
         try {
             // Fetch subscription plans, card types, and templates from the database
             const subscriptionPlans = await SubscriptionPlan.find();
@@ -344,17 +335,58 @@ app.get('/user-details', async (req, res) => {
 });
 
 
+const fetchUserData = async () => {
+    try {
+        const users = await User.find()
+            .populate({
+                path: 'selectedItems.subscriptionPlan.plan',
+                model: 'SubscriptionPlan',
+                select: 'name',
+            })
+            .populate({
+                path: 'selectedItems.cardType',
+                model: 'CardType',
+                select: 'name',
+            })
+            .populate({
+                path: 'selectedItems.template',
+                model: 'Template',
+                select: 'name',
+            });
+        return users;
+    } catch (error) {
+        throw error;
+    }
+};
+
 app.get('/user', async (req, res) => {
     try {
-        // Your logic for fetching subscription plan data if needed
-        // const subscriptionPlan = await Subplan1.findById(req.params.id);
-
-        res.render('admin/user');
+        const users1 = await fetchUserData();
+        res.render('admin/user', { users1 });
     } catch (error) {
         console.error(error);
         res.status(500).send("Internal Server Error");
     }
 });
+
+app.get('/delete-user/:id', async (req, res) => {
+    const userId = req.params.id;
+  
+    try {
+      // Assuming User is your Mongoose model
+      const deletedUser = await User.findByIdAndDelete(userId);
+  
+      if (!deletedUser) {
+        return res.status(404).send('User not found');
+      }
+  
+     const users1 = await fetchUserData();
+     res.render('admin/user', { users1 });
+    } catch (error) {
+      console.error(error);
+      res.status(500).send('Internal Server Error');
+    }
+  });
 
 app.get('/user-grid', async (req, res) => {
     try {
@@ -427,11 +459,74 @@ app.post('/add-user', async (req, res) => {
         // Save the user to the database
         const savedUser = await newUser.save();
 
-        // Redirect or respond as needed
-        console.log(savedUser);
-        res.render('admin/user'); // Redirect to a success page
+        const users1 = await fetchUserData();
+        res.render('admin/user', { users1 });
     } catch (error) {
         console.error('Error creating user:', error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+
+app.get('/edit-user/:userId', async (req, res) => {
+    try {
+        const userId = req.params.userId;
+        const user = await User.findById(userId);
+
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+        const subscriptionPlans = await SubscriptionPlan.find();
+        const cardTypes = await cardt.find();
+        const templates = await temp.find();
+    
+        res.render('admin/edit-user', { user,subscriptionPlans, cardTypes, templates });
+    } catch (error) {
+        console.error('Error fetching user for editing:', error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+
+app.post('/edit-user/:userId', async (req, res) => {
+    try {
+        const userId = req.params.userId;
+        const { username, email, number, subscriptionPlan, occasion, cardType, template } = req.body;
+
+        // Validate the form data if needed
+        // if (!username || !email || !number || !subscriptionPlan || !occasion || !cardType || !template) {
+        //     return res.status(400).json({ error: 'All fields are required' });
+        // }
+
+        // Update the user in the database
+        const Plan = new ObjectId(subscriptionPlan);
+        const card = new ObjectId(cardType);
+        const temp = new ObjectId(template);
+
+        const updatedUser = await User.findByIdAndUpdate(
+            userId,
+            {
+                $set: {
+                    username,
+                    email,
+                    number,
+                    'selectedItems.0.occasion': occasion,
+                    'selectedItems.0.cardType': card,
+                    'selectedItems.0.template': temp,
+                    'selectedItems.0.subscriptionPlan.plan': Plan,
+                },
+            },
+            { new: true } // This option returns the modified document rather than the original
+        );
+
+        if (!updatedUser) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        const users1 = await fetchUserData();
+        res.render('admin/user', { users1 });
+    } catch (error) {
+        console.error('Error updating user:', error);
         res.status(500).send('Internal Server Error');
     }
 });
