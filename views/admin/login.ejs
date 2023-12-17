@@ -1,98 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
-        <title>Preskool - Login</title>
-		
-		<!-- Favicon -->
-        <link rel="shortcut icon" href="/public/assets/admin/img/favicon.png">
-	
-		<!-- Fontfamily -->
-		<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,700;0,900;1,400;1,500;1,700&display=swap" rel="stylesheet">
-		
-		<!-- Bootstrap CSS -->
-        <link rel="stylesheet" href="/public/assets/admin/plugins/bootstrap/css/bootstrap.min.css">
-		
-		<!-- Feathericon CSS -->
-        <link rel="stylesheet" href="/public/assets/admin/plugins/feather/feather.css">
-		
-		<!-- Pe7 CSS -->
-		<link rel="stylesheet" href="/public/assets/admin/plugins/icons/flags/flags.css">
-		
-		<!-- Fontawesome CSS -->
-		<link rel="stylesheet" href="/public/assets/admin/plugins/fontawesome/css/fontawesome.min.css">
-		<link rel="stylesheet" href="/public/assets/admin/plugins/fontawesome/css/all.min.css">
-		
-		<!-- Main CSS -->
-        <link rel="stylesheet" href="/public/assets/admin/css/style.css">
-    </head>
-    <body>
-	
-		<!-- Main Wrapper -->
-        <div class="main-wrapper login-body">
-            <div class="login-wrapper">
-            	<div class="container">
-                	<div class="loginbox">
-                    	<div class="login-left">
-							<img class="img-fluid" src="/public/assets/admin/img/login.png" alt="Logo">
-                        </div>
-                        <div class="login-right">
-							<div class="login-right-wrap">
-								<h1>Welcome to eCardify</h1><br>
-								<!-- <p class="account-subtitle">Need an account?  <a href="register.ejs">Sign Up</a></p> -->
-								<h2> Sign in</h2>
-								<!-- Form -->
-								<form action="/admin" method="post">
-									<div class="form-group">
-										<label for="username">Username <span class="login-danger">*</span></label>
-										<input class="form-control" type="text" id="username" name="username" required>
-										<span class="profile-views"><i class="fas fa-user-circle"></i></span>
-									</div>
-									<div class="form-group">
-										<label for="password">Password <span class="login-danger">*</span></label>
-										<input class="form-control pass-input" type="password" id="password" name="password" required>
-										<span class="profile-views feather-eye toggle-password"></span>
-									</div>
-									<div class="form-group">
-										<button class="btn btn-primary btn-block" type="submit">Login</button>
-									</div>
-								</form>
-								<!-- /Form -->
-								
-								<!-- <div class="login-or">
-									<span class="or-line"></span>
-									<span class="span-or">or</span>
-								</div> -->
-								  
-								<!-- Social Login -->
-								<!-- <div class="social-login">
-									<a href="#" ><i class="fab fa-google-plus-g"></i></a>
-									<a href="#" ><i class="fab fa-facebook-f"></i></a>
-									<a href="#" ><i class="fab fa-twitter"></i></a>
-									<a href="#" ><i class="fab fa-linkedin-in"></i></a>
-								</div> -->
-								<!-- /Social Login -->
-								
-							</div>
-                        </div>
-                    </div>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="public/assets/admin/css/style1.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <title>Login</title>
+
+</head>
+<body>
+    <div class="box">
+        <div class="container">
+            <div class="top-header">
+                <header>Login</header>
+            </div>
+            <form action="/admin" method="post">
+            <div class="input-field">
+                <input type="text" class="input" placeholder="Username" name="username" required>
+                <i class="bx bx-user"></i>
+            </div>
+            <div class="input-field">
+                <input type="password" class="input" placeholder="Password" name="password" required>
+                <i class="bx bx-lock-alt"></i>
+            </div>
+            <div class="input-field">
+                <input type="submit" class="submit" value="Login">
+            </div>
+		</form>
+
+            <div class="bottom">
+                <div class="left">
+                    <input type="checkbox"  id="check">
+                    <label for="check"> Remember Me</label>
+                </div>
+                <div class="right">
+                    <label><a href="#">Forgot password?</a></label>
                 </div>
             </div>
         </div>
-		<!-- /Main Wrapper -->
-		
-		<!-- jQuery -->
-        <script src="/public/assets/admin/js/jquery-3.6.0.min.js"></script>
-		
-		<!-- Bootstrap Core JS -->
-        <script src="/public/assets/admin/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-		
-		<!-- Feather Icon JS -->
-		<script src="/public/assets/admin/js/feather.min.js"></script>
-		
-		<!-- Custom JS -->
-		<script src="/public/assets/admin/js/script.js"></script>
-		
-    </body>
+    </div>
+</body>
 </html>
