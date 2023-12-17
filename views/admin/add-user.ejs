@@ -122,54 +122,54 @@
 											</div>
 											<div class="col-12 col-sm-4">
 												<div class="form-group local-forms">
-													<label>Email</label>
-													<input class="form-control" type="text" placeholder="Enter Email" id="email" name="email" required>
+													<label >Last Name <span class="login-danger">*</span></label>
+													<input class="form-control" type="text" placeholder="Enter First Name" >
 												</div>
 											</div>
 											<div class="col-12 col-sm-4">
 												<div class="form-group local-forms">
-													<label >Phone number<span class="login-danger">*</span></label>
-													<input class="form-control" type="text" placeholder="Enter Phone number" id="password" name="number" required>
+													<label >Gender <span class="login-danger">*</span></label>
+													<select class="form-control select">
+														<option>Select Gender</option>
+														<option>Female</option>
+														<option>Male</option>
+														<option>Others</option>
+													  </select>
 												</div>
 											</div>
 											<div class="col-12 col-sm-4">
-												<div class="form-group local-forms">
-													<label >Subscription Plan<span class="login-danger">*</span></label>
-													<select class="form-control select" name="subscriptionPlan">
-														<option>Select Plan</option>
-														<% subscriptionPlans.forEach(plan => { %>
-															<option value="<%= plan._id %>"><%= plan.name %></option>
-														<% }); %>
-													</select>
+												<div class="form-group local-forms calendar-icon">
+													<label >Date Of Birth  <span class="login-danger">*</span></label>
+													<input class="form-control datetimepicker" type="text"  placeholder="DD-MM-YYYY" >
 												</div>
 											</div>
 											
 											<div class="col-12 col-sm-4">
 												<div class="form-group local-forms">
-													<label >Occassion </label>
-													<input class="form-control" type="text" placeholder="Enter Occassion" name="occassion" >
+													<label >Roll </label>
+													<input class="form-control" type="text" placeholder="Enter Roll Number" >
 												</div>
 											</div>
 											<div class="col-12 col-sm-4">
 												<div class="form-group local-forms">
-													<label >Card Type<span class="login-danger">*</span></label>
-													<select class="form-control select" name="cardType">
-														<option>Select card</option>
-														<% cardTypes.forEach(cardType => { %>
-															<option value="<%= cardType._id %>"><%= cardType.name %></option>
-														<% }); %>
-													</select>
+													<label >Blood Group <span class="login-danger">*</span></label>
+													<select class="form-control select">
+														<option>Please Select Group </option>
+														<option>B+</option>
+														<option>A+</option>
+														<option>O+</option>
+													  </select>
 												</div>
 											</div>
 											<div class="col-12 col-sm-4">
 												<div class="form-group local-forms">
-													<label >Template<span class="login-danger">*</span></label>
-													<select class="form-control select" name="template">
-														<option>Select Template</option>
-														<% templates.forEach(template => { %>
-															<option value="<%= template._id %>"><%= template.name %></option>
-														<% }); %>
-													</select>
+													<label >Religion <span class="login-danger">*</span></label>
+													<select class="form-control select">
+														<option>Please Select Religion  </option>
+														<option>Hindu</option>
+														<option>Christian</option>
+														<option>Others</option>
+													  </select>
 												</div>
 											</div>
 											<!-- <div class="col-12 col-sm-4">
@@ -199,9 +199,14 @@
 														<option>C</option>
 													  </select>
 												</div>
-											</div> -->
-											
-											<!-- <div class="col-12 col-sm-4">
+											</div>
+											<div class="col-12 col-sm-4">
+												<div class="form-group local-forms">
+													<label >Admission ID </label>
+													<input class="form-control" type="text" placeholder="Enter Admission ID" >
+												</div>
+											</div>
+											<div class="col-12 col-sm-4">
 												<div class="form-group local-forms">
 													<label >Phone </label>
 													<input class="form-control" type="text" placeholder="Enter Phone Number" >
