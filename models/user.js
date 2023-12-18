@@ -8,7 +8,7 @@ const userSchema = new mongoose.Schema({
   number: { type: Number,required: true},
   selectedItems: [
     {
-      occasion: String,
+      occasion: { type: String, default: 'DefaultOccasion' },
       cardType: { type: mongoose.Schema.Types.ObjectId, ref: 'CardType' },
       template: { type: mongoose.Schema.Types.ObjectId, ref: 'Template' },
       subscriptionPlan: { 
