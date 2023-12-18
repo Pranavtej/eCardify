@@ -171,12 +171,11 @@ app.get('/admin', async (req, res) => {
     }
 });
 
+
 app.post('/admin', async (req, res) => {
     try {
         const { username, password } = req.body;
-
         const user = await adminModel.findOne({ username });
-
         if (!user) {
             res.send("User does not exist");
         } else if (password === user.password) {
@@ -191,7 +190,7 @@ app.post('/admin', async (req, res) => {
 });
 
 app.get('/index',async(req,res)=>{
-   res.render('admin/index');
+    res.render('admin/index');
 });
 
 
@@ -322,6 +321,68 @@ app.get('/add-user', async (req, res) => {
         }
     });
 
+app.post('/add-card', async (req, res) => {
+
+    const mobileNumber = req.body.phoneNumber; // Get the entered mobile number
+  
+    try {
+      // Check if the user already exists based on the mobile number
+      const existingUser = await User.findOne({ number: mobileNumber });
+      console.log(existingUser);
+      if (existingUser) {
+        // If the user exists, you can redirect to the add-card page or perform necessary actions
+        const subscriptionPlans = await SubscriptionPlan.find();
+        const cardTypes = await cardt.find();
+        const templates = await temp.find();
+    
+        res.render('admin/add-card', { existingUser, subscriptionPlans, cardTypes, templates });
+         // Redirect to the add-card page with the user ID
+      } else {
+        // If the user doesn't exist, you can handle it as needed, such as displaying an error message
+        res.send('User not found. Please register.');
+      }
+    } catch (error) {
+      console.error(error);
+      res.status(500).send('Internal Server Error');
+    }
+  });
+
+app.post('/update-cards', async (req, res) => {
+    const { username, email, number, subscriptionPlan, occassion, cardType, template } = req.body
+    console.log(req.body);
+  try {
+    // Find the user by mobile number
+    const user = await User.findOne({ number: number });
+
+    if (!user) {
+      return res.status(404).send('User not found');
+    }
+
+    // Push the new card details and subscription plan to the user's selectedItems array
+    const newSelectedItem = {
+        occasion:occassion,
+        cardType: cardType,
+        template: template,
+        subscriptionPlan: {
+          plan: subscriptionPlan,
+        },
+        // Add other necessary fields for the new item
+      };
+  
+      // Push the new item to the selectedItems array
+      user.selectedItems.push(newSelectedItem);
+  
+      // Save the updated user object
+      await user.save();
+      const users1 = await fetchUserData();
+      res.render('admin/user', { users1 });
+    
+  } catch (error) {
+    console.error('Error adding card:', error);
+    return res.status(500).send('Internal Server Error');
+  }
+});
+
 app.get('/user-details', async (req, res) => {
     try {
         // Your logic for fetching subscription plan data if needed
@@ -369,25 +430,6 @@ app.get('/user', async (req, res) => {
     }
 });
 
-app.get('/delete-user/:id', async (req, res) => {
-    const userId = req.params.id;
-  
-    try {
-      // Assuming User is your Mongoose model
-      const deletedUser = await User.findByIdAndDelete(userId);
-  
-      if (!deletedUser) {
-        return res.status(404).send('User not found');
-      }
-  
-     const users1 = await fetchUserData();
-     res.render('admin/user', { users1 });
-    } catch (error) {
-      console.error(error);
-      res.status(500).send('Internal Server Error');
-    }
-  });
-
 app.get('/user-grid', async (req, res) => {
     try {
         // Your logic for fetching subscription plan data if needed
@@ -429,7 +471,7 @@ app.get("/delete/:id",async(req,res)=>{
 
 app.post('/add-user', async (req, res) => {
     try {
-        const { username, email, number, subscriptionPlan, occasion, cardType, template } = req.body;
+        const { username, email, number, subscriptionPlan, occassion, cardType, template } = req.body;
         console.log(req.body);
         // Validate the form data
         // if (!username || !email || !phoneNumber || !subscriptionPlan || !occasion || !cardType || !template) {
@@ -446,7 +488,7 @@ app.post('/add-user', async (req, res) => {
             number,
             selectedItems: [
                 {
-                    occasion,
+                    occasion:occassion,
                     cardType: card,
                     template: temp,
                     subscriptionPlan: { 
@@ -463,70 +505,6 @@ app.post('/add-user', async (req, res) => {
         res.render('admin/user', { users1 });
     } catch (error) {
         console.error('Error creating user:', error);
-        res.status(500).send('Internal Server Error');
-    }
-});
-
-
-app.get('/edit-user/:userId', async (req, res) => {
-    try {
-        const userId = req.params.userId;
-        const user = await User.findById(userId);
-
-        if (!user) {
-            return res.status(404).json({ error: 'User not found' });
-        }
-        const subscriptionPlans = await SubscriptionPlan.find();
-        const cardTypes = await cardt.find();
-        const templates = await temp.find();
-    
-        res.render('admin/edit-user', { user,subscriptionPlans, cardTypes, templates });
-    } catch (error) {
-        console.error('Error fetching user for editing:', error);
-        res.status(500).send('Internal Server Error');
-    }
-});
-
-
-app.post('/edit-user/:userId', async (req, res) => {
-    try {
-        const userId = req.params.userId;
-        const { username, email, number, subscriptionPlan, occasion, cardType, template } = req.body;
-
-        // Validate the form data if needed
-        // if (!username || !email || !number || !subscriptionPlan || !occasion || !cardType || !template) {
-        //     return res.status(400).json({ error: 'All fields are required' });
-        // }
-
-        // Update the user in the database
-        const Plan = new ObjectId(subscriptionPlan);
-        const card = new ObjectId(cardType);
-        const temp = new ObjectId(template);
-
-        const updatedUser = await User.findByIdAndUpdate(
-            userId,
-            {
-                $set: {
-                    username,
-                    email,
-                    number,
-                    'selectedItems.0.occasion': occasion,
-                    'selectedItems.0.cardType': card,
-                    'selectedItems.0.template': temp,
-                    'selectedItems.0.subscriptionPlan.plan': Plan,
-                },
-            },
-            { new: true } // This option returns the modified document rather than the original
-        );
-
-        if (!updatedUser) {
-            return res.status(404).json({ error: 'User not found' });
-        }
-
-        const users1 = await fetchUserData();
-        res.render('admin/user', { users1 });
-    } catch (error) {
-        console.error('Error updating user:', error);
         res.status(500).send('Internal Server Error');
     }
 });

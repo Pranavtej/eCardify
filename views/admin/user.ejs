@@ -139,10 +139,10 @@
 												<h3 class="page-title">Students</h3>
 											</div>
 											<div class="col-auto text-end float-end ms-auto download-grp">
-												<a href="/user" class="btn btn-outline-gray me-2 active"><i class="feather-list"></i></a>
+												<!-- <a href="/user" class="btn btn-outline-gray me-2 active"><i class="feather-list"></i></a>
 												<a href="/user-grid" class="btn btn-outline-gray me-2"><i class="feather-grid"></i></a>
-												<a href="#" class="btn btn-outline-primary me-2"><i class="fas fa-download"></i> Download</a>
-												<a href="/add-user" class="btn btn-primary"><i class="fas fa-plus"></i></a>
+												<a href="#" class="btn btn-outline-primary me-2"><i class="fas fa-download"></i> Download</a> -->
+												<a href="#" id="addCardBtn" class="btn btn-primary"><i class="fas fa-plus"></i> Add Card</a>
 											</div>
 										</div>
 									</div>
@@ -156,11 +156,13 @@
 													<th>S.No</th>
 													<th>Name</th>
 													<th>Phone</th>
-													<th>Subscription</th>
-													<th>Card</th>
-													<th>Template</th>
+													<th>E-mail</th>
+													<!-- <th>Card</th>
+													<th>Template</th> -->
 													
-													<th class="text-end">Edit/delete</th>
+													<th>Delete</th>
+													<th>Edit</th>
+													<th>Generate Card</th>
 												</tr>
 											</thead>
 											<tbody>
@@ -170,18 +172,84 @@
 													  <td><%= index + 1 %></td>
 													  <td><%= user.username %></td>
 													  <td><%= user.number %></td>
-													  <td><%= user.selectedItems[0].subscriptionPlan.plan.name %></td>
+													  <td><%= user.email %></td>
+													  <!-- <td><%= user.selectedItems[0].subscriptionPlan.plan.name %></td>
                                                       <td><%= user.selectedItems[0].cardType.name %></td>
-                                                      <td><%= user.selectedItems[0].template.name %></td>
-													  <td class="text-end">
-														<div class="actions">
-														  <a href="/delete-user/<%= user._id %>" class="btn btn-sm bg-danger-light me-2">
-															<i class="feather-trash-2"></i> 
-														  </a>
-														  <a href="/edit-user/<%= user._id %>" class="btn btn-sm bg-danger-light">
-															<i class="feather-edit"></i>
+                                                      <td><%= user.selectedItems[0].template.name %></td> -->
+													  <td>
+														
+															<button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal<%= user._id %>">
+																Delete
+															  </button>
+														  
+															  <!-- Modal for delete confirmation -->
+															  <div class="modal fade" id="deleteModal<%= user._id %>" tabindex="-1" aria-labelledby="deleteModalLabel<%= user._id %>" aria-hidden="true">
+																<div class="modal-dialog">
+																  <div class="modal-content">
+																	<div class="modal-header">
+																	  <h5 class="modal-title" id="deleteModalLabel<%= user._id %>">Delete Card</h5>
+																	  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+																	</div>
+																	<div class="modal-body">
+																	  <!-- Form to select card for deletion -->
+																	  <form action="/delete-card/<%= user._id %>" method="post">
+																		<div class="mb-3">
+																			<label for="cardSelect<%= user._id %>" class="form-label">Select Card to Delete:</label>
+																			<select class="form-select" id="cardSelect<%= user._id %>" name="cardId" required>
+																			  <% user.selectedItems.forEach(item => { %>
+																				<option value="<%= item._id %>">
+																					<%= item.occasion %>/<%= item.cardType.name %>/<%= item.template.name %>
+																				</option>
+																			  <% }); %>
+																			</select>
+																		  </div>
+																		<button type="submit" class="btn btn-danger">Confirm Delete</button>
+																	  </form>
+																	</div>
+																  </div>
+																</div>
+															  </div>
+															</td>
+
+														  <td>
+															<div>
+														  <a href="/edit-user/<%= user._id %>" class="btn btn-sm btn-warning">
+															<i class="feather-edit"></i> Edit
 														  </a>
 														</div>
+													  </td>
+													  <td>
+                                                        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#generateCardModal">
+															Generate New Card
+														</button>
+														<div class="modal fade" id="generateCardModal" tabindex="-1" aria-labelledby="generateCardModalLabel" aria-hidden="true">
+															<div class="modal-dialog">
+																<div class="modal-content">
+																	<div class="modal-header">
+																		<h5 class="modal-title" id="generateCardModalLabel">Generate New Card</h5>
+																		<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+																	</div>
+																	<div class="modal-body">
+																		<!-- Form to select card details for new card generation -->
+																		<form action="/generate-card" method="post">
+																			<div class="mb-3">
+																				<label for="cardSelect<%= user._id %>" class="form-label">Select Card to Generate:</label>
+																				<select class="form-select" id="cardSelect<%= user._id %>" name="cardId" required>
+																					<% user.selectedItems.forEach(item => { %>
+																						<option value="<%= item._id %>">
+																							<%= item.occasion %>/<%= item.cardType.name %>/<%= item.template.name %>
+																						</option>
+																					<% }); %>
+																				</select>
+																				<input type="hidden" name="userid" value="<%= user._id %>">
+																			</div>
+																			<button type="submit" class="btn btn-success">Generate Card</button>
+																		</form>
+																	</div>
+																</div>
+															</div>
+														</div>
+														
 													  </td>
 													</tr>
 												  <% }); %>
@@ -193,6 +261,30 @@
 						</div>					
 					</div>					
 				</div>
+				<div class="modal fade" id="addCardModal" tabindex="-1" role="dialog" aria-labelledby="addCardModalLabel" aria-hidden="true">
+					<div class="modal-dialog" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title" id="addCardModalLabel">Add Card for Existing User</h5>
+								<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+									<!-- <span aria-hidden="true">&times;</span> -->
+								</button>
+							</div>
+							<div class="modal-body">
+								<form action="/add-card" method="post">
+									<div class="form-group">
+										<label for="phoneNumber">Enter User's Mobile Number:</label>
+										<input type="text" class="form-control" id="phoneNumber" name="phoneNumber" required>
+									</div>
+									<button type="submit" class="btn btn-primary">Submit</button>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- Delete Modal -->
+				
 
 				<!-- Footer -->
 				<!-- <footer>
@@ -203,10 +295,26 @@
 			<!-- /Page Wrapper -->
 			
         </div>
+		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Bootstrap JavaScript -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+		<script>
+			$(document).ready(function() {
+				// Show modal when "Add Card" button is clicked
+				$('#addCardBtn').click(function() {
+					$('#addCardModal').modal('show');
+				});
+			});
+		</script>
+
+
 		<!-- /Main Wrapper -->
 		
 		<!-- jQuery -->
         <script src="/public/assets/admin/js/jquery-3.6.0.min.js"></script>
+		
+		
 		
 		<!-- Bootstrap Core JS -->
         <script src="/public/assets/admin/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>

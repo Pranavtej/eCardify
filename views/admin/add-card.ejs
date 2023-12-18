@@ -109,7 +109,7 @@
 						
 							<div class="card comman-shadow">
 								<div class="card-body">
-									<form action="/add-user" method="post">
+									<form action="/update-cards" method="post">
 										<div class="row">
 											<div class="col-12">
 												<h5 class="form-title student-info">User Information <span><a href="javascript:;"><i class="feather-more-vertical"></i></a></span></h5>
@@ -117,19 +117,19 @@
 											<div class="col-12 col-sm-4">  
 												<div class="form-group local-forms">
 													<label >Name <span class="login-danger">*</span></label>
-													<input class="form-control" type="text" placeholder="Enter Name" id="username"  name="username" required>
+													<input class="form-control" type="text" placeholder="Enter Name" id="username"  name="username" value="<%=existingUser.username%>" readonly>
 												</div>
 											</div>
 											<div class="col-12 col-sm-4">
 												<div class="form-group local-forms">
 													<label>Email</label>
-													<input class="form-control" type="text" placeholder="Enter Email" id="email" name="email" required>
+													<input class="form-control" type="text" placeholder="Enter Email" id="email" name="email" value="<%=existingUser.email%>" readonly>
 												</div>
 											</div>
 											<div class="col-12 col-sm-4">
 												<div class="form-group local-forms">
 													<label >Phone number<span class="login-danger">*</span></label>
-													<input class="form-control" type="text" placeholder="Enter Phone number" id="password" name="number" required>
+													<input class="form-control" type="text" placeholder="Enter Phone number" id="password" name="number" value="<%=existingUser.number%>" readonly>
 												</div>
 											</div>
 											<div class="col-12 col-sm-4">
@@ -146,10 +146,10 @@
 											
 											<div class="col-12 col-sm-4">
 												<div class="form-group local-forms">
-													<label >Purpose </label>
-													<input class="form-control" type="text" placeholder="Enter Purpose" name="occassion" >
+													<label >Occassion </label>
+													<input class="form-control" type="text" placeholder="Enter Occassion" name="occassion" >
 												</div>
-											</div>
+											</div> 
 											<div class="col-12 col-sm-4">
 												<div class="form-group local-forms">
 													<label >Card Type<span class="login-danger">*</span></label>
