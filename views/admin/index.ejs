@@ -6,7 +6,7 @@
         <title>Preskool - Dashboard</title>
 		<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 		<!-- Favicon -->
-        <link rel="shortcut icon" href="/public/assets/admin/img/favicon.png">
+        <link rel="shortcut icon" href="/public/assets/admin/img/favicon2.ico">
 		
 		<!-- Fontfamily -->
 		<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,700;0,900;1,400;1,500;1,700&display=swap" rel="stylesheet">
@@ -37,11 +37,11 @@
 			
 				<!-- Logo -->
                 <div class="header-left">
-                    <a href="index.ejs" class="logo">
-						<img src="/public/assets/admin/img/logo.png" alt="Logo">
+                    <a href="index.html" class="logo">
+						<img src="/public/assets/admin/img/logo2.png" alt="Logo">
 					</a>
-					<a href="index.ejs" class="logo logo-small">
-						<img src="/public/assets/admin/img/logo-small.png" alt="Logo" width="30" height="30">
+					<a href="index.html" class="logo logo-small">
+						<img src="/public/assets/admin/img/eCardify-small.png" alt="Logo" width="30" height="30">
 					</a>
                 </div>
 				<!-- /Logo -->
@@ -52,14 +52,7 @@
 					</a>
 				</div>
 				
-				<!-- Search Bar -->
-				<!-- <div class="top-nav-search">
-					<form>
-						<input type="text" class="form-control" placeholder="Search here">
-						<button class="btn" type="submit"><i class="fas fa-search"></i></button>
-					</form>
-				</div> -->
-				<!-- /Search Bar -->
+				
 				
 				<!-- Mobile Menu Toggle -->
 				<a class="mobile_btn" id="mobile_btn">
@@ -155,11 +148,14 @@
 						</div> -->
 					</li>
 					<!-- /Notifications -->
-					<li  class="nav-item zoom-screen me-2">
-						<a href="#" class="nav-link header-nav-list win-maximize">
-							<img src="/public/assets/admin/assets/img/icons/header-icon-04.svg" alt="">
+					<li class="nav-item zoom-screen me-2">
+						<a href="#" class="nav-link header-nav-list">
+						  <img
+							src="/public/assets/admin/img/icons/header-icon-04.svg"
+							alt=""
+						  />
 						</a>
-					</li>
+					  </li>
 					
 					<!-- User Menu -->
 					<li class="nav-item dropdown has-arrow new-user-menus">
@@ -230,7 +226,7 @@
 											<h3>40000</h3>
 										</div>	
 										<div class="db-icon">
-											<img  src="/public/assets/admin/img/icons/dash-icon-01.svg"  alt="Dashboard Icon">
+											<img  src="/public/assets/admin/img/icons/dash-icon-user.png"  alt="Dashboard Icon">
 										</div>
 									</div>
 								</div>
@@ -243,10 +239,10 @@
 									<div class="db-widgets d-flex justify-content-between align-items-center">
 										<div class="db-info">
 											<h6>Templates</h6>
-											<h3>80+</h3>
+											<h3>50+</h3>
 										</div>		
 										<div class="db-icon">
-											<img  src="/public/assets/admin/img/icons/dash-icon-02.svg"  alt="Dashboard Icon">
+											<img  src="/public/assets/admin/img/icons/dash-icon-template.png"  alt="Dashboard Icon">
 										</div>	
 									</div>
 								</div>
@@ -259,10 +255,10 @@
 									<div class="db-widgets d-flex justify-content-between align-items-center">
 										<div class="db-info">
 											<h6>Card Types</h6>
-											<h3>90+</h3>
+											<h3>30+</h3>
 										</div>
 										<div class="db-icon">
-											<img  src="/public/assets/admin/img/icons/dash-icon-03.svg"  alt="Dashboard Icon">
+											<img  src="/public/assets/admin/img/icons/dash-icon-cardtype.png"  alt="Dashboard Icon">
 										</div>
 									</div>
 								</div>
@@ -278,7 +274,7 @@
 											<h3>$505</h3>
 										</div>	
 										<div class="db-icon">
-											<img  src="/public/assets/admin/img/icons/dash-icon-04.svg"  alt="Dashboard Icon">
+											<img  src="/public/assets/admin/img/icons/dash-icon-revenue.png"  alt="Dashboard Icon">
 										</div>	
 									</div>
 								</div>
@@ -299,8 +295,8 @@
 										</div>
 										<div class="col-6">
 											<ul class="chart-list-out">
-												<li><span class="circle-blue"></span>Teacher</li>
-												<li><span class="circle-green"></span>Student</li>
+												<li><span class="circle-blue"></span>Subscribers</li>
+												<li><span class="circle-green"></span>New Users</li>
 												<li class="star-menus"><a href="javascript:;"><i class="fas fa-ellipsis-v"></i></a></li>
 											</ul>                                       
 										</div>
@@ -321,12 +317,12 @@
 								<div class="card-header">
 									<div class="row align-items-center">
 										<div class="col-6">
-											<h5 class="card-title">Number of Students</h5>
+											<h5 class="card-title">Number of Users</h5>
 										</div>
 										<div class="col-6">
 											<ul class="chart-list-out">
-												<li><span class="circle-blue"></span>Girls</li>
-												<li><span class="circle-green"></span>Boys</li>
+												<li><span class="circle-blue"></span>New Users</li>
+												<li><span class="circle-green"></span>Subscribers</li>
 												<li class="star-menus"><a href="javascript:;"><i class="fas fa-ellipsis-v"></i></a></li>
 											</ul>                                       
 										</div>
@@ -345,7 +341,7 @@
 							<!-- Star Students -->
 							<div class="card flex-fill student-space comman-shadow">
 								<div class="card-header d-flex align-items-center">
-									<h5 class="card-title">Star Students</h5>
+									<h5 class="card-title">Star Users</h5>
 									<ul class="chart-list-out student-ellips">
 										<li class="star-menus"><a href="javascript:;"><i class="fas fa-ellipsis-v"></i></a></li>
 									</ul> 
@@ -357,7 +353,7 @@
 												<tr>
 													<th>ID</th>
 													<th>Name</th>
-													<th class="text-center">Marks</th>
+													<th class="text-center">Plan</th>
 													<th class="text-center">Percentage</th>
 													<th class="text-end">Year</th>
 												</tr>
