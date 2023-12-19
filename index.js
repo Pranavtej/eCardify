@@ -551,7 +551,6 @@ app.get("/delete/:id",async(req,res)=>{
 
 app.get('/imageupload', async (req, res) => {
     try {
-<<<<<<< HEAD
       const data = await Image.find({});
       res.render('admin/image', { items: data });
     } catch (err) {
@@ -590,14 +589,6 @@ app.get('/imageupload', async (req, res) => {
         const subscriptionPlanId = req.body.subscriptionPlan;
         const templateId = req.body.template;
         const cardTypeId = req.body.cardType;
-=======
-        const { username, email, number, subscriptionPlan, occassion, cardType, template } = req.body;
-        console.log(req.body);
-        // Validate the form data
-        // if (!username || !email || !phoneNumber || !subscriptionPlan || !occasion || !cardType || !template) {
-        //     return res.status(400).json({ error: 'Username, email, phone number, subscription plan, occasion, card type, and template are required' });
-        // }
->>>>>>> f90f4cfafd8ede463bc9ed4c41c1dfbfdad2c228
 
         // Create a new user
         const newUser = new User({
@@ -606,20 +597,12 @@ app.get('/imageupload', async (req, res) => {
             number: req.body.number,
             selectedItems: [
                 {
-<<<<<<< HEAD
                     occasion: req.body.occasion,
                     cardType: cardTypeId,
                     template: templateId,
                     subscriptionPlan: {
                         plan: subscriptionPlanId,
                         expiresAt: req.body.expiresAt,
-=======
-                    occasion:occassion,
-                    cardType: card,
-                    template: temp,
-                    subscriptionPlan: { 
-                        plan:Plan,
->>>>>>> f90f4cfafd8ede463bc9ed4c41c1dfbfdad2c228
                     },
                 },
             ],
@@ -707,7 +690,6 @@ app.post('/edit-user/:userId', async (req, res) => {
     }
 });
 
-<<<<<<< HEAD
 
 
 
@@ -783,16 +765,16 @@ app.get('/cardlist', async (req, res) => {
 });
 
 
-app.post('/submitform', upload.single('employeeImage'), async (req, res) => {
+app.post('/profsample-1', upload.single('employeeImage'), async (req, res) => {
     try {
-      const { employeeName, employeePosition, employeeCompany } = req.body;
+      const { employeeName, employeePosition, employeeCompany,companyImage } = req.body;
   
       // Convert the image buffer to a base64-encoded string
       const imageBase64 = req.file ? req.file.buffer.toString('base64') : null;
   
       // Create a new Employee document using the Mongoose model
       const newEmployee = new Employee({
-        image: imageBase64,
+        image: companyImage ? companyImage : imageBase64,
         name: employeeName,
         Position: employeePosition,
         company: employeeCompany,
@@ -809,31 +791,4 @@ app.post('/submitform', upload.single('employeeImage'), async (req, res) => {
     }
   });
 
-=======
-app.post('/delete-user/:userId', async (req, res) => {
-    const userIdToDelete = req.params.userId;
-
-    try {
-        // Find the user by ID and remove it from the database
-        const deletedUser = await User.findByIdAndDelete(userIdToDelete);
-
-        if (!deletedUser) {
-            return res.status(404).json({ error: 'User not found' });
-        }
-
-        // Redirect to the user listing page or any other page after successful deletion
-        const users1 = await fetchUserData(); // Replace with your data-fetching logic
-        res.render('admin/user', { users1 });
-    } catch (error) {
-        console.error('Error deleting user:', error);
-        res.status(500).send('Internal Server Error');
-    }
-});
-
-
-app.post('/generate-card',async(req,res)=>
-{
-    console.log(req.body);
-    res.json(req.body);
-});
->>>>>>> f90f4cfafd8ede463bc9ed4c41c1dfbfdad2c228
+ 

@@ -140,7 +140,7 @@
                 <div class="col-sm-12">
                     <div class="card comman-shadow">
                         <div class="card-body">
-                            <form action="/add-user" method="post" id="userDetailsForm">
+                            <form action="/generate-card" method="post" id="userDetailsForm">
                                 <div class="row">
                                     <div class="col-12">
                                         <h5 class="form-title student-info">User Information <span><a href="javascript:;"><i class="feather-more-vertical"></i></a></span></h5>
@@ -182,8 +182,9 @@
 
                                     <div class="col-12">
                                         <div class="student-submit">
-											<button type="button" class="btn btn-primary" onclick="generatePDF()">Generate Card</button>
-										</div
+                                            <button type="button" class="btn btn-primary" onclick="submitForm()">Submit Form</button>
+                                            <button type="button" class="btn btn-success" onclick="generatePDF()">Download Card</button>
+                                        </div>
                                     </div>
                                 </div>
                             </form>
@@ -287,6 +288,29 @@
 		};
 		html2pdf().set(opt).from(element).save();
 	}
+
+
+    function submitForm() {
+    var form = document.getElementById('userDetailsForm');
+    var formData = new FormData(form);
+
+    // Make an AJAX request to the server to save the data
+    $.ajax({
+        type: 'POST',
+        url: '/generate-card',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function (response) {
+            console.log(response);
+            alert('Data saved successfully!');
+        },
+        error: function (error) {
+            console.error(error);
+            alert('Error saving data!');
+        }
+    });
+}
 
 	updateUserDetails();
 	generateQRCode();
