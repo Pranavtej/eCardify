@@ -7,15 +7,15 @@ const app = express();
 const mongoose = require("mongoose");
 const User = require("./models/user");
 const SubscriptionPlan = require("./models/subplan");
-const Bcard1 = require("./models/bcard");
+const BusinessCard = require("./models/bcard");
 const cardt = require("./models/card");
 const temp = require("./models/templates");
 const bcrypt = require("bcrypt");
 const path = require('path');
 const adminModel = require('./models/admin');
 const multer = require('multer');
-
-
+const Image = require('./models/image');
+const Employee = require('./models/employeeschema');
 // app.set("views", __dirname + "/views");
 // app.set("view engine", "ejs");
 const { ObjectId } = require('mongodb');
@@ -425,32 +425,100 @@ app.get("/delete/:id",async(req,res)=>{
     
 
 });
+          
 
 
-app.post('/add-user', async (req, res) => {
+// app.post('/add-user', async (req, res) => {
+//     try {
+//         const { username, email, number, subscriptionPlan, occasion, cardType, template } = req.body;
+//         console.log(req.body);
+
+//         // Create a new user
+//         const Plan = new ObjectId(subscriptionPlan);
+//         const card = new ObjectId(cardType);
+//         const temp = new ObjectId(template);
+
+//         const newUser = new User({
+//             username,
+//             email,
+//             number,
+//             selectedItems: [
+//                 {
+//                     occasion,
+//                     cardType: card,
+//                     template: temp,
+//                     subscriptionPlan: {
+//                         plan: Plan,
+//                     },
+//                 },
+//             ],
+//         });
+
+//         // Save the user to the database
+//         const savedUser = await newUser.save();
+
+//         // Redirect to the edit page for the newly created user
+//         res.redirect(`/template1?userId=${savedUser._id}`);
+//     } catch (error) {
+//         console.error('Error creating user:', error);
+//         res.status(500).send('Internal Server Error');
+//     }
+// });
+
+app.get('/imageupload', async (req, res) => {
     try {
-        const { username, email, number, subscriptionPlan, occasion, cardType, template } = req.body;
-        console.log(req.body);
-        // Validate the form data
-        // if (!username || !email || !phoneNumber || !subscriptionPlan || !occasion || !cardType || !template) {
-        //     return res.status(400).json({ error: 'Username, email, phone number, subscription plan, occasion, card type, and template are required' });
-        // }
+      const data = await Image.find({});
+      res.render('admin/image', { items: data });
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Internal Server Error');
+    }
+  });
+  
+  app.post('/imageupload', upload.single('image'), async (req, res) => {
+    try {
+      const obj = {
+        name: req.body.name,
+        desc: req.body.desc,
+        img: {
+          data: await readFileAsync(path.join(__dirname, 'uploads', req.file.filename)),
+          contentType: 'image/png',
+        },
+      };
+      await Image.create(obj);
+      res.redirect('/');
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Internal Server Error');
+    }
+  });
+
+
+
+
+
+  app.post('/add-user', async (req, res) => {
+    try {
+        // ... (validate and sanitize user input)
+
+        // Extract selected values
+        const subscriptionPlanId = req.body.subscriptionPlan;
+        const templateId = req.body.template;
+        const cardTypeId = req.body.cardType;
 
         // Create a new user
-        const Plan= new ObjectId(subscriptionPlan);
-        const card=new ObjectId(cardType);
-        const temp= new ObjectId(template);
         const newUser = new User({
-            username,
-            email,
-            number,
+            username: req.body.username,
+            email: req.body.email,
+            number: req.body.number,
             selectedItems: [
                 {
-                    occasion,
-                    cardType: card,
-                    template: temp,
-                    subscriptionPlan: { 
-                        plan:Plan,
+                    occasion: req.body.occasion,
+                    cardType: cardTypeId,
+                    template: templateId,
+                    subscriptionPlan: {
+                        plan: subscriptionPlanId,
+                        expiresAt: req.body.expiresAt,
                     },
                 },
             ],
@@ -459,13 +527,16 @@ app.post('/add-user', async (req, res) => {
         // Save the user to the database
         const savedUser = await newUser.save();
 
-        const users1 = await fetchUserData();
-        res.render('admin/user', { users1 });
+        // Redirect to the template page with selected values as query parameters
+        res.redirect(`admin/template1?subscriptionPlan=${subscriptionPlanId}&template=${templateId}&cardType=${cardTypeId}&userId=${savedUser._id}`);
     } catch (error) {
-        console.error('Error creating user:', error);
+        // Handle errors
+        console.error(error);
         res.status(500).send('Internal Server Error');
     }
 });
+
+  
 
 
 app.get('/edit-user/:userId', async (req, res) => {
@@ -530,3 +601,105 @@ app.post('/edit-user/:userId', async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 });
+
+
+
+
+
+
+
+app.get('/template1', (req, res) => {
+    // Retrieve fixed values from query parameters
+    const subscriptionPlanId = req.query.subscriptionPlan;
+    const templateId = req.query.template;
+    const cardTypeId = req.query.cardType;
+  
+    // Render the template.ejs file with fixed values
+    res.render('template1', { subscriptionPlanId, templateId, cardTypeId });
+  });
+  
+
+
+
+app.post('/template1', async (req, res) => {
+    try {
+        const { name, email, number, subscriptionPlan, occasion, cardType, template } = req.body;
+        console.log(req.body);
+
+        // Create a new user
+        const Plan = new ObjectId(subscriptionPlan);
+        const card = new ObjectId(cardType);
+        const temp = new ObjectId(template);
+
+        const newBusinnessCard = new BusinessCard({
+            username,
+            email,
+            number,
+            selectedItems: [
+                {
+                    occasion,
+                    cardType: card,
+                    template: temp,
+                    subscriptionPlan: {
+                        plan: Plan,
+                    },
+                },
+            ],
+        });
+
+        // Save the user to the database
+        const savedUser = await newUser.save();
+
+        // Redirect to the edit page for the newly created user
+        res.redirect(`/template1?userId=${savedUser._id}`);
+    } catch (error) {
+        console.error('Error creating user:', error);
+        res.status(500).send('Internal Server Error');
+    }
+}
+);
+
+
+
+app.get('/profsample-1',async(req,res)=>{
+    res.render('admin/profsample-1');
+}
+);
+
+app.get('/cardlist', async (req, res) => {
+    try {
+        const users1 = await fetchUserData();
+        res.render('admin/cardlist', { users1 });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Internal Server Error");
+    }
+});
+
+
+app.post('/submitform', upload.single('employeeImage'), async (req, res) => {
+    try {
+      const { employeeName, employeePosition, employeeCompany } = req.body;
+  
+      // Convert the image buffer to a base64-encoded string
+      const imageBase64 = req.file ? req.file.buffer.toString('base64') : null;
+  
+      // Create a new Employee document using the Mongoose model
+      const newEmployee = new Employee({
+        image: imageBase64,
+        name: employeeName,
+        Position: employeePosition,
+        company: employeeCompany,
+      });
+  
+      // Save the new employee document to the database
+      await newEmployee.save();
+  
+      // Respond to the client
+      res.render('admin/profsample-1');
+    } catch (error) {
+      console.error('Error during form submission:', error);
+      res.status(500).send('Internal Server Error');
+    }
+  });
+

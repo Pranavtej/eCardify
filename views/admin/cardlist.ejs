@@ -156,11 +156,9 @@
 													<th>S.No</th>
 													<th>Name</th>
 													<th>Phone</th>
-													<th>Subscription</th>
-													<th>Card</th>
-													<th>Template</th>
-													
-													<th class="text-end">Edit/delete</th>
+                                                    <th>Email</th>								
+													<th class="text-end">Edit/delete/Generate card</th>
+                                                    
 												</tr>
 											</thead>
 											<tbody>
@@ -170,9 +168,8 @@
 													  <td><%= index + 1 %></td>
 													  <td><%= user.username %></td>
 													  <td><%= user.number %></td>
-													  <td><%= user.selectedItems[0].subscriptionPlan.plan.name %></td>
-                                                      <td><%= user.selectedItems[0].cardType.name %></td>
-                                                      <td><%= user.selectedItems[0].template.name %></td>
+                                                        <td><%= user.email %></td>
+
 													  <td class="text-end">
 														<div class="actions">
 														  <a href="/delete-user/<%= user._id %>" class="btn btn-sm bg-danger-light me-2">
@@ -181,8 +178,13 @@
 														  <a href="/edit-user/<%= user._id %>" class="btn btn-sm bg-danger-light">
 															<i class="feather-edit"></i>
 														  </a>
+                                                         <a href="/profsample-1"> <button class="btn btn-sm btn-primary" onclick="generateCard('<%= user.cardName %>')">
+                                                        Generate    
+                                                        </button></a>
 														</div>
 													  </td>
+
+                                                      
 													</tr>
 												  <% }); %>
 											</tbody>
