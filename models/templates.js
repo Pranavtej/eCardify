@@ -2,7 +2,11 @@ const mongoose = require('mongoose');
 
 const templateSchema = new mongoose.Schema({
   name: { type: String, required: true },
-  cardType: { type: mongoose.Schema.Types.ObjectId, ref: 'CardType', required: true }, // Reference to CardType
+  cardType: { type: mongoose.Schema.Types.ObjectId, ref: 'CardType', required: true },
+  img: {
+    data: Buffer,
+    contentType: String,
+  },
   fields: [
     {
       name: String,
