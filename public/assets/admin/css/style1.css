@@ -1,0 +1,105 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+*{
+    font-family: 'Poppins', sans-serif;
+    
+}
+body{
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed;
+    margin: 0; 
+}
+.box{
+/*  background-image: url("https://artlogo.co/cdn/shop/articles/QR_Code_Business_Card_How_To_Create_and_Scan_QR_Code_Business_Cards_1100x.jpg?v=1698422857"),url("https://www.splitshire.com/wp-content/uploads/2015/03/SplitShire-8098-1800x1200-uai-1800x1161.jpg"); */
+    background-image: url("../img/img1.jpg"), url("../img/img2.jpg");
+    background-size: cover, cover; 
+    background-position: center center;
+    background-attachment: fixed, fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
+    background-repeat: no-repeat, no-repeat; 
+    background-blend-mode: multiply;
+}  
+.container{
+    width: 350px;
+    display: flex;
+    flex-direction: column;
+    padding: 0 15px 0 15px;
+}
+span{
+    color: white;
+    font-size: small;
+    display: flex;
+    justify-content: center;
+    padding: 10px 0 10px 0;
+}
+header{
+    color: white;
+    font-size: 30px;
+    display: flex;
+    justify-content: center;
+    padding: 10px 0 10px 0;
+}
+.input-field {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.input-field .input {
+    height: 45px;
+    width: calc(100% - 40px); /* Adjusted width */
+    border: none;
+    outline: none;
+    border-radius: 30px;
+    color: white;
+    padding: 0 20px; /* Adjusted padding */
+    background: rgba(255, 255, 255, 0.1);
+    padding-left: 40px; /* Increased padding to create space for the icon */
+    position: relative;
+}
+
+i {
+    color: white;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 10px;
+    font-size: 20px; /* Adjusted font size */
+}
+::-webkit-input-placeholder{
+    color:rgb(238, 236, 236);
+}
+.submit{
+    border: none;
+    border-radius: 30px;
+    font-size: 15px;
+    height: 45px;
+    outline: none;
+    width: 100%;
+    background: rgba(235, 235, 243, 0.7);
+    cursor: pointer;
+    transition: .3s;
+}
+.submit:hover{
+    box-shadow: 1px 5px 7px 1px rgba(0, 0, 0, 0.2);
+}
+.bottom{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    font-size: small;
+    color: white; 
+    margin-top: 10px;
+}
+.left{
+    display: flex;
+}
+label a{
+    color: white; 
+    text-decoration: none;
+}

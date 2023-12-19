@@ -171,12 +171,11 @@ app.get('/admin', async (req, res) => {
     }
 });
 
+
 app.post('/admin', async (req, res) => {
     try {
         const { username, password } = req.body;
-
         const user = await adminModel.findOne({ username });
-
         if (!user) {
             res.send("User does not exist");
         } else if (password === user.password) {
@@ -191,7 +190,7 @@ app.post('/admin', async (req, res) => {
 });
 
 app.get('/index',async(req,res)=>{
-   res.render('admin/index');
+    res.render('admin/index');
 });
 
 
@@ -322,6 +321,68 @@ app.get('/add-user', async (req, res) => {
         }
     });
 
+app.post('/add-card', async (req, res) => {
+
+    const mobileNumber = req.body.phoneNumber; // Get the entered mobile number
+  
+    try {
+      // Check if the user already exists based on the mobile number
+      const existingUser = await User.findOne({ number: mobileNumber });
+      console.log(existingUser);
+      if (existingUser) {
+        // If the user exists, you can redirect to the add-card page or perform necessary actions
+        const subscriptionPlans = await SubscriptionPlan.find();
+        const cardTypes = await cardt.find();
+        const templates = await temp.find();
+    
+        res.render('admin/add-card', { existingUser, subscriptionPlans, cardTypes, templates });
+         // Redirect to the add-card page with the user ID
+      } else {
+        // If the user doesn't exist, you can handle it as needed, such as displaying an error message
+        res.send('User not found. Please register.');
+      }
+    } catch (error) {
+      console.error(error);
+      res.status(500).send('Internal Server Error');
+    }
+  });
+
+app.post('/update-cards', async (req, res) => {
+    const { username, email, number, subscriptionPlan, occassion, cardType, template } = req.body
+    console.log(req.body);
+  try {
+    // Find the user by mobile number
+    const user = await User.findOne({ number: number });
+
+    if (!user) {
+      return res.status(404).send('User not found');
+    }
+
+    // Push the new card details and subscription plan to the user's selectedItems array
+    const newSelectedItem = {
+        occasion:occassion,
+        cardType: cardType,
+        template: template,
+        subscriptionPlan: {
+          plan: subscriptionPlan,
+        },
+        // Add other necessary fields for the new item
+      };
+  
+      // Push the new item to the selectedItems array
+      user.selectedItems.push(newSelectedItem);
+  
+      // Save the updated user object
+      await user.save();
+      const users1 = await fetchUserData();
+      res.render('admin/user', { users1 });
+    
+  } catch (error) {
+    console.error('Error adding card:', error);
+    return res.status(500).send('Internal Server Error');
+  }
+});
+
 app.get('/user-details', async (req, res) => {
     try {
         // Your logic for fetching subscription plan data if needed
@@ -369,24 +430,47 @@ app.get('/user', async (req, res) => {
     }
 });
 
-app.get('/delete-user/:id', async (req, res) => {
-    const userId = req.params.id;
-  
+app.get('/get-cards/:userId', async (req, res) => {
     try {
-      // Assuming User is your Mongoose model
-      const deletedUser = await User.findByIdAndDelete(userId);
-  
-      if (!deletedUser) {
-        return res.status(404).send('User not found');
-      }
-  
-     const users1 = await fetchUserData();
-     res.render('admin/user', { users1 });
+      const userId = req.params.userId;
+      const user = await User.findById(userId)
+      .populate({
+        path: 'selectedItems.subscriptionPlan.plan',
+        model: 'SubscriptionPlan',
+        select: 'name',
+    })
+    .populate({
+        path: 'selectedItems.cardType',
+        model: 'CardType',
+        select: 'name',
+    });
+      
+      console.log(user);
+      res.json({ cards: user.selectedItems });
     } catch (error) {
       console.error(error);
-      res.status(500).send('Internal Server Error');
+      res.status(500).json({ error: 'Internal Server Error' });
     }
   });
+
+//card deletion code
+app.post('/delete-card/:userId', async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const cardId = req.body.cardId;
+
+    await User.findByIdAndUpdate(userId, {
+      $pull: { selectedItems: { _id: cardId } }
+    });
+
+    const users1 = await fetchUserData();
+    res.render('admin/user', { users1 }); // Redirect to home or any desired route
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
 
 app.get('/user-grid', async (req, res) => {
     try {
@@ -467,6 +551,7 @@ app.get("/delete/:id",async(req,res)=>{
 
 app.get('/imageupload', async (req, res) => {
     try {
+<<<<<<< HEAD
       const data = await Image.find({});
       res.render('admin/image', { items: data });
     } catch (err) {
@@ -505,6 +590,14 @@ app.get('/imageupload', async (req, res) => {
         const subscriptionPlanId = req.body.subscriptionPlan;
         const templateId = req.body.template;
         const cardTypeId = req.body.cardType;
+=======
+        const { username, email, number, subscriptionPlan, occassion, cardType, template } = req.body;
+        console.log(req.body);
+        // Validate the form data
+        // if (!username || !email || !phoneNumber || !subscriptionPlan || !occasion || !cardType || !template) {
+        //     return res.status(400).json({ error: 'Username, email, phone number, subscription plan, occasion, card type, and template are required' });
+        // }
+>>>>>>> f90f4cfafd8ede463bc9ed4c41c1dfbfdad2c228
 
         // Create a new user
         const newUser = new User({
@@ -513,12 +606,20 @@ app.get('/imageupload', async (req, res) => {
             number: req.body.number,
             selectedItems: [
                 {
+<<<<<<< HEAD
                     occasion: req.body.occasion,
                     cardType: cardTypeId,
                     template: templateId,
                     subscriptionPlan: {
                         plan: subscriptionPlanId,
                         expiresAt: req.body.expiresAt,
+=======
+                    occasion:occassion,
+                    cardType: card,
+                    template: temp,
+                    subscriptionPlan: { 
+                        plan:Plan,
+>>>>>>> f90f4cfafd8ede463bc9ed4c41c1dfbfdad2c228
                     },
                 },
             ],
@@ -560,40 +661,44 @@ app.get('/edit-user/:userId', async (req, res) => {
 
 
 app.post('/edit-user/:userId', async (req, res) => {
+    const userId = req.params.userId;
+
     try {
-        const userId = req.params.userId;
-        const { username, email, number, subscriptionPlan, occasion, cardType, template } = req.body;
+        // Retrieve the user by ID
+        const user = await User.findById(userId);
 
-        // Validate the form data if needed
-        // if (!username || !email || !number || !subscriptionPlan || !occasion || !cardType || !template) {
-        //     return res.status(400).json({ error: 'All fields are required' });
-        // }
-
-        // Update the user in the database
-        const Plan = new ObjectId(subscriptionPlan);
-        const card = new ObjectId(cardType);
-        const temp = new ObjectId(template);
-
-        const updatedUser = await User.findByIdAndUpdate(
-            userId,
-            {
-                $set: {
-                    username,
-                    email,
-                    number,
-                    'selectedItems.0.occasion': occasion,
-                    'selectedItems.0.cardType': card,
-                    'selectedItems.0.template': temp,
-                    'selectedItems.0.subscriptionPlan.plan': Plan,
-                },
-            },
-            { new: true } // This option returns the modified document rather than the original
-        );
-
-        if (!updatedUser) {
+        if (!user) {
             return res.status(404).json({ error: 'User not found' });
         }
 
+        // Update user fields
+        user.username = req.body.username;
+        user.email = req.body.email;
+        user.number = req.body.number;
+
+        // Clear existing selectedItems array
+        user.selectedItems = [];
+
+        // Get the number of selectedItems from the hidden field
+        const selectedItemsCount = parseInt(req.body.selectedItemsCount, 10);
+
+        // Iterate over form fields to reconstruct selectedItems array
+        for (let index = 0; index < selectedItemsCount; index++) {
+            user.selectedItems.push({
+                occasion: req.body[`occasion_${index}`],
+                cardType: new ObjectId(req.body[`cardType_${index}`]),
+                template: new ObjectId(req.body[`template_${index}`]),
+                subscriptionPlan: {
+                    plan: new ObjectId(req.body[`subscriptionPlan_${index}`]),
+                },
+                // Add other fields if needed
+            });
+        }
+
+        // Save the updated user to the database
+        const updatedUser = await user.save();
+
+        // Redirect to the user listing page or any other page after successful update
         const users1 = await fetchUserData();
         res.render('admin/user', { users1 });
     } catch (error) {
@@ -602,6 +707,7 @@ app.post('/edit-user/:userId', async (req, res) => {
     }
 });
 
+<<<<<<< HEAD
 
 
 
@@ -703,3 +809,31 @@ app.post('/submitform', upload.single('employeeImage'), async (req, res) => {
     }
   });
 
+=======
+app.post('/delete-user/:userId', async (req, res) => {
+    const userIdToDelete = req.params.userId;
+
+    try {
+        // Find the user by ID and remove it from the database
+        const deletedUser = await User.findByIdAndDelete(userIdToDelete);
+
+        if (!deletedUser) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        // Redirect to the user listing page or any other page after successful deletion
+        const users1 = await fetchUserData(); // Replace with your data-fetching logic
+        res.render('admin/user', { users1 });
+    } catch (error) {
+        console.error('Error deleting user:', error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+
+app.post('/generate-card',async(req,res)=>
+{
+    console.log(req.body);
+    res.json(req.body);
+});
+>>>>>>> f90f4cfafd8ede463bc9ed4c41c1dfbfdad2c228

@@ -11,6 +11,8 @@
 		<!-- Fontfamily -->
 		<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,700;0,900;1,400;1,500;1,700&display=swap" rel="stylesheet">
 		
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 		<!-- Bootstrap CSS -->
         <link rel="stylesheet" href="/public/assets/admin/plugins/bootstrap/css/bootstrap.min.css">
 		
@@ -103,7 +105,29 @@
 						</div>
 					</div>
 					<!-- /Page Header -->
-				
+					<button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal<%= user._id %>">
+						Delete User
+					  </button>
+				  
+					  <!-- Modal for delete confirmation -->
+					  <div class="modal fade" id="deleteModal<%= user._id %>" tabindex="-1" aria-labelledby="deleteModalLabel<%= user._id %>" aria-hidden="true">
+						<div class="modal-dialog">
+						  <div class="modal-content">
+							<div class="modal-header">
+							  <h5 class="modal-title" id="deleteModalLabel<%= user._id %>">Delete Card</h5>
+							  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+							</div>
+							<div class="modal-body">
+							  <p>Are you sure you want to delete the user <%= user.username %>?</p>
+							  <form action="/delete-user/<%= user._id %>" method="post">
+								<button type="submit" class="btn btn-danger">Confirm Delete</button>
+							  </form>
+							</div>
+						  </div>
+					  </div>
+					  </div>
+				     
+
 					<div class="row">
 						<div class="col-sm-12">
 						
@@ -132,97 +156,48 @@
 													<input class="form-control" type="text" placeholder="Enter password" id="password" name="number" value="<%=user.number%>" required>
 												</div>
 											</div>
-											<div class="col-12 col-sm-4">
-												<div class="form-group local-forms">
-													<label >Subscription Plan<span class="login-danger">*</span></label>
-													<select class="form-control select" name="subscriptionPlan">
-                                                        <option></option>
-                                                        <% subscriptionPlans.forEach(plan => { %>
-                                                          <option value="<%= plan._id %>" <%=
-                                                            (user.selectedItems[0].subscriptionPlan.plan.toString() === plan._id.toString()) ? 'selected' : ''
-                                                          %>><%= plan.name %></option>
-                                                        <% }); %>
-                                                    </select>
-												</div>
-											</div>
-											
-											<!-- <div class="col-12 col-sm-4">
-												<div class="form-group local-forms">
-													<label >Occassion </label>
-													<input class="form-control" type="text" placeholder="Enter Occassion" name="occassion" value="<%= user.occasion %>" >
-												</div>
-											</div> -->
-											<div class="col-12 col-sm-4">
-												<div class="form-group local-forms">
-													<label >Card Type<span class="login-danger">*</span></label>
-													<select class="form-control select" name="cardType">
-                                                        <option>Select card</option>
-                                                        <% cardTypes.forEach(cardType => { %>
-                                                          <option value="<%= cardType._id %>" <%=
-                                                            (user.selectedItems[0].cardType && user.selectedItems[0].cardType.toString() === cardType._id.toString()) ? 'selected' : ''
-                                                          %>><%= cardType.name %></option>
-                                                        <% }); %>
-                                                      </select>
-												</div>
-											</div>
-											<div class="col-12 col-sm-4">
-												<div class="form-group local-forms">
-													<label >Template<span class="login-danger">*</span></label>
-													<select class="form-control select" name="template">
-                                                        <option>Select Template</option>
-                                                        <% templates.forEach(template => { %>
-                                                          <option value="<%= template._id %>" <%=
-                                                            (user.selectedItems[0].template && user.selectedItems[0].template.toString() === template._id.toString()) ? 'selected' : ''
-                                                          %>><%= template.name %></option>
-                                                        <% }); %>
-                                                      </select>
-												</div>
-											</div>
-											<!-- <div class="col-12 col-sm-4">
-												<div class="form-group local-forms">
-													<label >E-Mail <span class="login-danger">*</span></label>
-													<input class="form-control" type="text" placeholder="Enter Email Address" >
-												</div>
-											</div> -->
-											<!-- <div class="col-12 col-sm-4">
-												<div class="form-group local-forms">
-													<label >Class <span class="login-danger">*</span></label>
-													<select class="form-control select">
-														<option>Please Select Class  </option>
-														<option>12</option>
-														<option>11</option>
-														<option>10</option>
-													  </select>
-												</div>
-											</div> -->
-											<!-- <div class="col-12 col-sm-4">
-												<div class="form-group local-forms">
-													<label >Section <span class="login-danger">*</span></label>
-													<select class="form-control select">
-														<option>Please Select Section   </option>
-														<option>B</option>
-														<option>A</option>
-														<option>C</option>
-													  </select>
-												</div>
-											</div> -->
-											
-											<!-- <div class="col-12 col-sm-4">
-												<div class="form-group local-forms">
-													<label >Phone </label>
-													<input class="form-control" type="text" placeholder="Enter Phone Number" >
-												</div>
-											</div> -->
-											<!-- <div class="col-12 col-sm-4">
-												<div class="form-group students-up-files">
-													<label>Upload User Photo (150px X 150px)</label>
-													<div class="uplod">
-														<label class="file-upload image-upbtn mb-0">
-															Choose File <input type="file">
-														</label>
+											<% user.selectedItems.forEach((item, index) => { %>
+												
+												<div class="col-12">
+													<h7>Template <%= index+1 %></h7>
+													<!-- Fields for Occasion -->
+													<div class="form-group local-forms">
+														<label>Occasion</label>
+														<input class="form-control" type="text" name="occasion_<%= index %>" value="<%= item.occasion || '' %>" required>
+													</div>
+													<!-- Fields for Subscription Plan -->
+													<div class="form-group local-forms">
+														<label>Subscription Plan<span class="login-danger">*</span></label>
+														<select class="form-control select" name="subscriptionPlan_<%= index %>" required>
+															<!-- Iterate over subscription plans -->
+															<% subscriptionPlans.forEach(plan => { %>
+																<option value="<%= plan._id %>" <%= (item.subscriptionPlan && item.subscriptionPlan.plan.toString() === plan._id.toString()) ? 'selected' : '' %>><%= plan.name %></option>
+															<% }); %>
+														</select>
+													</div>
+													<!-- Fields for Card Type -->
+													<div class="form-group local-forms">
+														<label>Card Type<span class="login-danger">*</span></label>
+														<select class="form-control select" name="cardType_<%= index %>" required>
+															<!-- Iterate over card types -->
+															<% cardTypes.forEach(cardType => { %>
+																<option value="<%= cardType._id %>" <%= (item.cardType && item.cardType.toString() === cardType._id.toString()) ? 'selected' : '' %>><%= cardType.name %></option>
+															<% }); %>
+														</select>
+													</div>
+													<!-- Fields for Template -->
+													<div class="form-group local-forms">
+														<label>Template<span class="login-danger">*</span></label>
+														<select class="form-control select" name="template_<%= index %>" required>
+															<!-- Iterate over templates -->
+															<% templates.forEach(template => { %>
+																<option value="<%= template._id %>" <%= (item.template && item.template.toString() === template._id.toString()) ? 'selected' : '' %>><%= template.name %></option>
+															<% }); %>
+														</select>
 													</div>
 												</div>
-											</div> -->
+											<% }); %>
+											<input type="hidden" name="selectedItemsCount" value="<%= user.selectedItems.length %>">
 											<div class="col-12">
 												<div class="student-submit">
 													<button type="submit" class="btn btn-primary">Update User</button>
@@ -233,8 +208,10 @@
 								</div>
 							</div>							
 						</div>					
-					</div>					
-				</div>				
+					</div>	
+
+				</div>		
+						
 			</div>
 			<!-- /Page Wrapper -->
 			<!-- /Page Wrapper -->
