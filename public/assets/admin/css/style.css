@@ -9451,7 +9451,7 @@ body[data-layout-mode=dark] .alertify .ajs-footer .ajs-buttons .ajs-button.ajs-o
   .v71_14 {
 	width: 336px;
 	height: 192px;
-	background: linear-gradient(rgba(10, 87, 120, 1), rgba(5, 59, 82, 1));
+	background: rgba(10,87,120,1);
 	opacity: 1;
 	position: relative; 
 	margin-right: 10px;
@@ -9475,7 +9475,7 @@ body[data-layout-mode=dark] .alertify .ajs-footer .ajs-buttons .ajs-button.ajs-o
   
   .v71_22 {
 	width: 104px;
-	height: 171px;
+	height: 150px;
 	/* background: url("./images/css/v71_22.png"); */
 	background-repeat: no-repeat;
 	background-position: center center;
@@ -9561,5 +9561,25 @@ body[data-layout-mode=dark] .alertify .ajs-footer .ajs-buttons .ajs-button.ajs-o
 	flex-direction: row;
 	align-items: center;
 	justify-content: center;
+	
 }
+
+
+
+
+
+#frontview, #backview {
+    
+    flex: 1; 
+    padding: 20px;
+
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover; 
+	font-family: 'Poppins', sans-serif;
+}
+
+
+
+
   

@@ -195,9 +195,6 @@
 													<th>Name</th>
 													<th>Phone</th>
 													<th>E-mail</th>
-													<!-- <th>Card</th>
-													<th>Template</th> -->
-													
 													<th>Delete</th>
 													<th>Edit</th>
 													<th>Generate Card</th>
@@ -211,14 +208,12 @@
 													  <td><%= user.username %></td>
 													  <td><%= user.number %></td>
 													  <td><%= user.email %></td>
-													  <!-- <td><%= user.selectedItems[0].subscriptionPlan.plan.name %></td>
-                                                      <td><%= user.selectedItems[0].cardType.name %></td>
-                                                      <td><%= user.selectedItems[0].template.name %></td> -->
+													 
 													  <td>
-														
+														<% if (user.selectedItems && user.selectedItems.length > 0) { %>
 															<button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal<%= user._id %>">
 																Delete
-															  </button>
+															</button>
 														  
 															  <!-- Modal for delete confirmation -->
 															  <div class="modal fade" id="deleteModal<%= user._id %>" tabindex="-1" aria-labelledby="deleteModalLabel<%= user._id %>" aria-hidden="true">
@@ -247,6 +242,9 @@
 																  </div>
 																</div>
 															  </div>
+															  <% } else { %>
+																No cards to delete
+															<% } %>
 															</td>
 
 														  <td>
@@ -257,37 +255,40 @@
 														</div>
 													  </td>
 													  <td>
-                                                        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#generateCardModal">
-															Generate New Card
-														</button>
-														<div class="modal fade" id="generateCardModal" tabindex="-1" aria-labelledby="generateCardModalLabel" aria-hidden="true">
-															<div class="modal-dialog">
-																<div class="modal-content">
+														<% if (user.selectedItems && user.selectedItems.length > 0) { %>
+															<button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#generateCardModal<%= user._id %>">
+															  Generate New Card
+															</button>
+															<div class="modal fade" id="generateCardModal<%= user._id %>" tabindex="-1" aria-labelledby="generateCardModalLabel<%= user._id %>" aria-hidden="true">
+																<div class="modal-dialog">
+																  <div class="modal-content">
 																	<div class="modal-header">
-																		<h5 class="modal-title" id="generateCardModalLabel">Generate New Card</h5>
-																		<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+																	  <h5 class="modal-title" id="generateCardModalLabel<%= user._id %>">Generate New Card</h5>
+																	  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 																	</div>
 																	<div class="modal-body">
-																		<!-- Form to select card details for new card generation -->
-																		<form action="/profsample-1" method="post">
-																			<div class="mb-3">
-																				<label for="cardSelect<%= user._id %>" class="form-label">Select Card to Generate:</label>
-																				<select class="form-select" id="cardSelect<%= user._id %>" name="cardId" required>
-																					<% user.selectedItems.forEach(item => { %>
-																						<option value="<%= item._id %>">
-																							<%= item.occasion %>/<%= item.cardType.name %>/<%= item.template.name %>
-																						</option>
-																					<% }); %>
-																				</select>
-																				<input type="hidden" name="userid" value="<%= user._id %>">
-																			</div>
-																			<button type="submit" class="btn btn-success">Generate Card</button>
-																		</form>
+																	  <!-- Form to select card details for new card generation -->
+																	  <form action="/generate-card/<%= user._id %>" method="post">
+																		<div class="mb-3">
+																		  <label for="cardSelect<%= user._id %>" class="form-label">Select Card to Generate:</label>
+																		  <select class="form-select" id="cardSelect<%= user._id %>" name="cardId" required>
+																			<% user.selectedItems.forEach(item => { %>
+																			  <option value="<%= item._id %>">
+																				<%= item.occasion %>/<%= item.cardType.name %>/<%= item.template.name %>
+																			  </option>
+																			<% }); %>
+																		  </select>
+																		  
+																		</div>
+																		<button type="submit" class="btn btn-success">Generate Card</button>
+																	  </form>
 																	</div>
+																  </div>
 																</div>
-															</div>
-														</div>
-														
+															  </div>
+														<% } else { %>
+															No cards to generate
+														<% } %>
 													  </td>
 													</tr>
 												  <% }); %>
