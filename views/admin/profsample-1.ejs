@@ -108,9 +108,9 @@
 
           
             <!-- Horizontal Card -->
-            <div class="card" id="previewCard" style="display:flex;">
+            <div class="card" id="previewCard">
 				<div class="card-body" id="frontview">
-					<h5 class="card-title"></h5>
+					
 					<div class="v71_14">
 						<span class="v71_18" id="userName"></span>
 						<div class="v71_22" id="image"></div>
@@ -280,11 +280,11 @@
 		
 		var element = document.getElementById('previewCard');
 		var opt = {
-			margin: 0.5,
+			margin: 0.2,
 			filename: 'myfile.pdf',
 			image: { type: 'jpeg', quality: 0.98 },
-			html2canvas: { scale: 2 },
-			jsPDF: { unit: 'in', format :'A4', orientation: 'portrait' }
+			html2canvas: { scale: 1,logging:true },
+			jsPDF: { unit: 'mm', format :'a4', orientation:'portrait' }
 		};
 		html2pdf().set(opt).from(element).save();
 	}

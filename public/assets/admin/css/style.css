@@ -9561,5 +9561,7 @@ body[data-layout-mode=dark] .alertify .ajs-footer .ajs-buttons .ajs-button.ajs-o
 	flex-direction: row;
 	align-items: center;
 	justify-content: center;
+	width: 100%;
+    height: 100%;
 }
   

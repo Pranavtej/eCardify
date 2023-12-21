@@ -19,6 +19,7 @@ const Employee = require('./models/employeeschema');
 // app.set("views", __dirname + "/views");
 // app.set("view engine", "ejs");
 const { ObjectId } = require('mongodb');
+const customizablepages = require('./models/CustomablePage');
 
 app.set("views", __dirname + "/views");
 app.set("view engine", "ejs");
@@ -792,3 +793,17 @@ app.post('/profsample-1', upload.single('employeeImage'), async (req, res) => {
   });
 
  
+
+  app.get('/globalpage',async(req,res)=>{
+    try {
+        const pageId = req.params.id;
+        const pageData = await customizablepages.find();
+
+        res.render('admin/globalpage', { pageData });
+
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).send("Internal Server Error");
+    }
+  })
