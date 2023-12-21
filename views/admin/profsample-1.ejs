@@ -1,33 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
-    <title>Preskool - Students</title>
-
-    <!-- Favicon -->
-
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+        <title>Preskool - Students</title>
+		
+		<!-- Favicon -->
+        <link rel="shortcut icon" href="/public/assets/admin/img/favicon.png">
 	
-    <link rel="shortcut icon" href="/public/assets/admin/img/favicon.png">
-
-    <!-- Fontfamily -->
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,700;0,900;1,400;1,500;1,700&display=swap" rel="stylesheet">
-
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="/public/assets/admin/plugins/bootstrap/css/bootstrap.min.css">
-
-    <!-- Feathericon CSS -->
-    <link rel="stylesheet" href="/public/assets/admin/plugins/feather/feather.css">
-
-    <!-- Pe7 CSS -->
-    <link rel="stylesheet" href="/public/assets/admin/plugins/icons/flags/flags.css">
-
-    <!-- Datepicker CSS -->
-    <link rel="stylesheet" href="/public/assets/admin/css/bootstrap-datetimepicker.min.css">
-
-    <!-- Fontawesome CSS -->
-    <link rel="stylesheet" href="/public/assets/admin/plugins/fontawesome/css/fontawesome.min.css">
-    <link rel="stylesheet" href="/public/assets/admin/plugins/fontawesome/css/all.min.css">
+		<!-- Fontfamily -->
+		<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,700;0,900;1,400;1,500;1,700&display=swap" rel="stylesheet">
+		
+		<!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="/public/assets/admin/plugins/bootstrap/css/bootstrap.min.css">
+		
+		<!-- Feathericon CSS -->
+        <link rel="stylesheet" href="/public/assets/admin/plugins/feather/feather.css">
+		
+		<!-- Pe7 CSS -->
+		<link rel="stylesheet" href="/public/assets/admin/plugins/icons/flags/flags.css">
+		
+		<!-- Fontawesome CSS -->
+		<link rel="stylesheet" href="/public/assets/admin/plugins/fontawesome/css/fontawesome.min.css">
+		<link rel="stylesheet" href="/public/assets/admin/plugins/fontawesome/css/all.min.css">
 
     <!-- Select CSS -->
     <link rel="stylesheet" href="/public/assets/admin/plugins/select2/css/select2.min.css">
@@ -109,9 +104,8 @@
           
             <!-- Horizontal Card -->
             <div class="card" id="previewCard">
-				<div class="card-body" id="frontview">
-					
-					<div class="v71_14">
+				<div class="card-body" >
+					<div class="v71_14" id="frontview">
 						<span class="v71_18" id="userName"></span>
 						<div class="v71_22" id="image"></div>
 						<span class="v71_23" id="userRole"></span>
@@ -131,200 +125,211 @@
 							</div>
 						</div>
 					</div>
-				</div>
-			</div>
-            <!-- /Horizontal Card -->
-
-
-            <div class="row">
-                <div class="col-sm-12">
-                    <div class="card comman-shadow">
-                        <div class="card-body">
-                            <form action="/generate-card" method="post" id="userDetailsForm">
-                                <div class="row">
-                                    <div class="col-12">
-                                        <h5 class="form-title student-info">User Information <span><a href="javascript:;"><i class="feather-more-vertical"></i></a></span></h5>
-                                    </div>
-                                    <div class="col-12 col-sm-4">
-                                        <div class="form-group local-forms">
-                                            <label>Name <span class="login-danger">*</span></label>
-                                            <input class="form-control" type="text" placeholder="Enter Name" id="username" name="username" required>
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-sm-4">
-                                        <div class="form-group local-forms">
-                                            <label>Role</label>
-                                            <input class="form-control" type="text" placeholder="Enter Role" id="role" name="role" required>
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-sm-4">
-                                        <div class="form-group local-forms">
-                                            <label>Company Name<span class="login-danger">*</span></label>
-                                            <input class="form-control" type="text" placeholder="Enter your companyName" id="companyname" name="companyname" required>
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-sm-4">
-                                        <div class="form-group local-forms">
-                                            <label for="companyImage">Image<span class="login-danger">*</span></label>
-                                            <input class="form-control" type="file" id="companyImage" name="companyImage" accept="image/*" required>
-                                        </div>
-                                    </div>
-									
-									<div class="col-12 col-sm-4">
-										<div class="form-group local-forms">
-											<label>Link <span class="login-danger">*</span></label>
-											<input class="form-control" type="text" placeholder="eg : www.google.com" id="urlInput" required>
+				
+					<div class="row">
+						<div class="col-sm-12">
+						
+							<div class="card card-table comman-shadow">
+								<div class="card-body">
+								
+									<!-- Page Header -->
+									<div class="page-header">
+										<div class="row align-items-center">
+											<div class="col">
+												<h3 class="page-title">Students</h3>
+											</div>
+											<div class="col-auto text-end float-end ms-auto download-grp">
+												<!-- <a href="/user" class="btn btn-outline-gray me-2 active"><i class="feather-list"></i></a>
+												<a href="/user-grid" class="btn btn-outline-gray me-2"><i class="feather-grid"></i></a>
+												<a href="#" class="btn btn-outline-primary me-2"><i class="fas fa-download"></i> Download</a> -->
+												<a href="#" id="addCardBtn" class="btn btn-primary"><i class="fas fa-plus"></i> Add Card</a>
+											</div>
 										</div>
-										<button type="button" onclick="generateQRCode()" class="btn btn-primary">Generate QR Code</button>
 									</div>
-
+									<!-- /Page Header -->
 									
+									<div class="table-responsive">
+										<table class="table border-0 star-student table-hover table-center mb-0 datatable table-striped">
+											<thead class="student-thread">
+												<tr>
+													
+													<th>S.No</th>
+													<th>Name</th>
+													<th>Phone</th>
+													<th>E-mail</th>
+													<th>Delete</th>
+													<th>Edit</th>
+													<th>Generate Card</th>
+												</tr>
+											</thead>
+											<tbody>
+												<% users1.forEach((user,index) => { %>
+													<tr> 
+	
+													  <td><%= index + 1 %></td>
+													  <td><%= user.username %></td>
+													  <td><%= user.number %></td>
+													  <td><%= user.email %></td>
+													 
+													  <td>
+														<% if (user.selectedItems && user.selectedItems.length > 0) { %>
+															<button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal<%= user._id %>">
+																Delete
+															</button>
+														  
+															  <!-- Modal for delete confirmation -->
+															  <div class="modal fade" id="deleteModal<%= user._id %>" tabindex="-1" aria-labelledby="deleteModalLabel<%= user._id %>" aria-hidden="true">
+																<div class="modal-dialog">
+																  <div class="modal-content">
+																	<div class="modal-header">
+																	  <h5 class="modal-title" id="deleteModalLabel<%= user._id %>">Delete Card</h5>
+																	  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+																	</div>
+																	<div class="modal-body">
+																	  <!-- Form to select card for deletion -->
+																	  <form action="/delete-card/<%= user._id %>" method="post">
+																		<div class="mb-3">
+																			<label for="cardSelect<%= user._id %>" class="form-label">Select Card to Delete:</label>
+																			<select class="form-select" id="cardSelect<%= user._id %>" name="cardId" required>
+																			  <% user.selectedItems.forEach(item => { %>
+																				<option value="<%= item._id %>">
+																					<%= item.occasion %>/<%= item.cardType.name %>/<%= item.template.name %>
+																				</option>
+																			  <% }); %>
+																			</select>
+																		  </div>
+																		<button type="submit" class="btn btn-danger">Confirm Delete</button>
+																	  </form>
+																	</div>
+																  </div>
+																</div>
+															  </div>
+															  <% } else { %>
+																No cards to delete
+															<% } %>
+															</td>
 
-                                    <div class="col-12">
-                                        <div class="student-submit">
-                                            <button type="button" class="btn btn-primary" onclick="submitForm()">Submit Form</button>
-                                            <button type="button" class="btn btn-success" onclick="generatePDF()">Download Card</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
+														  <td>
+															<div>
+														  <a href="/edit-user/<%= user._id %>" class="btn btn-sm btn-warning">
+															<i class="feather-edit"></i> Edit
+														  </a>
+														</div>
+													  </td>
+													  <td>
+														<% if (user.selectedItems && user.selectedItems.length > 0) { %>
+															<button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#generateCardModal<%= user._id %>">
+															  Generate New Card
+															</button>
+															<div class="modal fade" id="generateCardModal<%= user._id %>" tabindex="-1" aria-labelledby="generateCardModalLabel<%= user._id %>" aria-hidden="true">
+																<div class="modal-dialog">
+																  <div class="modal-content">
+																	<div class="modal-header">
+																	  <h5 class="modal-title" id="generateCardModalLabel<%= user._id %>">Generate New Card</h5>
+																	  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+																	</div>
+																	<div class="modal-body">
+																	  <!-- Form to select card details for new card generation -->
+																	  <form action="/generate-card/<%= user._id %>" method="post">
+																		<div class="mb-3">
+																		  <label for="cardSelect<%= user._id %>" class="form-label">Select Card to Generate:</label>
+																		  <select class="form-select" id="cardSelect<%= user._id %>" name="cardId" required>
+																			<% user.selectedItems.forEach(item => { %>
+																			  <option value="<%= item._id %>">
+																				<%= item.occasion %>/<%= item.cardType.name %>/<%= item.template.name %>
+																			  </option>
+																			<% }); %>
+																		  </select>
+																		  
+																		</div>
+																		<button type="submit" class="btn btn-success">Generate Card</button>
+																	  </form>
+																	</div>
+																  </div>
+																</div>
+															  </div>
+														<% } else { %>
+															No cards to generate
+														<% } %>
+													  </td>
+													</tr>
+												  <% }); %>
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>							
+						</div>					
+					</div>					
+				</div>
+				<div class="modal fade" id="addCardModal" tabindex="-1" role="dialog" aria-labelledby="addCardModalLabel" aria-hidden="true">
+					<div class="modal-dialog" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title" id="addCardModalLabel">Add Card for Existing User</h5>
+								<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+									<!-- <span aria-hidden="true">&times;</span> -->
+								</button>
+							</div>
+							<div class="modal-body">
+								<form action="/add-card" method="post">
+									<div class="form-group">
+										<label for="phoneNumber">Enter User's Mobile Number:</label>
+										<input type="text" class="form-control" id="phoneNumber" name="phoneNumber" required>
+									</div>
+									<button type="submit" class="btn btn-primary">Submit</button>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- Delete Modal -->
+				
+
+				<!-- Footer -->
+				<!-- <footer>
+					<p>Copyright © 2022 Dreamguys.</p>					
+				</footer> -->
+				<!-- /Footer -->				
+			</div>
+			<!-- /Page Wrapper -->
+			
         </div>
-    </div>
-    <!-- /Page Wrapper -->
-    <!-- /Page Wrapper -->
+		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Bootstrap JavaScript -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-</div>
-<!-- /Main Wrapper -->
-
-<!-- jQuery -->
-<script src="/public/assets/admin/js/jquery-3.6.0.min.js"></script>
-
-<!-- Bootstrap Core JS -->
-<script src="/public/assets/admin/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-<!-- Feather Icon JS -->
-<script src="/public/assets/admin/js/feather.min.js"></script>
-
-<!-- Slimscroll JS -->
-<script src="/public/assets/admin/plugins/slimscroll/jquery.slimscroll.min.js"></script>
-
-<!-- Select2 JS -->
-<script src="/public/assets/admin/plugins/select2/js/select2.min.js"></script>
-
-<!-- Datepicker Core JS -->
-<script src="/public/assets/admin/plugins/moment/moment.min.js"></script>
-<script src="/public/assets/admin/js/bootstrap-datetimepicker.min.js"></script>
-
-<!-- Custom JS -->
-<script src="/public/assets/admin/js/script.js"></script>
+		<script>
+			$(document).ready(function() {
+				// Show modal when "Add Card" button is clicked
+				$('#addCardBtn').click(function() {
+					$('#addCardModal').modal('show');
+				});
+			});
+		</script>
 
 
-<script>
-    function updateUserDetails() {
-        var userName = document.getElementById('username').value;
-        var userRole = document.getElementById('role').value;
-        var userCompanyName = document.getElementById('companyname').value;
-
-        document.getElementById('userName').innerText = userName;
-        document.getElementById('userRole').innerText = userRole;
-        document.getElementById('companyNamePreview').innerText = userCompanyName;
-
-        var fileInput = document.getElementById('companyImage');
-        var imageDiv = document.getElementById('image');
-
-        if (fileInput.files && fileInput.files[0]) {
-            var reader = new FileReader();
-
-            reader.onload = function (e) {
-                imageDiv.style.backgroundImage = 'url(' + e.target.result + ')';
-            };
-
-            reader.readAsDataURL(fileInput.files[0]);
-        }
-    }
-
-    var formInputs = document.querySelectorAll('#userDetailsForm input');
-    formInputs.forEach(function (input) {
-        input.addEventListener('input', function () {
-            updateUserDetails();
-        });
-    });
-
-    function generateQRCode() {
-        var url = document.getElementById('urlInput').value;
-        var qrcodeContainer = document.getElementById('qrcodeContainer');
-        var downloadLink = document.getElementById('downloadLink');
-        var qrcodeInput = document.getElementById('qrcodeInput');
-
-        if (url.trim() !== '') {
-            qrcodeContainer.innerHTML = '';
-
-            var qrcode = new QRCode(qrcodeContainer, {
-                text: url,
-                width: 100,
-                height: 100,
-            });
-
-            downloadLink.href = qrcodeContainer.firstChild.toDataURL("image/png");
-            downloadLink.style.display = 'block';
-            qrcodeInput.value = url; // Display the URL in the QR code input field
-        }
-    }
-
-	function generatePDF()
-	{
+		<!-- /Main Wrapper -->
 		
-		var element = document.getElementById('previewCard');
-		var opt = {
-			margin: 0.2,
-			filename: 'myfile.pdf',
-			image: { type: 'jpeg', quality: 0.98 },
-			html2canvas: { scale: 1,logging:true },
-			jsPDF: { unit: 'mm', format :'a4', orientation:'portrait' }
-		};
-		html2pdf().set(opt).from(element).save();
-	}
-
-
-    function submitForm() {
-    var form = document.getElementById('userDetailsForm');
-    var formData = new FormData(form);
-
-    // Make an AJAX request to the server to save the data
-    $.ajax({
-        type: 'POST',
-        url: '/generate-card',
-        data: formData,
-        processData: false,
-        contentType: false,
-        success: function (response) {
-            console.log(response);
-            alert('Data saved successfully!');
-        },
-        error: function (error) {
-            console.error(error);
-            alert('Error saving data!');
-        }
-    });
-}
-
-	updateUserDetails();
-	generateQRCode();
-
-
-
-</script>
-
-<!-- html2pdf library -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/latest/html2pdf.bundle.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.0/html2pdf.bundle.min.js"></script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
-
-</body>
+		<!-- jQuery -->
+        <script src="/public/assets/admin/js/jquery-3.6.0.min.js"></script>
+		
+		
+		
+		<!-- Bootstrap Core JS -->
+        <script src="/public/assets/admin/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+		
+		<!-- Feather Icon JS -->
+		<script src="/public/assets/admin/js/feather.min.js"></script>
+		
+		<!-- Slimscroll JS -->
+		<script src="/public/assets/admin/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+		
+		<!-- Datatables JS -->
+		<script src="/public/assets/admin/plugins/datatables/datatables.min.js"></script>
+		
+		<!-- Custom JS -->
+		<script src="/public/assets/admin/js/script.js"></script>
+    </body>
 </html>

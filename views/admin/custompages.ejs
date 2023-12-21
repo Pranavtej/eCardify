@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    form {
+      max-width: 800px;
+      margin: 20px auto;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+      color: #333;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+      color: #555;
+    }
+
+    input, select, button {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+
+    .addFieldButton {
+      background-color: #4CAF50;
+      color: #fff;
+      border: none;
+      padding: 10px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .removeFieldButton {
+      background-color: #ff0000;
+      color: #fff;
+      border: none;
+      padding: 10px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .fieldGroup {
+      margin-bottom: 20px;
+    }
+
+    .fieldGroup label {
+      margin-bottom: 5px;
+    }
+
+    img.preview {
+      max-width: 100%;
+      margin-top: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+  </style>
+  <title>Customizable Form</title>
+</head>
+<body>
+  <form id="customizableForm" action="/custompage/<%= userId %>" method="post" enctype="multipart/form-data">
+    <h2>Customizable Form</h2>
+
+    <!-- Image Section -->
+    <label for="image">Image:</label>
+    <input type="file" id="image" name="image" accept="image/*">
+    <input type="text" id="imageSize" name="imageSize" placeholder="Image Size">
+
+    <!-- Basic Information Section -->
+    <div class="fieldGroup" id="basicInformationFields">
+      <h2>Basic Information</h2>
+      <div class="field">
+        <label for="field1">Field:</label>
+        <input type="text" name="fieldNames[]" placeholder="Field Name">
+        <input type="text" name="fieldValues[]" placeholder="Value">
+        <input type="color"  placeholder="Select Color" name="fieldTextColors[]" value="#000000">
+        <select name="fieldTextStyles[]">
+          <option value="normal">Normal</option>
+          <option value="italic">Italic</option>
+          <option value="bold">Bold</option>
+        </select>
+        <input type="number" name="fieldTextSizes[]" placeholder="Text Size">
+        <button class="removeFieldButton" type="button" onclick="removeField(this)">Remove</button>
+      </div>
+      <button class="addFieldButton" type="button" onclick="addField('basicInformationFields')">Add Field</button>
+    </div>
+
+    <!-- Contact Info Section -->
+    <div class="fieldGroup" id="contactInfoFields">
+      <h2>Contact Info</h2>
+      <div class="field">
+        <label for="contactField1">Field:</label>
+        <input type="text" name="contactFieldNames[]" placeholder="Field Name">
+        <input type="text" name="contactFieldValues[]" placeholder="Value">
+        <input type="color" name="contactFieldTextColors[]" value="#000000">
+        <select name="contactFieldTextStyles[]">
+          <option value="normal">Normal</option>
+          <option value="italic">Italic</option>
+          <option value="bold">Bold</option>
+        </select>
+        <input type="number" name="contactFieldTextSizes[]" placeholder="Text Size">
+        <input type="text" name="contactFieldIcons[]" placeholder="Icon">
+        <button class="removeFieldButton" type="button" onclick="removeField(this)">Remove</button>
+      </div>
+      <button class="addFieldButton" type="button" onclick="addField('contactInfoFields')">Add Field</button>
+    </div>
+
+    <!-- Buttons Section -->
+    <div class="fieldGroup" id="buttonsFields">
+      <h2>Buttons</h2>
+    
+      <!-- Generic Button Field -->
+      <div class="field">
+        <label for="button">Button:</label>
+        <input type="text" name="buttonFieldNames[]" placeholder="Field Name">
+        <input type="text" name="buttonValues[]" placeholder="Value">
+        <select name="buttonTextStyles[]">
+          <option value="normal">Normal</option>
+          <option value="italic">Italic</option>
+          <option value="bold">Bold</option>
+        </select>
+        <h4>Select Button Color</h4>
+        <input type="color" name="buttonColors[]" value="#4CAF50">
+        <input type="number" name="buttonSizes[]" placeholder="Button Size">
+        <button class="removeFieldButton" type="button" onclick="removeField(this)">Remove</button>
+      </div>
+    
+      <!-- Add Button Field Button -->
+      <button class="addFieldButton" type="button" onclick="addField('buttonsFields')">Add Button</button>
+    </div>
+      
+
+    <!-- Social Media Section -->
+    <div class="fieldGroup" id="socialMediaFields">
+      <h2>Social Media</h2>
+      <div class="field">
+        <label for="socialField1">Field:</label>
+        <input type="text" name="socialFieldNames[]" placeholder="Field Name">
+        <input type="text" name="socialFieldValues[]" placeholder="Value">
+        <input type="color" name="socialFieldTextColors[]" value="#000000">
+        <select name="socialFieldTextStyles[]">
+          <option value="normal">Normal</option>
+          <option value="italic">Italic</option>
+          <option value="bold">Bold</option>
+        </select>
+        <input type="number" name="socialFieldTextSizes[]" placeholder="Text Size">
+        
+        <button class="removeFieldButton" type="button" onclick="removeField(this)">Remove</button>
+      </div>
+      <button class="addFieldButton" type="button" onclick="addField('socialMediaFields')">Add Field</button>
+    </div>
+
+    <!-- Image Preview -->
+    <div id="imagePreview"></div>
+
+    <button type="submit">Submit</button>
+  </form>
+
+  <script>
+    function addField(fieldGroup) {
+      const originalField = document.querySelector(`#${fieldGroup} .field`);
+      const newField = originalField.cloneNode(true);
+      const removeButton = document.createElement('button');
+      removeButton.className = 'removeFieldButton';
+      removeButton.type = 'button';
+      removeButton.textContent = 'Remove';
+      removeButton.onclick = function () {
+        removeField(this);
+      };
+  
+      // Remove any existing remove buttons in the new field
+      const existingRemoveButtons = newField.querySelectorAll('.removeFieldButton');
+      existingRemoveButtons.forEach(button => button.parentNode.removeChild(button));
+  
+      // Append the new remove button to the new field
+      newField.appendChild(removeButton);
+  
+      document.querySelector(`#${fieldGroup}`).appendChild(newField);
+    }
+  
+    function removeField(button) {
+      const parentFieldGroup = button.parentNode.parentNode;
+      parentFieldGroup.removeChild(button.parentNode);
+  
+      // If all fields are removed, add an empty field back
+      if (!parentFieldGroup.querySelector('.field')) {
+        addField(parentFieldGroup.id);
+      }
+    }
+  
+    document.getElementById('image').addEventListener('change', function (e) {
+      const imagePreview = document.getElementById('imagePreview');
+      const file = e.target.files[0];
+  
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          const img = document.createElement('img');
+          img.classList.add('preview');
+          img.src = e.target.result;
+          imagePreview.innerHTML = '';
+          imagePreview.appendChild(img);
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+  
+    document.addEventListener('click', function (event) {
+      if (event.target.classList.contains('addFieldButton')) {
+        const fieldGroup = event.target.getAttribute('data-field-group');
+        addField(fieldGroup);
+      }
+    });
+  
+    // Initialize the form with an empty field for each section
+    addField('basicInfoFields');
+    addField('contactInfoFields');
+    addField('buttonsFields');
+    addField('socialMediaFields');
+  </script>
+</body>
+</html>
+</body>
+</html>

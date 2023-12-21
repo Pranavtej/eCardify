@@ -10,6 +10,7 @@ const SubscriptionPlan = require("./models/subplan");
 const BusinessCard = require("./models/bcard");
 const cardt = require("./models/card");
 const temp = require("./models/templates");
+const cpages = require("./models/custompages");
 const bcrypt = require("bcrypt");
 const path = require('path');
 const adminModel = require('./models/admin');
@@ -19,7 +20,6 @@ const Employee = require('./models/employeeschema');
 // app.set("views", __dirname + "/views");
 // app.set("view engine", "ejs");
 const { ObjectId } = require('mongodb');
-const customizablepages = require('./models/CustomablePage');
 
 app.set("views", __dirname + "/views");
 app.set("view engine", "ejs");
@@ -37,7 +37,7 @@ app.set('views', path.join(__dirname, 'views'));
 
 app.use('/public', express.static(__dirname + "/public"));
 
-
+const fs = require('fs');
 const defaultSessionSecret = 'mydefaultsecretkey';
 
 app.use(session({
@@ -51,8 +51,6 @@ app.use(session({
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
-
-
 
 
 app.get('/', function (req, res) {
@@ -560,23 +558,23 @@ app.get('/imageupload', async (req, res) => {
     }
   });
   
-  app.post('/imageupload', upload.single('image'), async (req, res) => {
-    try {
-      const obj = {
-        name: req.body.name,
-        desc: req.body.desc,
-        img: {
-          data: await readFileAsync(path.join(__dirname, 'uploads', req.file.filename)),
-          contentType: 'image/png',
-        },
-      };
-      await Image.create(obj);
-      res.redirect('/');
-    } catch (err) {
-      console.error(err);
-      res.status(500).send('Internal Server Error');
-    }
-  });
+//   app.post('/imageupload', upload.single('image'), async (req, res) => {
+//     try {
+//       const obj = {
+//         name: req.body.name,
+//         desc: req.body.desc,
+//         img: {
+//           data: await fs.readFileAsync(path.join(__dirname, 'uploads', req.file.filename)),
+//           contentType: 'image/png',
+//         },
+//       };
+//       await Image.create(obj);
+//       res.redirect('/');
+//     } catch (err) {
+//       console.error(err);
+//       res.status(500).send('Internal Server Error');
+//     }
+//   });
 
 
 
@@ -598,7 +596,7 @@ app.get('/imageupload', async (req, res) => {
             number: req.body.number,
             selectedItems: [
                 {
-                    occasion: req.body.occasion,
+                    occasion: req.body.occassion,
                     cardType: cardTypeId,
                     template: templateId,
                     subscriptionPlan: {
@@ -613,7 +611,8 @@ app.get('/imageupload', async (req, res) => {
         const savedUser = await newUser.save();
 
         // Redirect to the template page with selected values as query parameters
-        res.redirect(`admin/template1?subscriptionPlan=${subscriptionPlanId}&template=${templateId}&cardType=${cardTypeId}&userId=${savedUser._id}`);
+        const users1 = await fetchUserData();
+        res.render('admin/user', { users1 });
     } catch (error) {
         // Handle errors
         console.error(error);
@@ -748,12 +747,41 @@ app.post('/template1', async (req, res) => {
 }
 );
 
+app.post('/generate-card/:userid', async (req, res) => {
+    try {
+        const cardId  = req.body.cardId;
+        const userId = req.params.userid;
+        
+        
+        const user = await User.findById(userId);
+
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        // Find the selected item with the given cardId
+        const selectedItem = user.selectedItems.find(item => item._id.toString() === cardId);
+        
+        if (!selectedItem) {
+            return res.status(404).json({ error: 'Selected item not found' });
+        }
+
+        const template = await temp.findById(selectedItem.template);
+        
+
+        if (!template) {
+            return res.status(404).json({ error: 'Template not found' });
+        }
+        const templateName = template.name;
+        res.render(`admin/${templateName}`,{user,selectedItem});
+
+    } catch (error) {
+        console.error('Error generating card:', error);
+        res.status(500).send('Internal Server Error');
+    }
+});
 
 
-app.get('/profsample-1',async(req,res)=>{
-    res.render('admin/profsample-1');
-}
-);
 
 app.get('/cardlist', async (req, res) => {
     try {
@@ -766,44 +794,142 @@ app.get('/cardlist', async (req, res) => {
 });
 
 
-app.post('/profsample-1', upload.single('employeeImage'), async (req, res) => {
-    try {
-      const { employeeName, employeePosition, employeeCompany,companyImage } = req.body;
-  
-      // Convert the image buffer to a base64-encoded string
-      const imageBase64 = req.file ? req.file.buffer.toString('base64') : null;
-  
-      // Create a new Employee document using the Mongoose model
-      const newEmployee = new Employee({
-        image: companyImage ? companyImage : imageBase64,
-        name: employeeName,
-        Position: employeePosition,
-        company: employeeCompany,
-      });
-  
-      // Save the new employee document to the database
-      await newEmployee.save();
-  
-      // Respond to the client
-      res.render('admin/profsample-1');
-    } catch (error) {
-      console.error('Error during form submission:', error);
-      res.status(500).send('Internal Server Error');
-    }
-  });
+app.post('/businesscard/:userId',  upload.fields([  { name: 'Image', maxCount: 1 }, { name: 'bgImage', maxCount: 1 }
+  ]), async (req, res) => {
+     try {
+        const  userId  = req.params.userId;
+        const  selectedItems = req.body.selectedItems;       
+        const selectedItemsObject = JSON.parse(selectedItems);
+        const subscriptionPlan = selectedItemsObject.subscriptionPlan || {};
+        const plan = subscriptionPlan.plan || '';
+        const templateId=selectedItemsObject.template;
+        const cardid=selectedItemsObject.cardType;
+        const template =await temp.findById(templateId).lean();
 
+        const imageUrl = req.files['Image'] ? req.files['Image'][0] : null;
+        // path to the uploaded image
+        const bgImage = req.files['bgImage'] ? req.files['bgImage'][0]: null; // path to the uploaded background image
+        
+        console.log(template);
+        
+const templateFields = template.fields && template.fields.map(field => ({
+    fieldName: field.name,
+    fieldValue: req.body[field.name] || '',
+  }));
+  console.log(templateFields);
+        const businessCard = new BusinessCard({
+            user: userId,
+            selectedCardType: cardid,
+            selectedTemplate: templateId,
+            selectedSubscriptionPlan: plan,
+            templateFields: templateFields,
+            Image:imageUrl.buffer.toString('base64'),
+            bgImg:bgImage.buffer.toString('base64'),
+            bgColor:req.body.bgColor || '',
+        });
+
+        const savedBusinessCard = await businessCard.save();
+        console.log(savedBusinessCard);
+        res.render('admin/custompages',{userId});
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
+
+app.post('/delete-user/:userId', async (req, res) => {
+    const userId = req.params.userId;
+
+    try {
+        // Find the user by ID and remove them
+        const deletedUser = await User.findOneAndDelete({ _id: userId });;
+
+        if (!deletedUser) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+        const users1 = await fetchUserData();
+        res.render('admin/user', { users1 });
+        
+    } catch (error) {
+        console.error('Error deleting user:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
+
+
+
+function mapFields(formData, section) {
+    const fieldNames = formData[`${section}Names`] || [];
+    const fieldValues = formData[`${section}Values`] || [];
+    const textColors = formData[`${section}TextColors`] || [];
+    const textStyles = formData[`${section}TextStyles`] || [];
+    const textSizes = formData[`${section}TextSizes`] || [];
+
+    return fieldNames.map((name, idx) => {
+      const fieldObj = {
+        fieldName: name,
+        value: fieldValues[idx] || '',
+        textColor: textColors[idx] || '',
+        textStyle: textStyles[idx] || '',
+        textSize: textSizes[idx] || '',
+      };
+  
+      // Additional fields based on section
+      if (section === 'contactField') {
+        fieldObj.icon = formData[`${section}Icons`] ? formData[`${section}Icons`][idx] : '';
+      }
+      
+      return fieldObj;
+    });
+  }
+  
  
 
-  app.get('/globalpage',async(req,res)=>{
-    try {
-        const pageId = req.params.id;
-        const pageData = await customizablepages.find();
+app.post('/custompage/:id',upload.fields([{ name: 'image', maxCount: 1 }]),async(req,res)=>
+{
+    try{
+    const formData = req.body;
+    const imageFile = req.files['image'][0];
+    const basicInformationFields = mapFields(formData, 'field');
+    const contactInfoFields = mapFields(formData, 'contactField');
+    const socialMediaFields = mapFields(formData, 'socialField');
+    const buttons = [];
 
-        res.render('admin/globalpage', { pageData });
 
+    // Iterate over the button fields in the form data
+    for (let i = 0; i < formData.buttonFieldNames.length; i++) {
+      const button = {
+        fieldName: formData.buttonFieldNames[i],
+        value: formData.buttonValues[i],
+        textStyle: formData.buttonTextStyles[i],
+        buttonColor: formData.buttonColors[i],
+        buttonSize: formData.buttonSizes[i],
+      };
+      buttons.push(button);
     }
-    catch (error) {
-        console.error(error);
-        res.status(500).send("Internal Server Error");
-    }
-  })
+    
+
+    // Save the image to MongoDB
+    const customizablePage = new cpages({
+        user: req.params.id,
+        image: imageFile.buffer.toString('base64'),
+        imageSize: formData.imageSize,
+        basicInformationFields:basicInformationFields,
+        contactInfoFields:contactInfoFields,
+        additionalButtons: buttons,
+        socialMediaFields:socialMediaFields,
+      });
+
+    // Save the data to MongoDB
+    await customizablePage.save();
+    console.log(customizablePage);
+    res.status(201).send('Form submitted successfully!');
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Internal Server Error');
+  }
+
+});
+
