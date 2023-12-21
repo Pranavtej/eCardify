@@ -2,12 +2,6 @@ const mongoose = require('mongoose');
 
 const businessCardSchema = new mongoose.Schema({
   user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-  name: { type: String, required: true },
-  title: String,
-  company: String,
-  phone: String,
-  email: String,
-  address: String,
   selectedCardType: { type: mongoose.Schema.Types.ObjectId, ref: 'CardType', required: true },
   selectedTemplate: { type: mongoose.Schema.Types.ObjectId, ref: 'Template', required: true },
   selectedSubscriptionPlan: { type: mongoose.Schema.Types.ObjectId, ref: 'SubscriptionPlan', required: true },
@@ -18,6 +12,9 @@ const businessCardSchema = new mongoose.Schema({
       fieldValue: String, // User-entered value for the field
     },
   ],
+  Image:String,
+  bgImg:String,
+  bgColor:String,
 });
 
 const BusinessCard = mongoose.model('BusinessCard', businessCardSchema);
