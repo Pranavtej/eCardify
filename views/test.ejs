@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body style="background-color: black;">
+
+    <div class="flex" >
+        <div class="flex-row">
+            <div class="Image" >
+                <img src="" width="" height="" />
+
+            </div>
+            <div class="Header" >
+                <span class="text-bold "></span>
+                <span class="text-italic "></span>
+            </div>
+            <div class="ButtonsGroup" >
+                <div class="flex">
+                    <div class="flex-col">
+                    
+                            <% data.ButtonsGroup.forEach(function(button) { %> 
+                    
+                                <a href="<%= button.buttonRedirect%>" class="btn btn-primary<%= button.buttonStyle%>"><%= button.buttonName %></a>
+                            <% }) %>
+
+                    
+                        </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    
+</body>
+</html>
