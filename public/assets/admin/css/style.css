@@ -1,47 +1,15 @@
 /*
-Author       : Dreamguys
-Template Name: Preskool - Bootstrap Admin Template
-Version      : 1.0
+Author       : Takshalabs
+Version      : 1.0.0
 */
 
-/*============================
- [Table of CSS]
-
-1. General
-2. Table
-3. Helper Class
-4. Bootstrap Classes
-5. Select2
-6. Nav Tabs
-7. Components
-8. Header
-9. Footer
-10. Sidebar
-11. Content
-12. Login
-13. Notifications
-14. Dashboard
-15. Student Details
-16. Event
-17. Inbox
-18. Error
-19. Profile
-20. Teacher Dashboard
-21. Student Dashboard
-22. Settings
-23. Blog
-24. Blog Details
-25. Ribbon
-26. Drag & Drop
-27. Alert
-28. Timeline
-29. Responsive
-
-========================================*/
 
 /*-----------------
 	1. General
 -----------------------*/
+
+@import url('https://fonts.googleapis.com/css2?family=Inter&display=swap');
+
 
 html {
 	height: 100%;
@@ -49,7 +17,7 @@ html {
 body {
 	background-color: #f7f7fa;
 	color: #333;
-	font-family: 'Roboto', sans-serif;
+	font-family: 'Inter', sans-serif;
 	font-size: 15px;
 	height: 100%;
 	line-height: 1.5;
@@ -62,7 +30,7 @@ h3,
 h4,
 h5,
 h6 {
-	font-family: 'Roboto', sans-serif;
+	font-family: 'Inter', sans-serif;
 	margin-top: 0;
 	    color: #000000;
 }
@@ -3385,12 +3353,12 @@ footer p {
 .fc-toolbar h2 {
 	font-size: 18px;
 	font-weight: 600;
-	font-family: 'Roboto', sans-serif;
+	font-family: 'Inter', sans-serif;
 	line-height: 30px;
 	text-transform: uppercase;
 }
 .fc-day-grid-event .fc-time {
-	font-family: 'Roboto', sans-serif;
+	font-family: 'Inter', sans-serif;
 }
 .fc-day {
 	background: #fff;
@@ -3469,12 +3437,12 @@ footer p {
 .fc-basic-view td.fc-week-number span {
 	padding-right: 8px;
 	font-weight: 700;
-	font-family: 'Roboto', sans-serif;
+	font-family: 'Inter', sans-serif;
 }
 .fc-basic-view td.fc-day-number {
 	padding-right: 8px;
 	font-weight: 700;
-	font-family: 'Roboto', sans-serif;
+	font-family: 'Inter', sans-serif;
 }
 .event-form .input-group .form-control {
 	height: 40px;

@@ -3,6 +3,7 @@ const express = require('express');
 const session = require('express-session');
 const bodyParser = require("body-parser");
 const e = require('express');
+
 const app = express();
 const mongoose = require("mongoose");
 const User = require("./models/user");
@@ -54,7 +55,7 @@ const upload = multer({ storage: storage });
 
 
 app.get('/', function (req, res) {
-    res.render('index');
+    res.render('landing/index.ejs');
 });
 
 
