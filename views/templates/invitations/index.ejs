@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+        <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap');
+
+        body {
+            margin: 0; /* Remove default body margin */
+        }
+
+        .offer_header {
+            width: 100%;
+            height: 40px;
+            top: 0;
+            font-family: 'Inter', sans-serif;
+            font-size: 8px;
+            color: #fff;
+            position: sticky;
+            position: -webkit-sticky; /* For Safari */
+            background: linear-gradient(180deg, #F55F0A 0%, rgba(204, 85, 18, 0.88) 100%);
+            display: flex;
+            justify-content: space-between; /* Align items on the ends */
+            align-items: center;
+            padding: 0 10px; /* Add padding to the left and right */
+            box-sizing: border-box; /* Include padding in width */
+            z-index: 100; /* Set a higher z-index */
+        }
+
+        .offer_title {
+            flex: 1; /* Take up remaining space */
+            text-align: center; /* Center text */
+        }
+
+        .close_button {
+            fill: rgba(0, 0, 0, 0.15);
+            /* color: #F55F0A;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 50%;
+            cursor: pointer; */
+        }
+
+        .close_button:hover {
+        
+        }
+        .header{
+            position: sticky;
+            background-color: #fff;
+        }
+        .header_content{
+            width: 100%;
+            height: 60px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-bottom: 1px solid #E5E5E5;
+            position: sticky;
+        }
+        .header_logo{
+            display: flex;
+            padding-left: 40px;
+            justify-items: center;
+
+        }
+        .header_text{
+            font-family: 'Inter', sans-serif;
+            color: #F55F0A;
+            font-family: Inter;
+            font-size: 32px;
+            font-style: normal;
+            font-weight: 700;
+            line-height: normal;
+        }
+
+        .main_container {
+            /* Add styles for the main content container if needed */
+
+        }
+    </style>
+</head>
+<body>
+    <div class="offer_header">
+        <div class="offer_title">
+            <h1>Get up to 30% off</h1>
+        </div>
+        <div class="close_button" onclick="closeOffer">
+            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 44 44" fill="none">
+                <circle cx="22" cy="22" r="22" fill="black" fill-opacity="0.15"></circle>
+                <path d="M14 14L30 30M14 30L30 14" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+        </div>
+    </div>
+    <div class="header">
+        <!-- Your header goes here -->
+        <div class="header_content">
+            <div class="header_text">
+                <span>Its Taksha's Birthday !!</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="main_container">
+       
+        
+    
+    </div>
+
+    <script>
+        function closeOffer() {
+            document.querySelector('.offer_header').style.display = 'none';
+        }
+    </script>
+    <script src="/public/assets/templates/invitation/index.js"></script>
+</body>
+</html>

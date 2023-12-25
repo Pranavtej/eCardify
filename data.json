@@ -1,0 +1,38 @@
+{
+    "data": {
+        "ImageData":{
+            "ImageURl" : "assets/img/profiles/avatar-01.jpg",
+            "ImageSize" :{
+                "width" : 400,
+                "height" : 400
+            }
+        },
+        "HeadData":{
+            "Name" :{
+                "value" : "Pranav Teja",
+                "style"  : "text-bold",
+                "size" : "40px"
+            },
+            "Designation" :{
+                "value" : "Pranav Teja",
+                "style"  : "text-bold",
+                "size" : "20px"
+            } 
+        },
+        "ButtonsGroup" :[
+            {
+                "buttonName" : "Share" ,
+                "butoonSize"  : "30px",
+                "buttonColor" : "black",
+                "buttonRedirect" : "http://localhost:8000/test/redirect"
+            },
+            {
+                "buttonName" : "Save" ,
+                "butoonSize"  : "30px",
+                "buttonColor" : "black",
+                "buttonStyle" : "black 20px border-1px",
+                "buttonRedirect" : "http://localhost:8000/test/redirect"
+            }
+        ]
+    }
+}

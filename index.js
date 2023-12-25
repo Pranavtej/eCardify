@@ -59,6 +59,11 @@ app.get('/', function (req, res) {
 });
 
 
+app.get('/invitation', function (req, res) {
+    res.render('templates/invitations/index.ejs');
+});
+
+
 app.get('/login', async (req, res) => {
     res.render('login/login');
 }
