@@ -806,10 +806,10 @@ app.post('/businesscard/:userId',  upload.fields([  { name: 'Image', maxCount: 1
         const cardid=selectedItemsObject.cardType;
         const template =await temp.findById(templateId).lean();
 
-        const imageUrl = req.files['Image'] ? req.files['Image'][0] : null;
+        const imageUrl = req.files['Image'] ? req.files['Image'][0] : '';
         // path to the uploaded image
-        const bgImage = req.files['bgImage'] ? req.files['bgImage'][0]: null; // path to the uploaded background image
-        
+        const bgImage = req.files['bgImage'] ? req.files['bgImage'][0]: ''; // path to the uploaded background image
+        const bgImg = bgImage ? bgImage.buffer.toString('base64') : '';
         console.log(template);
         
 const templateFields = template.fields && template.fields.map(field => ({
@@ -824,7 +824,7 @@ const templateFields = template.fields && template.fields.map(field => ({
             selectedSubscriptionPlan: plan,
             templateFields: templateFields,
             Image:imageUrl.buffer.toString('base64'),
-            bgImg:bgImage.buffer.toString('base64'),
+            bgImg:bgImg,
             bgColor:req.body.bgColor || '',
         });
 
@@ -933,4 +933,84 @@ app.post('/custompage/:id',upload.fields([{ name: 'image', maxCount: 1 }]),async
 
 });
 
+app.post('/update-saves', async (req, res) => {
+    try {
+      const customizablePage = await cpages.findByIdAndUpdate(
+        req.body.pageId,
+        { $inc: { saves: 1 } },
+        { new: true }
+      );
+      console.log('update-saves');
+      const pageData = await cpages.find({user:req.body.pageId});
+      res.render('admin/globalpage', { pageData });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  });
+  
+  // Share action
+app.post('/update-shares', async (req, res) => {
+    try {
+        console.log(req.body.pageId);
+      const customizablePage = await cpages.findByIdAndUpdate(
+        req.body.pageId,
+        { $inc: { shares: 1 } },
+        { new: true }
+      );
+      console.log('update1-shares');
+      const pageData = await cpages.find({user:req.body.pageId});
+      res.render('admin/globalpage', { pageData });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  });
 
+app.post('/update-views', async (req, res) => {
+    const  pageId  = req.body.pageId;
+    try {
+        // Find the page in the database and update the views count
+        const result = await cpages.findByIdAndUpdate(pageId, { $inc: { views: 1 } },{new : true});
+
+        if (!result) {
+            return res.status(404).json({ message: 'Page not found' });
+        }
+
+        const pageData = await cpages.find({user:pageId});
+        res.render('admin/globalpage', { pageData });
+    } catch (error) {
+        console.error('Error updating views count:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
+
+app.post('/send-message', async (req, res) => {
+    try {
+      const message1 = req.body.message;
+      const documentId1 = req.body.documentId;
+      console.log(req.body);
+      const customizablePage = await cpages.findOne({ _id: documentId1});
+  
+      customizablePage.messages.push(message1);
+  
+      await customizablePage.save();
+      const pageData = await cpages.find({_id: documentId1});
+      res.render('admin/globalpage', { pageData });
+    } catch (error) {
+      console.error('Error sending message:', error);
+      res.status(500).json({ success: false, error: 'Internal Server Error' });
+    }
+  });
+  
+app.get('/globalpage/:id',async(req,res)=>{
+    try {
+        // Fetch the data from MongoDB based on the provided ID
+        const pageData = await cpages.find({user:req.params.id});
+        res.render('admin/globalpage', { pageData });
+      } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+      }
+    });
