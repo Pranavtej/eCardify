@@ -1101,3 +1101,9 @@ app.post('/invite-details/:userid', upload.any(), async (req, res) => {
    console.log(user);
    res.render('invitationpage',{user});
   });
+
+
+  app.get("/invitation",async(req,res)=>{
+    res.render('admin/invitation');
+  }
+  );
