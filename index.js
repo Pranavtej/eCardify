@@ -1099,5 +1099,5 @@ app.post('/invite-details/:userid', upload.any(), async (req, res) => {
    const userid = req.params.id;
    const user = await invite.findOne({user:userid});
    console.log(user);
-   res.render('invitationpage',{user});
+   res.render('admin/invitationpage',{user});
   });
