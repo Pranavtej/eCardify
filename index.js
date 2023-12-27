@@ -11,6 +11,7 @@ const BusinessCard = require("./models/bcard");
 const cardt = require("./models/card");
 const temp = require("./models/templates");
 const cpages = require("./models/custompages");
+const invite = require("./models/invitations");
 const bcrypt = require("bcrypt");
 const path = require('path');
 const adminModel = require('./models/admin');
@@ -1017,3 +1018,95 @@ app.get('/globalpage/:id',async(req,res)=>{
         res.status(500).send('Internal Server Error');
       }
     });
+
+app.get('/inviteform/:id',async(req,res)=>{
+const userid = req.params.id;
+res.render('admin/invitations.ejs',{userid});
+});
+
+function mapFilesByFieldname(files, fieldname) {
+    return files.filter(file => file.fieldname === fieldname);
+  }
+ 
+const mapImagesToSchema = (images, textArray, styleArray) => {
+    return images.map((image, index) => ({
+        image: image.buffer.toString('base64'),
+      text: textArray ? textArray[index] || '' : '',
+      style: styleArray ? styleArray[index] || '' : '',
+    }));
+  };
+
+app.post('/invite-details/:userid', upload.any(), async (req, res) => {
+    try {
+      const userId = req.params.userid;
+      const formData = req.body;
+  
+      console.log('User ID:', userId);
+      console.log('Form Data:', formData);
+  
+      const headerSliderImages = mapFilesByFieldname(req.files, 'headerSliderImage[]');
+      const sliderImgImages = mapFilesByFieldname(req.files, 'sliderImgImage[]');
+      const extraImages = mapFilesByFieldname(req.files, 'extraImg[]');
+      const  headerSliderImages1 = mapImagesToSchema(headerSliderImages,formData.headerSliderText,formData.headerSliderStyle);
+      const  sliderImgImage1 = mapImagesToSchema(sliderImgImages,formData.sliderImgText,formData.SliderImgStyle);
+      
+      const invitationPage = new invite({
+        user: userId,
+        headerMsg: {
+          text: formData.headerMsgText,
+          style: formData.headerMsgStyle,
+        },
+        headerSlider: headerSliderImages1,
+        button: {
+          text: formData.buttonText,
+          style: formData.buttonStyle,
+          redirect: formData.buttonRedirect,
+        },
+        customMsgHead: {
+          text: formData.customMsgHeadText,
+          style: formData.customMsgHeadStyle,
+        },
+        customMsg: {
+          text: formData.customMsgText,
+          style: formData.customMsgStyle,
+        },
+        sliderImg: sliderImgImage1,
+        maps: {
+          longitude: formData.mapsLongitude,
+          latitude: formData.mapsLatitude,
+        },
+        contactInfo: formData.contactInfoField.map((field, index) => ({
+          field,
+          value: formData.contactInfoValue[index],
+          style: formData.contactInfoStyle[index],
+        })),
+        extraImg: extraImages.map((img) => ({ img: img.buffer.toString('base64') })),
+        about: {
+          text: formData.aboutText,
+          style: formData.aboutStyle,
+        },
+      });
+  
+      // Save the invitationPage to the database
+      const savedInvitationPage = await invitationPage.save();
+  
+      res.send('Form submitted successfully!');
+    } catch (error) {
+      console.error(error);
+      res.status(500).send('Internal Server Error');
+    }
+  });
+
+
+  app.get('/invitepage/:id',async(req,res)=>{
+   const userid = req.params.id;
+   const user = await invite.findOne({user:userid});
+   console.log(user);
+   res.render('admin/invitationpage',{user});
+  });
+
+
+  app.get("/invitation",async(req,res)=>{
+    res.render('admin/invitation');
+  }
+  );
