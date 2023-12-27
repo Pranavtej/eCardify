@@ -53,8 +53,11 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
 
-app.get('/', function (req, res) {
-    res.render('index');
+app.get('/:id', async function (req, res) {
+    const pageData = await cpages.find({user:req.params.id});
+        // res.render('admin/globalpage', { pageData });
+    res.render('templates/profile/index', { pageData: pageData[0]});
+    console.log(pageData);
 });
 
 
