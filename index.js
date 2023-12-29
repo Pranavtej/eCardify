@@ -240,12 +240,12 @@ app.get('/add-subscription', async (req, res) => {
 app.post('/add-subscription', async (req, res) => {
     try {
         
-      const { name, price, features } = req.body;
-
+      const { name, price, featuresNames } = req.body;
+      console.log(req.body);
       const newPlan = new SubscriptionPlan({
         name,
         price,
-        features: features.map(feature => ({ logoUrl: feature })),
+        features: featuresNames.map(feature => ({ logoUrl: feature })),
       });
   
       // Save the document to MongoDB
@@ -933,4 +933,16 @@ app.post('/custompage/:id',upload.fields([{ name: 'image', maxCount: 1 }]),async
 
 });
 
+app.get('/invitepage/:id',async(req,res)=>{
+  const userid = req.params.id;
+  const user = await invite.findOne({user:userid});
+  console.log(user);
+  res.render('admin/invitationpage',{user});
+ });
+
+
+ app.get("/invitation",async(req,res)=>{
+   res.render('admin/invitation');
+ }
+ );
 
