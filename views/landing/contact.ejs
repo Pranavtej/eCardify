@@ -1,0 +1,858 @@
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <title>eCardify| Custom Card Making</title>
+
+    <meta charset="utf-8" />
+    <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" /><![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="" />
+
+    <!-- Css -->
+    <link rel="stylesheet" href="./css/style.css" />
+
+    <!-- Dark Mode JS -->
+    <script src="./js/darkMode.bundle.js"></script>
+
+    <!-- Favicons -->
+    <link rel="shortcut icon" href="img/favicon.ico" />
+    <link rel="apple-touch-icon" href="img/apple-touch-icon.png" />
+    <link rel="apple-touch-icon" sizes="72x72" href="img/apple-touch-icon-72x72.png" />
+    <link rel="apple-touch-icon" sizes="114x114" href="img/apple-touch-icon-114x114.png" />
+  </head>
+
+  <body
+    class="overflow-x-hidden font-body text-jacarta-500 dark:bg-jacarta-900"
+    itemscope
+    itemtype="http://schema.org/WebPage"
+  >
+    <!-- Header -->
+    <header class="js-page-header fixed top-0 z-20 w-full backdrop-blur transition-colors">
+      <div class="flex items-center px-6 py-6 xl:px-24">
+        <!-- Logo -->
+        <a href="index.html" class="shrink-0">
+            <img src="img/eCardifyLogo(L).png" class="max-h-7 dark:hidden" >
+            <img src="img/eCardifyLogo(D).png" class="hidden max-h-7 dark:block" >
+          </a>
+
+        
+
+        <!-- Menu / Actions -->
+        <div
+          class="js-mobile-menu invisible lg:visible fixed inset-0 z-10 ml-auto items-center bg-white opacity-0 dark:bg-jacarta-800 lg:relative lg:inset-auto lg:flex lg:bg-transparent lg:opacity-100 dark:lg:bg-transparent"
+        >
+          <!-- Mobile Logo / Menu Close -->
+          <div
+            class="t-0 fixed left-0 z-10 flex w-full items-center justify-between bg-white p-6 dark:bg-jacarta-800 lg:hidden"
+          >
+            <!-- Mobile Logo -->
+            <a href="index.html" class="shrink-0">
+              <img src="img/eCardifyLogo(L).png" class="max-h-7 dark:hidden" >
+              <img src="img/eCardifyLogo(D).png" class="hidden max-h-7 dark:block" >
+            </a>
+
+            <!-- Mobile Menu Close -->
+            <button
+              class="js-mobile-close group ml-2 flex h-10 w-10 items-center justify-center rounded-full border border-jacarta-100 bg-white transition-colors hover:border-transparent hover:bg-accent focus:border-transparent focus:bg-accent dark:border-transparent dark:bg-white/[.15] dark:hover:bg-accent"
+              aria-label="close mobile menu"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                width="24"
+                height="24"
+                class="h-4 w-4 fill-jacarta-700 transition-colors group-hover:fill-white group-focus:fill-white dark:fill-white"
+              >
+                <path fill="none" d="M0 0h24v24H0z" />
+                <path
+                  d="M12 10.586l4.95-4.95 1.414 1.414-4.95 4.95 4.95 4.95-1.414 1.414-4.95-4.95-4.95 4.95-1.414-1.414 4.95-4.95-4.95-4.95L7.05 5.636z"
+                />
+              </svg>
+            </button>
+          </div>
+
+          <!-- Mobile Search -->
+          <form action="search" class="relative mt-24 mb-8 w-full lg:hidden">
+
+          </form>
+
+          <!-- Primary Nav -->
+          <nav class="navbar w-full">
+            <ul class="flex flex-col lg:flex-row">
+              <li class="js-nav-dropdown group relative">
+                <a
+                  href="#"
+                  class="dropdown-toggle flex items-center justify-between py-3.5 font-display text-base text-jacarta-700 hover:text-accent focus:text-accent dark:text-white dark:hover:text-accent dark:focus:text-accent lg:px-5"
+                  id="navDropdown-4"
+                  aria-expanded="false"
+                  role="button"
+                  data-bs-toggle="dropdown"
+                  >Home
+                  <i class="lg:hidden">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      width="24"
+                      height="24"
+                      class="h-4 w-4 dark:fill-white"
+                    >
+                      <path fill="none" d="M0 0h24v24H0z" />
+                      <path d="M12 13.172l4.95-4.95 1.414 1.414L12 16 5.636 9.636 7.05 8.222z" />
+                    </svg>
+                  </i>
+                </a>
+                <ul
+                  class="dropdown-menu group-hover:visible lg:invisible left-0 top-[85%] z-10 hidden min-w-[200px] gap-x-4 whitespace-nowrap rounded-xl bg-white transition-all will-change-transform group-hover:opacity-100 dark:bg-jacarta-800 lg:absolute lg:grid lg:translate-y-4 lg:py-4 lg:px-2 lg:opacity-0 lg:shadow-2xl lg:group-hover:translate-y-2"
+                  aria-labelledby="navDropdown-4"
+                >
+                  <li>
+                    <a
+                      href="index.html"
+                      class="flex items-center rounded-xl px-5 py-2 transition-colors hover:bg-jacarta-50 hover:text-accent focus:text-accent dark:hover:bg-jacarta-600"
+                    >
+                      <span class="font-display text-sm text-jacarta-700 dark:text-white">Home</span>
+                    </a>
+                  </li>
+                  
+                  
+                </ul>
+              </li>
+                
+              </li>
+              <li class="js-nav-dropdown group relative">
+                <a
+                  href="#"
+                  class="dropdown-toggle flex items-center justify-between py-3.5 font-display text-base text-jacarta-700 hover:text-accent focus:text-accent dark:text-white dark:hover:text-accent dark:focus:text-accent lg:px-5"
+                  id="navDropdown-4"
+                  aria-expanded="false"
+                  role="button"
+                  data-bs-toggle="dropdown"
+                  >Contact Us
+                  <i class="lg:hidden">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      width="24"
+                      height="24"
+                      class="h-4 w-4 dark:fill-white"
+                    >
+                      <path fill="none" d="M0 0h24v24H0z" />
+                      <path d="M12 13.172l4.95-4.95 1.414 1.414L12 16 5.636 9.636 7.05 8.222z" />
+                    </svg>
+                  </i>
+                </a>
+                <ul
+                  class="dropdown-menu group-hover:visible lg:invisible left-0 top-[85%] z-10 hidden min-w-[200px] gap-x-4 whitespace-nowrap rounded-xl bg-white transition-all will-change-transform group-hover:opacity-100 dark:bg-jacarta-800 lg:absolute lg:grid lg:translate-y-4 lg:py-4 lg:px-2 lg:opacity-0 lg:shadow-2xl lg:group-hover:translate-y-2"
+                  aria-labelledby="navDropdown-4"
+                >
+                  <li>
+                    <a
+                      href="contact.html"
+                      class="flex items-center rounded-xl px-5 py-2 transition-colors hover:bg-jacarta-50 hover:text-accent focus:text-accent dark:hover:bg-jacarta-600"
+                    >
+                      <span class="font-display text-sm text-jacarta-700 dark:text-white">Contact Us</span>
+                    </a>
+                  </li>
+
+                </ul>
+              </li>
+              <li class="js-nav-dropdown group relative">
+                <a
+                  href="#"
+                  class="dropdown-toggle flex items-center justify-between py-3.5 font-display text-base text-jacarta-700 hover:text-accent focus:text-accent dark:text-white dark:hover:text-accent dark:focus:text-accent lg:px-5"
+                  id="navDropdown-4"
+                  aria-expanded="false"
+                  role="button"
+                  data-bs-toggle="dropdown"
+                  >About
+                  <i class="lg:hidden">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      width="24"
+                      height="24"
+                      class="h-4 w-4 dark:fill-white"
+                    >
+                      <path fill="none" d="M0 0h24v24H0z" />
+                      <path d="M12 13.172l4.95-4.95 1.414 1.414L12 16 5.636 9.636 7.05 8.222z" />
+                    </svg>
+                  </i>
+                </a>
+                <ul
+                  class="dropdown-menu group-hover:visible lg:invisible left-0 top-[85%] z-10 hidden min-w-[200px] gap-x-4 whitespace-nowrap rounded-xl bg-white transition-all will-change-transform group-hover:opacity-100 dark:bg-jacarta-800 lg:absolute lg:grid lg:translate-y-4 lg:py-4 lg:px-2 lg:opacity-0 lg:shadow-2xl lg:group-hover:translate-y-2"
+                  aria-labelledby="navDropdown-4"
+                >
+                  <li>
+                    <a
+                      href="about.html"
+                      class="flex items-center rounded-xl px-5 py-2 transition-colors hover:bg-jacarta-50 hover:text-accent focus:text-accent dark:hover:bg-jacarta-600"
+                    >
+                      <span class="font-display text-sm text-jacarta-700 dark:text-white">About</span>
+                    </a>
+                  </li>
+
+                </ul>
+              </li>
+
+            </ul>
+          </nav>
+
+          <!-- Mobile Connect Wallet / Socials -->
+          <div class="mt-10 w-full lg:hidden">
+           
+
+            <hr class="my-5 h-px border-0 bg-jacarta-100 dark:bg-jacarta-600" />
+
+            <!-- Socials -->
+            <div class="flex items-center justify-center space-x-5">
+              <a href="#" class="group">
+                <svg
+                  aria-hidden="true"
+                  focusable="false"
+                  data-prefix="fab"
+                  data-icon="facebook"
+                  class="h-5 w-5 fill-jacarta-300 group-hover:fill-accent dark:group-hover:fill-white"
+                  role="img"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 512 512"
+                >
+                  <path
+                    d="M504 256C504 119 393 8 256 8S8 119 8 256c0 123.78 90.69 226.38 209.25 245V327.69h-63V256h63v-54.64c0-62.15 37-96.48 93.67-96.48 27.14 0 55.52 4.84 55.52 4.84v61h-31.28c-30.8 0-40.41 19.12-40.41 38.73V256h68.78l-11 71.69h-57.78V501C413.31 482.38 504 379.78 504 256z"
+                  ></path>
+                </svg>
+              </a>
+              <a href="#" class="group">
+                <svg
+                  aria-hidden="true"
+                  focusable="false"
+                  data-prefix="fab"
+                  data-icon="twitter"
+                  class="h-5 w-5 fill-jacarta-300 group-hover:fill-accent dark:group-hover:fill-white"
+                  role="img"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 512 512"
+                >
+                  <path
+                    d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"
+                  ></path>
+                </svg>
+              </a>
+              <a href="#" class="group">
+                <svg
+                  aria-hidden="true"
+                  focusable="false"
+                  data-prefix="fab"
+                  data-icon="discord"
+                  class="h-5 w-5 fill-jacarta-300 group-hover:fill-accent dark:group-hover:fill-white"
+                  role="img"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 640 512"
+                >
+                  <path
+                    d="M524.531,69.836a1.5,1.5,0,0,0-.764-.7A485.065,485.065,0,0,0,404.081,32.03a1.816,1.816,0,0,0-1.923.91,337.461,337.461,0,0,0-14.9,30.6,447.848,447.848,0,0,0-134.426,0,309.541,309.541,0,0,0-15.135-30.6,1.89,1.89,0,0,0-1.924-.91A483.689,483.689,0,0,0,116.085,69.137a1.712,1.712,0,0,0-.788.676C39.068,183.651,18.186,294.69,28.43,404.354a2.016,2.016,0,0,0,.765,1.375A487.666,487.666,0,0,0,176.02,479.918a1.9,1.9,0,0,0,2.063-.676A348.2,348.2,0,0,0,208.12,430.4a1.86,1.86,0,0,0-1.019-2.588,321.173,321.173,0,0,1-45.868-21.853,1.885,1.885,0,0,1-.185-3.126c3.082-2.309,6.166-4.711,9.109-7.137a1.819,1.819,0,0,1,1.9-.256c96.229,43.917,200.41,43.917,295.5,0a1.812,1.812,0,0,1,1.924.233c2.944,2.426,6.027,4.851,9.132,7.16a1.884,1.884,0,0,1-.162,3.126,301.407,301.407,0,0,1-45.89,21.83,1.875,1.875,0,0,0-1,2.611,391.055,391.055,0,0,0,30.014,48.815,1.864,1.864,0,0,0,2.063.7A486.048,486.048,0,0,0,610.7,405.729a1.882,1.882,0,0,0,.765-1.352C623.729,277.594,590.933,167.465,524.531,69.836ZM222.491,337.58c-28.972,0-52.844-26.587-52.844-59.239S193.056,219.1,222.491,219.1c29.665,0,53.306,26.82,52.843,59.239C275.334,310.993,251.924,337.58,222.491,337.58Zm195.38,0c-28.971,0-52.843-26.587-52.843-59.239S388.437,219.1,417.871,219.1c29.667,0,53.307,26.82,52.844,59.239C470.715,310.993,447.538,337.58,417.871,337.58Z"
+                  ></path>
+                </svg>
+              </a>
+              <a href="#" class="group">
+                <svg
+                  aria-hidden="true"
+                  focusable="false"
+                  data-prefix="fab"
+                  data-icon="instagram"
+                  class="h-5 w-5 fill-jacarta-300 group-hover:fill-accent dark:group-hover:fill-white"
+                  role="img"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 448 512"
+                >
+                  <path
+                    d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"
+                  ></path>
+                </svg>
+              </a>
+              <a href="#" class="group">
+                <svg
+                  aria-hidden="true"
+                  focusable="false"
+                  data-prefix="fab"
+                  data-icon="tiktok"
+                  class="h-5 w-5 fill-jacarta-300 group-hover:fill-accent dark:group-hover:fill-white"
+                  role="img"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 448 512"
+                >
+                  <path
+                    d="M448,209.91a210.06,210.06,0,0,1-122.77-39.25V349.38A162.55,162.55,0,1,1,185,188.31V278.2a74.62,74.62,0,1,0,52.23,71.18V0l88,0a121.18,121.18,0,0,0,1.86,22.17h0A122.18,122.18,0,0,0,381,102.39a121.43,121.43,0,0,0,67,20.14Z"
+                  ></path>
+                </svg>
+              </a>
+            </div>
+          </div>
+
+          <!-- Actions -->
+          <div class="ml-8 hidden lg:flex xl:ml-12">
+            
+
+            <!-- Profile -->
+            
+
+            <!-- Dark Mode -->
+            <a
+              href="#"
+              class="js-dark-mode-trigger group ml-2 flex h-10 w-10 items-center justify-center rounded-full border border-jacarta-100 bg-white transition-colors hover:border-transparent hover:bg-accent focus:border-transparent focus:bg-accent dark:border-transparent dark:bg-white/[.15] dark:hover:bg-accent"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                width="24"
+                height="24"
+                class="dark-mode-light h-4 w-4 fill-jacarta-700 transition-colors group-hover:fill-white group-focus:fill-white dark:hidden"
+              >
+                <path fill="none" d="M0 0h24v24H0z" />
+                <path
+                  d="M11.38 2.019a7.5 7.5 0 1 0 10.6 10.6C21.662 17.854 17.316 22 12.001 22 6.477 22 2 17.523 2 12c0-5.315 4.146-9.661 9.38-9.981z"
+                />
+              </svg>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                width="24"
+                height="24"
+                class="dark-mode-dark hidden h-4 w-4 fill-jacarta-700 transition-colors group-hover:fill-white group-focus:fill-white dark:block dark:fill-white"
+              >
+                <path fill="none" d="M0 0h24v24H0z" />
+                <path
+                  d="M12 18a6 6 0 1 1 0-12 6 6 0 0 1 0 12zM11 1h2v3h-2V1zm0 19h2v3h-2v-3zM3.515 4.929l1.414-1.414L7.05 5.636 5.636 7.05 3.515 4.93zM16.95 18.364l1.414-1.414 2.121 2.121-1.414 1.414-2.121-2.121zm2.121-14.85l1.414 1.415-2.121 2.121-1.414-1.414 2.121-2.121zM5.636 16.95l1.414 1.414-2.121 2.121-1.414-1.414 2.121-2.121zM23 11v2h-3v-2h3zM4 11v2H1v-2h3z"
+                />
+              </svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Mobile Menu Actions -->
+        <div class="ml-auto flex lg:hidden">
+          <!-- Profile -->
+
+          <!-- Dark Mode -->
+          <a
+            href="#"
+            class="js-dark-mode-trigger group ml-2 flex h-10 w-10 items-center justify-center rounded-full border border-jacarta-100 bg-white transition-colors hover:border-transparent hover:bg-accent focus:border-transparent focus:bg-accent dark:border-transparent dark:bg-white/[.15] dark:hover:bg-accent"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              width="24"
+              height="24"
+              class="dark-mode-light h-4 w-4 fill-jacarta-700 transition-colors group-hover:fill-white group-focus:fill-white dark:hidden"
+            >
+              <path fill="none" d="M0 0h24v24H0z" />
+              <path
+                d="M11.38 2.019a7.5 7.5 0 1 0 10.6 10.6C21.662 17.854 17.316 22 12.001 22 6.477 22 2 17.523 2 12c0-5.315 4.146-9.661 9.38-9.981z"
+              />
+            </svg>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              width="24"
+              height="24"
+              class="dark-mode-dark hidden h-4 w-4 fill-jacarta-700 transition-colors group-hover:fill-white group-focus:fill-white dark:block dark:fill-white"
+            >
+              <path fill="none" d="M0 0h24v24H0z" />
+              <path
+                d="M12 18a6 6 0 1 1 0-12 6 6 0 0 1 0 12zM11 1h2v3h-2V1zm0 19h2v3h-2v-3zM3.515 4.929l1.414-1.414L7.05 5.636 5.636 7.05 3.515 4.93zM16.95 18.364l1.414-1.414 2.121 2.121-1.414 1.414-2.121-2.121zm2.121-14.85l1.414 1.415-2.121 2.121-1.414-1.414 2.121-2.121zM5.636 16.95l1.414 1.414-2.121 2.121-1.414-1.414 2.121-2.121zM23 11v2h-3v-2h3zM4 11v2H1v-2h3z"
+              />
+            </svg>
+          </a>
+
+          <!-- Mobile Menu Toggle -->
+          <button
+            class="js-mobile-toggle group ml-2 flex h-10 w-10 items-center justify-center rounded-full border border-jacarta-100 bg-white transition-colors hover:border-transparent hover:bg-accent focus:border-transparent focus:bg-accent dark:border-transparent dark:bg-white/[.15] dark:hover:bg-accent"
+            aria-label="open mobile menu"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              width="24"
+              height="24"
+              class="h-4 w-4 fill-jacarta-700 transition-colors group-hover:fill-white group-focus:fill-white dark:fill-white"
+            >
+              <path fill="none" d="M0 0h24v24H0z" />
+              <path d="M18 18v2H6v-2h12zm3-7v2H3v-2h18zm-3-7v2H6V4h12z" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main class="pt-[5.5rem] lg:pt-24">
+      <!-- Page Title -->
+      <section
+        class="relative bg-cover bg-center bg-no-repeat py-32 after:absolute after:inset-0 after:bg-jacarta-900/60"
+        style="background-image: url('./img/page-title/knowledge_base_banner.jpg')"
+      >
+        <div class="container relative z-10">
+          <h1 class="text-center font-display text-4xl font-medium text-white">Get in touch</h1>
+        </div>
+      </section>
+
+      <!-- Contact -->
+      <section class="relative py-24 dark:bg-jacarta-800">
+        <picture class="pointer-events-none absolute inset-0 -z-10 dark:hidden">
+          <img src="img/gradient_light.jpg" alt="gradient" class="h-full w-full" />
+        </picture>
+        <div class="container">
+          <div class="lg:flex">
+            <!-- Contact Form -->
+            <div class="mb-12 lg:mb-0 lg:w-2/3 lg:pr-12">
+              <h2 class="mb-4 font-display text-xl text-jacarta-700 dark:text-white">Contact Us</h2>
+              <p class="mb-16 text-lg leading-normal dark:text-jacarta-300">
+                Have a question? Need help? Don't hesitate, drop us a line
+              </p>
+              <form id="contact-form" method="post">
+                <div class="flex space-x-7">
+                  <div class="mb-6 w-1/2">
+                    <label for="name" class="mb-1 block font-display text-sm text-jacarta-700 dark:text-white"
+                      >Name<span class="text-red">*</span></label
+                    >
+                    <input
+                      name="name"
+                      class="contact-form-input w-full rounded-lg border-jacarta-100 py-3 hover:ring-2 hover:ring-accent/10 focus:ring-accent dark:border-jacarta-600 dark:bg-jacarta-700 dark:text-white dark:placeholder:text-jacarta-300"
+                      id="name"
+                      type="text"
+                      required
+                    />
+                  </div>
+
+                  <div class="mb-6 w-1/2">
+                    <label for="email" class="mb-1 block font-display text-sm text-jacarta-700 dark:text-white"
+                      >Email<span class="text-red">*</span></label
+                    >
+                    <input
+                      name="email"
+                      class="contact-form-input w-full rounded-lg border-jacarta-100 py-3 hover:ring-2 hover:ring-accent/10 focus:ring-accent dark:border-jacarta-600 dark:bg-jacarta-700 dark:text-white dark:placeholder:text-jacarta-300"
+                      id="email"
+                      type="email"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div class="mb-4">
+                  <label for="message" class="mb-1 block font-display text-sm text-jacarta-700 dark:text-white"
+                    >Message<span class="text-red">*</span></label
+                  >
+                  <textarea
+                    id="message"
+                    class="contact-form-input w-full rounded-lg border-jacarta-100 py-3 hover:ring-2 hover:ring-accent/10 focus:ring-accent dark:border-jacarta-600 dark:bg-jacarta-700 dark:text-white dark:placeholder:text-jacarta-300"
+                    required
+                    name="message"
+                    rows="5"
+                  ></textarea>
+                </div>
+
+                <div class="mb-6 flex items-center space-x-2">
+                  <input
+                    type="checkbox"
+                    id="contact-form-consent-input"
+                    name="agree-to-terms"
+                    class="h-5 w-5 self-start rounded border-jacarta-200 text-accent checked:bg-accent focus:ring-accent/20 focus:ring-offset-0 dark:border-jacarta-500 dark:bg-jacarta-600"
+                  />
+                  <label for="contact-form-consent-input" class="text-sm dark:text-jacarta-200"
+                    >I agree to the <a href="tos.html" class="text-accent">Terms of Service</a></label
+                  >
+                </div>
+
+                <button
+                  type="submit"
+                  class="rounded-full bg-accent py-3 px-8 text-center font-semibold text-white shadow-accent-volume transition-all hover:bg-accent-dark"
+                  id="contact-form-submit"
+                >
+                  Submit
+                </button>
+
+                <div
+                  id="contact-form-notice"
+                  class="relative mt-4 hidden rounded-lg border border-transparent p-4"
+                ></div>
+              </form>
+            </div>
+
+            <!-- Info -->
+            <div class="lg:w-1/3 lg:pl-5">
+              <h2 class="mb-4 font-display text-xl text-jacarta-700 dark:text-white">Information</h2>
+              <p class="mb-6 text-lg leading-normal dark:text-jacarta-300">
+                Don't hesitaste, drop us a line Collaboratively administrate channels whereas virtual. Objectively seize
+                scalable metrics whereas proactive e-services.
+              </p>
+
+              <div
+                class="rounded-2.5xl border border-jacarta-100 bg-white p-10 dark:border-jacarta-600 dark:bg-jacarta-700"
+              >
+                <div class="mb-6 flex items-center space-x-5">
+                  <span
+                    class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-jacarta-100 bg-light-base dark:border-jacarta-600 dark:bg-jacarta-700"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      width="24"
+                      height="24"
+                      class="fill-jacarta-400"
+                    >
+                      <path fill="none" d="M0 0h24v24H0z" />
+                      <path
+                        d="M9.366 10.682a10.556 10.556 0 0 0 3.952 3.952l.884-1.238a1 1 0 0 1 1.294-.296 11.422 11.422 0 0 0 4.583 1.364 1 1 0 0 1 .921.997v4.462a1 1 0 0 1-.898.995c-.53.055-1.064.082-1.602.082C9.94 21 3 14.06 3 5.5c0-.538.027-1.072.082-1.602A1 1 0 0 1 4.077 3h4.462a1 1 0 0 1 .997.921A11.422 11.422 0 0 0 10.9 8.504a1 1 0 0 1-.296 1.294l-1.238.884zm-2.522-.657l1.9-1.357A13.41 13.41 0 0 1 7.647 5H5.01c-.006.166-.009.333-.009.5C5 12.956 11.044 19 18.5 19c.167 0 .334-.003.5-.01v-2.637a13.41 13.41 0 0 1-3.668-1.097l-1.357 1.9a12.442 12.442 0 0 1-1.588-.75l-.058-.033a12.556 12.556 0 0 1-4.702-4.702l-.033-.058a12.442 12.442 0 0 1-.75-1.588z"
+                      />
+                    </svg>
+                  </span>
+
+                  <div>
+                    <span class="block font-display text-base text-jacarta-700 dark:text-white">Phone</span>
+                    <a href="tel:123-123-456" class="text-sm hover:text-accent dark:text-jacarta-300">(123) 123-456</a>
+                  </div>
+                </div>
+                <div class="mb-6 flex items-center space-x-5">
+                  <span
+                    class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-jacarta-100 bg-light-base dark:border-jacarta-600 dark:bg-jacarta-700"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      width="24"
+                      height="24"
+                      class="fill-jacarta-400"
+                    >
+                      <path fill="none" d="M0 0h24v24H0z" />
+                      <path
+                        d="M12 20.9l4.95-4.95a7 7 0 1 0-9.9 0L12 20.9zm0 2.828l-6.364-6.364a9 9 0 1 1 12.728 0L12 23.728zM12 13a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm0 2a4 4 0 1 1 0-8 4 4 0 0 1 0 8z"
+                      />
+                    </svg>
+                  </span>
+
+                  <div>
+                    <span class="block font-display text-base text-jacarta-700 dark:text-white">Address</span>
+                    <address class="text-sm not-italic dark:text-jacarta-300">08 W 36th St, New YorkNY 10001</address>
+                  </div>
+                </div>
+                <div class="flex items-center space-x-5">
+                  <span
+                    class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-jacarta-100 bg-light-base dark:border-jacarta-600 dark:bg-jacarta-700"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      width="24"
+                      height="24"
+                      class="fill-jacarta-400"
+                    >
+                      <path fill="none" d="M0 0h24v24H0z" />
+                      <path
+                        d="M2.243 6.854L11.49 1.31a1 1 0 0 1 1.029 0l9.238 5.545a.5.5 0 0 1 .243.429V20a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V7.283a.5.5 0 0 1 .243-.429zM4 8.133V19h16V8.132l-7.996-4.8L4 8.132zm8.06 5.565l5.296-4.463 1.288 1.53-6.57 5.537-6.71-5.53 1.272-1.544 5.424 4.47z"
+                      />
+                    </svg>
+                  </span>
+
+                  <div>
+                    <span class="block font-display text-base text-jacarta-700 dark:text-white">Email</span>
+                    <a
+                      href="mailto:office@eCardify.com"
+                      class="text-sm not-italic hover:text-accent dark:text-jacarta-300"
+                      >office@eCardify.com</a
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- end contact -->
+    </main>
+
+    <!-- Wallet Modal -->
+    <div class="modal fade" id="walletModal" tabindex="-1" aria-labelledby="walletModalLabel" aria-hidden="true">
+      <div class="modal-dialog max-w-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="walletModalLabel">Connect your wallet</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                width="24"
+                height="24"
+                class="h-6 w-6 fill-jacarta-700 dark:fill-white"
+              >
+                <path fill="none" d="M0 0h24v24H0z" />
+                <path
+                  d="M12 10.586l4.95-4.95 1.414 1.414-4.95 4.95 4.95 4.95-1.414 1.414-4.95-4.95-4.95 4.95-1.414-1.414 4.95-4.95-4.95-4.95L7.05 5.636z"
+                />
+              </svg>
+            </button>
+          </div>
+
+          <!-- Body -->
+          <div class="modal-body p-6 text-center">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              x="0"
+              y="0"
+              viewBox="0 0 318.6 318.6"
+              xml:space="preserve"
+              class="mb-4 inline-block h-8 w-8"
+            >
+              <style>
+                .st1,
+                .st6 {
+                  fill: #e4761b;
+                  stroke: #e4761b;
+                  stroke-linecap: round;
+                  stroke-linejoin: round;
+                }
+                .st6 {
+                  fill: #f6851b;
+                  stroke: #f6851b;
+                }
+              </style>
+              <path
+                fill="#e2761b"
+                stroke="#e2761b"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M274.1 35.5l-99.5 73.9L193 65.8z"
+              />
+              <path
+                class="st1"
+                d="M44.4 35.5l98.7 74.6-17.5-44.3zm193.9 171.3l-26.5 40.6 56.7 15.6 16.3-55.3zm-204.4.9L50.1 263l56.7-15.6-26.5-40.6z"
+              />
+              <path
+                class="st1"
+                d="M103.6 138.2l-15.8 23.9 56.3 2.5-2-60.5zm111.3 0l-39-34.8-1.3 61.2 56.2-2.5zM106.8 247.4l33.8-16.5-29.2-22.8zm71.1-16.5l33.9 16.5-4.7-39.3z"
+              />
+              <path
+                d="M211.8 247.4l-33.9-16.5 2.7 22.1-.3 9.3zm-105 0l31.5 14.9-.2-9.3 2.5-22.1z"
+                fill="#d7c1b3"
+                stroke="#d7c1b3"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M138.8 193.5l-28.2-8.3 19.9-9.1zm40.9 0l8.3-17.4 20 9.1z"
+                fill="#233447"
+                stroke="#233447"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M106.8 247.4l4.8-40.6-31.3.9zM207 206.8l4.8 40.6 26.5-39.7zm23.8-44.7l-56.2 2.5 5.2 28.9 8.3-17.4 20 9.1zm-120.2 23.1l20-9.1 8.2 17.4 5.3-28.9-56.3-2.5z"
+                fill="#cd6116"
+                stroke="#cd6116"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M87.8 162.1l23.6 46-.8-22.9zm120.3 23.1l-1 22.9 23.7-46zm-64-20.6l-5.3 28.9 6.6 34.1 1.5-44.9zm30.5 0l-2.7 18 1.2 45 6.7-34.1z"
+                fill="#e4751f"
+                stroke="#e4751f"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                class="st6"
+                d="M179.8 193.5l-6.7 34.1 4.8 3.3 29.2-22.8 1-22.9zm-69.2-8.3l.8 22.9 29.2 22.8 4.8-3.3-6.6-34.1z"
+              />
+              <path
+                fill="#c0ad9e"
+                stroke="#c0ad9e"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M180.3 262.3l.3-9.3-2.5-2.2h-37.7l-2.3 2.2.2 9.3-31.5-14.9 11 9 22.3 15.5h38.3l22.4-15.5 11-9z"
+              />
+              <path
+                fill="#161616"
+                stroke="#161616"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M177.9 230.9l-4.8-3.3h-27.7l-4.8 3.3-2.5 22.1 2.3-2.2h37.7l2.5 2.2z"
+              />
+              <path
+                d="M278.3 114.2l8.5-40.8-12.7-37.9-96.2 71.4 37 31.3 52.3 15.3 11.6-13.5-5-3.6 8-7.3-6.2-4.8 8-6.1zM31.8 73.4l8.5 40.8-5.4 4 8 6.1-6.1 4.8 8 7.3-5 3.6 11.5 13.5 52.3-15.3 37-31.3-96.2-71.4z"
+                fill="#763d16"
+                stroke="#763d16"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                class="st6"
+                d="M267.2 153.5l-52.3-15.3 15.9 23.9-23.7 46 31.2-.4h46.5zm-163.6-15.3l-52.3 15.3-17.4 54.2h46.4l31.1.4-23.6-46zm71 26.4l3.3-57.7 15.2-41.1h-67.5l15 41.1 3.5 57.7 1.2 18.2.1 44.8h27.7l.2-44.8z"
+              />
+            </svg>
+            <p class="text-center dark:text-white">
+              You don't have MetaMask in your browser, please download it from
+              <a href="https://metamask.io/" class="text-accent" target="_blank" rel="noreferrer noopener">MetaMask</a>
+            </p>
+          </div>
+          <!-- end body -->
+
+          <div class="modal-footer">
+            <div class="flex items-center justify-center space-x-4">
+              <a
+                href="https://metamask.io/"
+                target="_blank"
+                rel="noreferrer noopener"
+                class="rounded-full bg-accent py-3 px-8 text-center font-semibold text-white shadow-accent-volume transition-all hover:bg-accent-dark"
+              >
+                Get Metamask
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="page-footer bg-white dark:bg-jacarta-900">
+        <div class="container">
+          <div class="grid grid-cols-6 gap-x-7 gap-y-14 pt-24 pb-12 md:grid-cols-12">
+            <div class="col-span-full sm:col-span-3 md:col-span-4">
+              <!-- Logo -->
+              <a href="index.html" class="shrink-0">
+                <img src="img/eCardifyLogo(L).png" class="max-h-7 dark:hidden" >
+                <img src="img/eCardifyLogo(D).png" class="hidden max-h-7 dark:block" >
+              </a>
+              <br>
+              <p class="mb-12 dark:text-jacarta-300 animate-gradient">
+                Your Digital Identity,<br>Simply eCardify
+              </p>
+              
+              
+              <!-- Socials -->
+              <div class="flex space-x-5">
+                <a href="#" class="group">
+                  <svg aria-hidden="true" focusable="false" data-prefix="fab" data-icon="facebook" class="h-5 w-5 fill-jacarta-300 group-hover:fill-accent dark:group-hover:fill-white" role="img" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 512 512">
+                    <path d="M504 256C504 119 393 8 256 8S8 119 8 256c0 123.78 90.69 226.38 209.25 245V327.69h-63V256h63v-54.64c0-62.15 37-96.48 93.67-96.48 27.14 0 55.52 4.84 55.52 4.84v61h-31.28c-30.8 0-40.41 19.12-40.41 38.73V256h68.78l-11 71.69h-57.78V501C413.31 482.38 504 379.78 504 256z"></path>
+                  </svg>
+                </a>
+                <a href="#" class="group">
+                  <svg aria-hidden="true" focusable="false" data-prefix="fab" data-icon="twitter" class="h-5 w-5 fill-jacarta-300 group-hover:fill-accent dark:group-hover:fill-white" role="img" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 512 512">
+                    <path d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"></path>
+                  </svg>
+                </a>
+                <a href="#" class="group">
+                  <svg aria-hidden="true" focusable="false" data-prefix="fab" data-icon="discord" class="h-5 w-5 fill-jacarta-300 group-hover:fill-accent dark:group-hover:fill-white" role="img" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 640 512">
+                    <path d="M524.531,69.836a1.5,1.5,0,0,0-.764-.7A485.065,485.065,0,0,0,404.081,32.03a1.816,1.816,0,0,0-1.923.91,337.461,337.461,0,0,0-14.9,30.6,447.848,447.848,0,0,0-134.426,0,309.541,309.541,0,0,0-15.135-30.6,1.89,1.89,0,0,0-1.924-.91A483.689,483.689,0,0,0,116.085,69.137a1.712,1.712,0,0,0-.788.676C39.068,183.651,18.186,294.69,28.43,404.354a2.016,2.016,0,0,0,.765,1.375A487.666,487.666,0,0,0,176.02,479.918a1.9,1.9,0,0,0,2.063-.676A348.2,348.2,0,0,0,208.12,430.4a1.86,1.86,0,0,0-1.019-2.588,321.173,321.173,0,0,1-45.868-21.853,1.885,1.885,0,0,1-.185-3.126c3.082-2.309,6.166-4.711,9.109-7.137a1.819,1.819,0,0,1,1.9-.256c96.229,43.917,200.41,43.917,295.5,0a1.812,1.812,0,0,1,1.924.233c2.944,2.426,6.027,4.851,9.132,7.16a1.884,1.884,0,0,1-.162,3.126,301.407,301.407,0,0,1-45.89,21.83,1.875,1.875,0,0,0-1,2.611,391.055,391.055,0,0,0,30.014,48.815,1.864,1.864,0,0,0,2.063.7A486.048,486.048,0,0,0,610.7,405.729a1.882,1.882,0,0,0,.765-1.352C623.729,277.594,590.933,167.465,524.531,69.836ZM222.491,337.58c-28.972,0-52.844-26.587-52.844-59.239S193.056,219.1,222.491,219.1c29.665,0,53.306,26.82,52.843,59.239C275.334,310.993,251.924,337.58,222.491,337.58Zm195.38,0c-28.971,0-52.843-26.587-52.843-59.239S388.437,219.1,417.871,219.1c29.667,0,53.307,26.82,52.844,59.239C470.715,310.993,447.538,337.58,417.871,337.58Z"></path>
+                  </svg>
+                </a>
+                <a href="#" class="group">
+                  <svg aria-hidden="true" focusable="false" data-prefix="fab" data-icon="instagram" class="h-5 w-5 fill-jacarta-300 group-hover:fill-accent dark:group-hover:fill-white" role="img" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512">
+                    <path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"></path>
+                  </svg>
+                </a>
+                <a href="#" class="group">
+                  <svg aria-hidden="true" focusable="false" data-prefix="fab" data-icon="tiktok" class="h-5 w-5 fill-jacarta-300 group-hover:fill-accent dark:group-hover:fill-white" role="img" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 448 512">
+                    <path d="M448,209.91a210.06,210.06,0,0,1-122.77-39.25V349.38A162.55,162.55,0,1,1,185,188.31V278.2a74.62,74.62,0,1,0,52.23,71.18V0l88,0a121.18,121.18,0,0,0,1.86,22.17h0A122.18,122.18,0,0,0,381,102.39a121.43,121.43,0,0,0,67,20.14Z"></path>
+                  </svg>
+                </a>
+              </div>
+            </div>
+  
+            <div class="col-span-full sm:col-span-3 md:col-span-2">
+              <h3 class="mb-6 font-display text-sm text-jacarta-700 dark:text-white">About Us</h3>
+              <ul class="flex flex-col space-y-1 dark:text-jacarta-300">
+                <li>
+                  <a href="#" class="hover:text-accent dark:hover:text-white">Company</a>
+                </li>
+                <li>
+                  <a href="#" class="hover:text-accent dark:hover:text-white">Team</a>
+                </li>
+                <li>
+                  <a href="#" class="hover:text-accent dark:hover:text-white">Contact Us</a>
+                </li>
+              </ul>
+            </div>
+  
+            <div class="col-span-full sm:col-span-3 md:col-span-2">
+              <h3 class="mb-6 font-display text-sm text-jacarta-700 dark:text-white">Contact</h3>
+              <ul class="flex flex-col space-y-1 dark:text-jacarta-300">
+                <li>
+                  <a href="#" class="hover:text-accent dark:hover:text-white">Email</a>
+                </li>
+                <li>
+                  <a href="help-center.html#" class="hover:text-accent dark:hover:text-white">Help Center</a>
+                </li>
+              </ul>
+            </div>
+  
+            <div class="col-span-full sm:col-span-3 md:col-span-2">
+              <h3 class="mb-6 font-display text-sm text-jacarta-700 dark:text-white">Marketplace</h3>
+              <ul class="flex flex-col space-y-1 dark:text-jacarta-300">
+                <li>
+                  <a href="#" class="hover:text-accent dark:hover:text-white">Plans</a>
+                </li>
+                <li>
+                  <a href="#" class="hover:text-accent dark:hover:text-white">Reviews</a>
+                </li>
+                <li>
+                  <a href="#" class="hover:text-accent dark:hover:text-white">Blogs</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+  
+          <div class="flex items-center space-x-2">
+            <div class="status-dot"></div>
+            <a href="platform-status.html" class="hover:text-accent"><span>All systems are Operational</span></a>
+          </div>
+          
+  
+          <div class="flex flex-col items-center justify-between space-y-2 py-8 sm:flex-row sm:space-y-0">
+  
+            <span class="text-sm dark:text-jacarta-400">&copy;
+                <script>
+                    document.write(new Date().getFullYear())
+                </script>
+                eCardify — Made by
+                <a href="http://65.0.200.229/" class="hover:text-accent">Jaswanth</a>
+            </span>
+            
+            <ul class="flex flex-wrap space-x-4 text-sm dark:text-jacarta-400">
+                <li>
+                    <a href="tos.html" class="hover:text-accent">Terms and conditions</a>
+                </li>
+                <li>
+                    <a href="#" class="hover:text-accent">Privacy policy</a>
+                </li>
+            </ul>
+        </div>
+        
+        </div>
+      </footer>
+  
+      
+      <script src="js/app.bundle.js"></script>
+      <script src="js/videoLightbox.bundle.js"></script>
+      <style>
+        /* Styles for the blinking dot */
+        .status-dot {
+          width: 10px;
+          height: 10px;
+          border-radius: 50%;
+          background-color: blue;
+          animation: blink-animation 1s infinite;
+        }
+    
+        /* Blinking animation */
+        @keyframes blink-animation {
+          0% { opacity: 1; }
+          50% { opacity: 0; }
+          100% { opacity: 1; }
+        }
+      </style>
+      
+    </body>
+  </html>
+
+<!-- JS Scripts -->
+<script src="./js/app.bundle.js"></script>
+</body>
+</html>
