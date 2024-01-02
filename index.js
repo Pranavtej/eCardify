@@ -236,27 +236,33 @@ app.get('/add-subscription', async (req, res) => {
     }
 });
 
-
 app.post('/add-subscription', async (req, res) => {
     try {
+        const { name, price, featureNames } = req.body;
+    
         
-      const { name, price, features } = req.body;
+        if (!name || !price || !featureNames || !Array.isArray(featureNames)) {
+          return res.status(400).json({ error: 'Invalid data format' });
+        }
+    
+        
+        const newSubscriptionPlan = new SubscriptionPlan({
+          name,
+          price,
+          features: featureNames,
+        });
+    
+        
+        await newSubscriptionPlan.save();
+    
+        const subscriptionPlans = await SubscriptionPlan.find();
+        res.render('admin/subscription', { subscriptionPlans });
+      } catch (error) {
+        console.error('Error adding subscription plan:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+      }
+    });
 
-      const newPlan = new SubscriptionPlan({
-        name,
-        price,
-        features: features.map(feature => ({ logoUrl: feature })),
-      });
-  
-      // Save the document to MongoDB
-      await newPlan.save();
-  
-      res.status(200).send('Subscription plan added successfully!');
-    } catch (error) {
-      console.error('Error saving subscription plan:', error);
-      res.status(500).send('Internal Server Error');
-    }
-  });
 
 
 
@@ -932,5 +938,4 @@ app.post('/custompage/:id',upload.fields([{ name: 'image', maxCount: 1 }]),async
   }
 
 });
-
 

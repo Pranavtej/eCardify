@@ -9561,6 +9561,12 @@ body[data-layout-mode=dark] .alertify .ajs-footer .ajs-buttons .ajs-button.ajs-o
 	flex-direction: row;
 	align-items: center;
 	justify-content: center;
+<<<<<<< HEAD
+	width: 100%;
+    height: 100%;
+}
+  
+=======
 	
 }
 
@@ -9583,3 +9589,4 @@ body[data-layout-mode=dark] .alertify .ajs-footer .ajs-buttons .ajs-button.ajs-o
 
 
   
+>>>>>>> b120959fe31dde39db04c2388acc30efd2f017c3
