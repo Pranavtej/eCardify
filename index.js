@@ -18,8 +18,7 @@ const adminModel = require('./models/admin');
 const multer = require('multer');
 const Image = require('./models/image');
 const Employee = require('./models/employeeschema');
-// app.set("views", __dirname + "/views");
-// app.set("view engine", "ejs");
+
 const { ObjectId } = require('mongodb');
 const AWS = require('aws-sdk');
 const dotenv = require('dotenv');
@@ -28,9 +27,7 @@ dotenv.config();
 
 app.set("views", __dirname + "/views");
 app.set("view engine", "ejs");
-//const { ObjectId } = require('mongodb');
-//app.set("views", __dirname + "/views");
-//app.set("view engine", "ejs");
+
 app.use(express.static(__dirname + "/public"));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
@@ -81,66 +78,6 @@ app.get('/register', async (req, res) => {
 
 
 
-app.post('/register', async (req, res) => {
-    const data = {
-        username: req.body.username,
-        email: req.body.email,
-        password: req.body.password,
-        subscription : {
-            plan: fixedSubscriptionPlanId,
-            expiresAt: fixedExpiresAt
-        }
-    }
-
-    // check if username or email already exists
-    const existingUser = await User.findOne({ $or: [{ username: data.username }, { email: data.email }] });
-
-    if (existingUser) {
-        res.send("Username or email already exists. Please try again");
-    } else {
-        // hashing the password
-        const saltRounds = 10;
-        const hashedPassword = await bcrypt.hash(data.password, saltRounds);
-
-        data.password = hashedPassword;
-
-
-        const user = new User(data);
-        await user.save();
-
-        res.redirect('/login');
-    }
-});
-
-
-app.post('/login', async (req, res) => {
-    try {
-        const input = req.body.usernameOrEmail;
-        const isEmail = /\S+@\S+\.\S+/.test(input);
-
-        let check;
-        if (isEmail) {
-            check = await User.findOne({ email: input });
-        } else {
-            check = await User.findOne({ username: input });
-        }
-
-        if (!check) {
-            res.send("User does not exist");
-        } else {
-            const validPassword = await bcrypt.compare(req.body.password, check.password);
-            if (validPassword) {
-                res.redirect("/");
-            } else {
-                res.send("Invalid password");
-            }
-        }
-    } catch (error) {
-        res.status(400).send("Invalid username or password");
-    }
-});
-
-
 app.get('/about', function (req, res) {
     res.render('/views/about/about.ejs');
 });
@@ -151,15 +88,9 @@ app.get('/contact', function (req, res) {
 );
 
 
-
-
-
 app.listen(8000, function () {
     console.log('Server started at port 8000');
    })
-
-//admin login
-
 
 
 
@@ -238,6 +169,8 @@ app.post('/edit-subscription', async (req, res) => {
     }
 });
 
+// getting subscription details 
+
 app.get('/add-subscription', async (req, res) => {
     try {
         res.render('admin/add-subscription');
@@ -246,6 +179,8 @@ app.get('/add-subscription', async (req, res) => {
         res.status(500).send("Internal Server Error");
     }
 });
+
+//add subscription plan
 
 app.post('/add-subscription', async (req, res) => {
     try {
@@ -949,46 +884,5 @@ app.post('/custompage/:id',upload.fields([{ name: 'image', maxCount: 1 }]),async
   }
 
 });
-
-
-app.get('/add-company',async(req,res)=>{
-res.render('admin/add-company');
-});
-
-
-app.post('/company-details', upload.single('logo'),async(req, res) => {
-    const { name, cname, cnum, cmail } = req.body;
-    console.log(req.body);
-    const file = req.file;
-
-    const key = `${name}`;
-  
-    const params = {
-      Bucket: process.env.S3_BUCKET_NAME,
-      Key: `company_logo/${key}`,
-      Body: file.buffer,
-      ContentType: file.mimetype
-    };
-  
-    const s3UploadResponse = await s3.upload(params).promise();
-
-    const logoUrl = s3UploadResponse.Location;
-    console.log(logoUrl);
-    try{
-    const newCompany = new mcompany({
-        logo: logoUrl,
-        name,
-        ceo: { name: cname, contact: cnum, email: cmail },
-       
-      });
-  
-      await newCompany.save();
-      res.status(201).json({ message: 'Company added successfully', company: newCompany });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: 'Internal Server Error' });
-    }
-  });
-
 
   
