@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+        <title>Preskool - Students</title>
+		
+		<!-- Favicon -->
+        <link rel="shortcut icon" href="/public/assets/admin/img/favicon.png">
+	
+		<!-- Fontfamily -->
+		<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,700;0,900;1,400;1,500;1,700&display=swap" rel="stylesheet">
+		
+		<!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="/public/assets/admin/plugins/bootstrap/css/bootstrap.min.css">
+		
+		<!-- Feathericon CSS -->
+        <link rel="stylesheet" href="/public/assets/admin/plugins/feather/feather.css">
+		
+		<!-- Pe7 CSS -->
+		<link rel="stylesheet" href="/public/assets/admin/plugins/icons/flags/flags.css">
+		
+		<!-- Fontawesome CSS -->
+		<link rel="stylesheet" href="/public/assets/admin/plugins/fontawesome/css/fontawesome.min.css">
+		<link rel="stylesheet" href="/public/assets/admin/plugins/fontawesome/css/all.min.css">
+
+    <!-- Select CSS -->
+    <link rel="stylesheet" href="/public/assets/admin/plugins/select2/css/select2.min.css">
+
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="/public/assets/admin/css/style.css">
+</head>
+<body>
+
+<!-- Main Wrapper -->
+<div class="main-wrapper">
+
+    <!-- Header -->
+    <div class="header">
+
+        <!-- Logo -->
+        <div class="header-left">
+            <a href="index.html" class="logo">
+                <img src="/public/assets/admin/img/logo.png" alt="Logo">
+            </a>
+            <a href="index.html" class="logo logo-small">
+                <img src="/public/assets/admin/img/logo-small.png" alt="Logo" width="30" height="30">
+            </a>
+        </div>
+        <!-- /Logo -->
+
+        <div class="menu-toggle">
+            <a href="javascript:void(0);" id="toggle_btn">
+                <i class="fas fa-bars"></i>
+            </a>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="top-nav-search">
+            <form>
+                <input type="text" class="form-control" placeholder="Search here">
+                <button class="btn" type="submit"><i class="fas fa-search"></i></button>
+            </form>
+        </div>
+        <!-- /Search Bar -->
+
+        <!-- Mobile Menu Toggle -->
+        <a class="mobile_btn" id="mobile_btn">
+            <i class="fas fa-bars"></i>
+        </a>
+        <!-- /Mobile Menu Toggle -->
+
+        <!-- Header Right Menu -->
+
+        <!-- /Header Right Menu -->
+
+    </div>
+    <!-- /Header -->
+
+    <!-- Sidebar -->
+    <%- include('sidebar.ejs') %>
+    <!-- /Sidebar -->
+
+    <!-- Page Wrapper -->
+    <div class="page-wrapper">
+        <div class="content container-fluid">
+
+            <!-- Page Header -->
+            <div class="page-header">
+                <div class="row align-items-center">
+                    <div class="col-sm-12">
+                        <div class="page-sub-header">
+                            <h3 class="page-title">Add Users</h3>
+                            <ul class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="/user">User</a></li>
+                                <li class="breadcrumb-item active">Add Users</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /Page Header -->
+
+          
+            <!-- Horizontal Card -->
+            <div class="card" id="previewCard">
+				<div class="card-body" >
+					<div class="v71_14" id="frontview">
+						<span class="v71_18" id="userName"></span>
+						<div class="v71_22" id="image"></div>
+						<span class="v71_23" id="userRole"></span>
+						<span class="v71_24" id="companyNamePreview"></span>
+					</div>
+				</div>
+				<div class="card-body" id="backview">
+					<div class="v71_8">
+						<span class="v71_13" id="companyName"></span>
+						<div class="v71_25" id="qrcodeContainerPreview">
+							<div class="col-12 col-sm-4">
+								<div class="form-group local-forms">
+									<div id="qrcodeContainer"></div>
+									<label><span class="login-danger"></span></label>
+									<a id='downloadLink' class='download' download="qrcode.png" style='display: none;'></a>
+								</div>
+							</div>
+						</div>
+					</div>
+				
+					<div class="row">
+						<div class="col-sm-12">
+						
+							<div class="card card-table comman-shadow">
+								<div class="card-body">
+								
+									<!-- Page Header -->
+									<div class="page-header">
+										<div class="row align-items-center">
+											<div class="col">
+												<h3 class="page-title">Students</h3>
+											</div>
+											<div class="col-auto text-end float-end ms-auto download-grp">
+												<!-- <a href="/user" class="btn btn-outline-gray me-2 active"><i class="feather-list"></i></a>
+												<a href="/user-grid" class="btn btn-outline-gray me-2"><i class="feather-grid"></i></a>
+												<a href="#" class="btn btn-outline-primary me-2"><i class="fas fa-download"></i> Download</a> -->
+												<a href="#" id="addCardBtn" class="btn btn-primary"><i class="fas fa-plus"></i> Add Card</a>
+											</div>
+										</div>
+									</div>
+									<!-- /Page Header -->
+									
+									<div class="table-responsive">
+										<table class="table border-0 star-student table-hover table-center mb-0 datatable table-striped">
+											<thead class="student-thread">
+												<tr>
+													
+													<th>S.No</th>
+													<th>Name</th>
+													<th>Phone</th>
+													<th>E-mail</th>
+													<th>Delete</th>
+													<th>Edit</th>
+													<th>Generate Card</th>
+												</tr>
+											</thead>
+											<tbody>
+												<% users1.forEach((user,index) => { %>
+													<tr> 
+	
+													  <td><%= index + 1 %></td>
+													  <td><%= user.username %></td>
+													  <td><%= user.number %></td>
+													  <td><%= user.email %></td>
+													 
+													  <td>
+														<% if (user.selectedItems && user.selectedItems.length > 0) { %>
+															<button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal<%= user._id %>">
+																Delete
+															</button>
+														  
+															  <!-- Modal for delete confirmation -->
+															  <div class="modal fade" id="deleteModal<%= user._id %>" tabindex="-1" aria-labelledby="deleteModalLabel<%= user._id %>" aria-hidden="true">
+																<div class="modal-dialog">
+																  <div class="modal-content">
+																	<div class="modal-header">
+																	  <h5 class="modal-title" id="deleteModalLabel<%= user._id %>">Delete Card</h5>
+																	  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+																	</div>
+																	<div class="modal-body">
+																	  <!-- Form to select card for deletion -->
+																	  <form action="/delete-card/<%= user._id %>" method="post">
+																		<div class="mb-3">
+																			<label for="cardSelect<%= user._id %>" class="form-label">Select Card to Delete:</label>
+																			<select class="form-select" id="cardSelect<%= user._id %>" name="cardId" required>
+																			  <% user.selectedItems.forEach(item => { %>
+																				<option value="<%= item._id %>">
+																					<%= item.occasion %>/<%= item.cardType.name %>/<%= item.template.name %>
+																				</option>
+																			  <% }); %>
+																			</select>
+																		  </div>
+																		<button type="submit" class="btn btn-danger">Confirm Delete</button>
+																	  </form>
+																	</div>
+																  </div>
+																</div>
+															  </div>
+															  <% } else { %>
+																No cards to delete
+															<% } %>
+															</td>
+
+														  <td>
+															<div>
+														  <a href="/edit-user/<%= user._id %>" class="btn btn-sm btn-warning">
+															<i class="feather-edit"></i> Edit
+														  </a>
+														</div>
+													  </td>
+													  <td>
+														<% if (user.selectedItems && user.selectedItems.length > 0) { %>
+															<button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#generateCardModal<%= user._id %>">
+															  Generate New Card
+															</button>
+															<div class="modal fade" id="generateCardModal<%= user._id %>" tabindex="-1" aria-labelledby="generateCardModalLabel<%= user._id %>" aria-hidden="true">
+																<div class="modal-dialog">
+																  <div class="modal-content">
+																	<div class="modal-header">
+																	  <h5 class="modal-title" id="generateCardModalLabel<%= user._id %>">Generate New Card</h5>
+																	  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+																	</div>
+																	<div class="modal-body">
+																	  <!-- Form to select card details for new card generation -->
+																	  <form action="/generate-card/<%= user._id %>" method="post">
+																		<div class="mb-3">
+																		  <label for="cardSelect<%= user._id %>" class="form-label">Select Card to Generate:</label>
+																		  <select class="form-select" id="cardSelect<%= user._id %>" name="cardId" required>
+																			<% user.selectedItems.forEach(item => { %>
+																			  <option value="<%= item._id %>">
+																				<%= item.occasion %>/<%= item.cardType.name %>/<%= item.template.name %>
+																			  </option>
+																			<% }); %>
+																		  </select>
+																		  
+																		</div>
+																		<button type="submit" class="btn btn-success">Generate Card</button>
+																	  </form>
+																	</div>
+																  </div>
+																</div>
+															  </div>
+														<% } else { %>
+															No cards to generate
+														<% } %>
+													  </td>
+													</tr>
+												  <% }); %>
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>							
+						</div>					
+					</div>					
+				</div>
+				<div class="modal fade" id="addCardModal" tabindex="-1" role="dialog" aria-labelledby="addCardModalLabel" aria-hidden="true">
+					<div class="modal-dialog" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title" id="addCardModalLabel">Add Card for Existing User</h5>
+								<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+									<!-- <span aria-hidden="true">&times;</span> -->
+								</button>
+							</div>
+							<div class="modal-body">
+								<form action="/add-card" method="post">
+									<div class="form-group">
+										<label for="phoneNumber">Enter User's Mobile Number:</label>
+										<input type="text" class="form-control" id="phoneNumber" name="phoneNumber" required>
+									</div>
+									<button type="submit" class="btn btn-primary">Submit</button>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- Delete Modal -->
+				
+
+				<!-- Footer -->
+				<!-- <footer>
+					<p>Copyright © 2022 Dreamguys.</p>					
+				</footer> -->
+				<!-- /Footer -->				
+			</div>
+			<!-- /Page Wrapper -->
+			
+        </div>
+		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Bootstrap JavaScript -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+		<script>
+			$(document).ready(function() {
+				// Show modal when "Add Card" button is clicked
+				$('#addCardBtn').click(function() {
+					$('#addCardModal').modal('show');
+				});
+			});
+		</script>
+
+
+		<!-- /Main Wrapper -->
+		
+		<!-- jQuery -->
+        <script src="/public/assets/admin/js/jquery-3.6.0.min.js"></script>
+		
+		
+		
+		<!-- Bootstrap Core JS -->
+        <script src="/public/assets/admin/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+		
+		<!-- Feather Icon JS -->
+		<script src="/public/assets/admin/js/feather.min.js"></script>
+		
+		<!-- Slimscroll JS -->
+		<script src="/public/assets/admin/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+		
+		<!-- Datatables JS -->
+		<script src="/public/assets/admin/plugins/datatables/datatables.min.js"></script>
+		
+		<!-- Custom JS -->
+		<script src="/public/assets/admin/js/script.js"></script>
+    </body>
+</html>

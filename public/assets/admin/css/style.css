@@ -9443,4 +9443,150 @@ body[data-layout-mode=dark] .alertify .ajs-footer .ajs-buttons .ajs-button.ajs-o
 	}
 }
 
+.flex-container {
+    display: flex;
+    height: 100vh;
+}
+  
+  .v71_14 {
+	width: 336px;
+	height: 192px;
+	background: rgba(10,87,120,1);
+	opacity: 1;
+	position: relative; 
+	margin-right: 10px;
+	overflow: hidden;
+	border-radius :8px;
+	background-repeat: no-repeat;
+  }
+  
+  .v71_18 {
+	width: 147px;
+	color: rgba(255, 255, 255, 1);
+	position: absolute;
+	top: 26px;
+	left: 25px;
+	font-family: Taviraj;
+	font-weight: Medium;
+	font-size: 17px;
+	opacity: 1;
+	text-align: left;
+  }
+  
+  .v71_22 {
+	width: 104px;
+	height: 150px;
+	/* background: url("./images/css/v71_22.png"); */
+	background-repeat: no-repeat;
+	background-position: center center;
+	background-size: cover;
+	opacity: 1;
+	position: absolute;
+	top: 25px;
+	left: 212px;
+	overflow: hidden;
+  }
+  
+  .v71_23 {
+	width: 111px;
+	color: rgba(255, 255, 255, 1);
+	position: absolute;
+	top: 53px;
+	left: 25px;
+	font-family: Taviraj;
+	font-weight: Medium;
+	font-size: 12px;
+	opacity: 1;
+	text-align: left;
+  }
+  
+  .v71_24 {
+	width: 148px;
+	color: rgba(255, 255, 255, 1);
+	position: absolute;
+	top: 142px;
+	left: 25px;
+	font-family: Taviraj;
+	font-weight: Medium;
+	font-size: 17px;
+	opacity: 1;
+	text-align: left;
+  }
 
+  
+  .v71_8 {
+	width: 336px;
+	height: 192px;
+	background: rgba(10,87,120,1);
+	opacity: 1;
+	position: relative;
+	top: 0px;
+	left: 0px;
+	border-top-left-radius: 10px;
+	border-top-right-radius: 10px;
+	border-bottom-left-radius: 10px;
+	border-bottom-right-radius: 10px;
+	overflow: hidden;
+  }
+  .v71_13 {
+	width: 133px;
+	color: rgba(255,255,255,1);
+	position: absolute;
+	top: 130px;
+	left: 107px;
+	font-family: Taviraj;
+	font-weight: Medium;
+	font-size: 15px;
+	opacity: 1;
+	text-align: left;
+  }
+  .v71_25 {
+	width:auto;
+	height:auto;
+	/* background: url("./images/css/v71_25.png"); */
+	background-repeat: no-repeat;
+	background-position: center center;
+	background-size: cover;
+	opacity: 1;
+	position: absolute;
+	top: 47px;
+	left: 132px;
+	overflow: hidden;
+	border-radius: 8px;
+
+  }
+ 
+#previewCard {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+<<<<<<< HEAD
+	width: 100%;
+    height: 100%;
+}
+  
+=======
+	
+}
+
+
+
+
+
+#frontview, #backview {
+    
+    flex: 1; 
+    padding: 20px;
+
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover; 
+	font-family: 'Poppins', sans-serif;
+}
+
+
+
+
+  
+>>>>>>> b120959fe31dde39db04c2388acc30efd2f017c3

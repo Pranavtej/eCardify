@@ -7,24 +7,27 @@ const app = express();
 const mongoose = require("mongoose");
 const User = require("./models/user");
 const SubscriptionPlan = require("./models/subplan");
-const Bcard1 = require("./models/bcard");
+const BusinessCard = require("./models/bcard");
 const cardt = require("./models/card");
 const temp = require("./models/templates");
+const cpages = require("./models/custompages");
+const mcompany = require("./models/company");
 const bcrypt = require("bcrypt");
 const path = require('path');
 const adminModel = require('./models/admin');
 const multer = require('multer');
+const Image = require('./models/image');
+const Employee = require('./models/employeeschema');
 
-
-// app.set("views", __dirname + "/views");
-// app.set("view engine", "ejs");
 const { ObjectId } = require('mongodb');
+const AWS = require('aws-sdk');
+const dotenv = require('dotenv');
+
+dotenv.config();
 
 app.set("views", __dirname + "/views");
 app.set("view engine", "ejs");
-//const { ObjectId } = require('mongodb');
-//app.set("views", __dirname + "/views");
-//app.set("view engine", "ejs");
+
 app.use(express.static(__dirname + "/public"));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
@@ -36,7 +39,7 @@ app.set('views', path.join(__dirname, 'views'));
 
 app.use('/public', express.static(__dirname + "/public"));
 
-
+const fs = require('fs');
 const defaultSessionSecret = 'mydefaultsecretkey';
 
 app.use(session({
@@ -45,17 +48,21 @@ app.use(session({
     saveUninitialized: true
 }));
 
+AWS.config.update({
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+    region: process.env.AWS_REGION
+  });
+  
+const s3 = new AWS.S3();
 
-// multer confuguration
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
 
-
-
 app.get('/', function (req, res) {
-    res.render('index');
+    res.render('landing/index');
 });
 
 
@@ -71,66 +78,6 @@ app.get('/register', async (req, res) => {
 
 
 
-app.post('/register', async (req, res) => {
-    const data = {
-        username: req.body.username,
-        email: req.body.email,
-        password: req.body.password,
-        subscription : {
-            plan: fixedSubscriptionPlanId,
-            expiresAt: fixedExpiresAt
-        }
-    }
-
-    // check if username or email already exists
-    const existingUser = await User.findOne({ $or: [{ username: data.username }, { email: data.email }] });
-
-    if (existingUser) {
-        res.send("Username or email already exists. Please try again");
-    } else {
-        // hashing the password
-        const saltRounds = 10;
-        const hashedPassword = await bcrypt.hash(data.password, saltRounds);
-
-        data.password = hashedPassword;
-
-
-        const user = new User(data);
-        await user.save();
-
-        res.redirect('/login');
-    }
-});
-
-
-app.post('/login', async (req, res) => {
-    try {
-        const input = req.body.usernameOrEmail;
-        const isEmail = /\S+@\S+\.\S+/.test(input);
-
-        let check;
-        if (isEmail) {
-            check = await User.findOne({ email: input });
-        } else {
-            check = await User.findOne({ username: input });
-        }
-
-        if (!check) {
-            res.send("User does not exist");
-        } else {
-            const validPassword = await bcrypt.compare(req.body.password, check.password);
-            if (validPassword) {
-                res.redirect("/");
-            } else {
-                res.send("Invalid password");
-            }
-        }
-    } catch (error) {
-        res.status(400).send("Invalid username or password");
-    }
-});
-
-
 app.get('/about', function (req, res) {
     res.render('/views/about/about.ejs');
 });
@@ -141,15 +88,9 @@ app.get('/contact', function (req, res) {
 );
 
 
-
-
-
 app.listen(8000, function () {
     console.log('Server started at port 3000');
    })
-
-//admin login
-
 
 
 
@@ -228,6 +169,8 @@ app.post('/edit-subscription', async (req, res) => {
     }
 });
 
+// getting subscription details 
+
 app.get('/add-subscription', async (req, res) => {
     try {
         res.render('admin/add-subscription');
@@ -237,27 +180,35 @@ app.get('/add-subscription', async (req, res) => {
     }
 });
 
+//add subscription plan
 
 app.post('/add-subscription', async (req, res) => {
     try {
+        const { name, price, featureNames } = req.body;
+    
         
-      const { name, price, features } = req.body;
+        if (!name || !price || !featureNames || !Array.isArray(featureNames)) {
+          return res.status(400).json({ error: 'Invalid data format' });
+        }
+    
+        
+        const newSubscriptionPlan = new SubscriptionPlan({
+          name,
+          price,
+          features: featureNames,
+        });
+    
+        
+        await newSubscriptionPlan.save();
+    
+        const subscriptionPlans = await SubscriptionPlan.find();
+        res.render('admin/subscription', { subscriptionPlans });
+      } catch (error) {
+        console.error('Error adding subscription plan:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+      }
+    });
 
-      const newPlan = new SubscriptionPlan({
-        name,
-        price,
-        features: features.map(feature => ({ logoUrl: feature })),
-      });
-  
-      // Save the document to MongoDB
-      await newPlan.save();
-  
-      res.status(200).send('Subscription plan added successfully!');
-    } catch (error) {
-      console.error('Error saving subscription plan:', error);
-      res.status(500).send('Internal Server Error');
-    }
-  });
 
 
 
@@ -467,32 +418,100 @@ app.get("/delete/:id",async(req,res)=>{
     
 
 });
+          
 
 
-app.post('/add-user', async (req, res) => {
+// app.post('/add-user', async (req, res) => {
+//     try {
+//         const { username, email, number, subscriptionPlan, occasion, cardType, template } = req.body;
+//         console.log(req.body);
+
+//         // Create a new user
+//         const Plan = new ObjectId(subscriptionPlan);
+//         const card = new ObjectId(cardType);
+//         const temp = new ObjectId(template);
+
+//         const newUser = new User({
+//             username,
+//             email,
+//             number,
+//             selectedItems: [
+//                 {
+//                     occasion,
+//                     cardType: card,
+//                     template: temp,
+//                     subscriptionPlan: {
+//                         plan: Plan,
+//                     },
+//                 },
+//             ],
+//         });
+
+//         // Save the user to the database
+//         const savedUser = await newUser.save();
+
+//         // Redirect to the edit page for the newly created user
+//         res.redirect(`/template1?userId=${savedUser._id}`);
+//     } catch (error) {
+//         console.error('Error creating user:', error);
+//         res.status(500).send('Internal Server Error');
+//     }
+// });
+
+app.get('/imageupload', async (req, res) => {
     try {
-        const { username, email, number, subscriptionPlan, occassion, cardType, template } = req.body;
-        console.log(req.body);
-        // Validate the form data
-        // if (!username || !email || !phoneNumber || !subscriptionPlan || !occasion || !cardType || !template) {
-        //     return res.status(400).json({ error: 'Username, email, phone number, subscription plan, occasion, card type, and template are required' });
-        // }
+      const data = await Image.find({});
+      res.render('admin/image', { items: data });
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Internal Server Error');
+    }
+  });
+  
+//   app.post('/imageupload', upload.single('image'), async (req, res) => {
+//     try {
+//       const obj = {
+//         name: req.body.name,
+//         desc: req.body.desc,
+//         img: {
+//           data: await fs.readFileAsync(path.join(__dirname, 'uploads', req.file.filename)),
+//           contentType: 'image/png',
+//         },
+//       };
+//       await Image.create(obj);
+//       res.redirect('/');
+//     } catch (err) {
+//       console.error(err);
+//       res.status(500).send('Internal Server Error');
+//     }
+//   });
+
+
+
+
+
+  app.post('/add-user', async (req, res) => {
+    try {
+        // ... (validate and sanitize user input)
+
+        // Extract selected values
+        const subscriptionPlanId = req.body.subscriptionPlan;
+        const templateId = req.body.template;
+        const cardTypeId = req.body.cardType;
 
         // Create a new user
-        const Plan= new ObjectId(subscriptionPlan);
-        const card=new ObjectId(cardType);
-        const temp= new ObjectId(template);
         const newUser = new User({
-            username,
-            email,
-            number,
+            username: req.body.username,
+            email: req.body.email,
+            number: req.body.number,
             selectedItems: [
                 {
-                    occasion:occassion,
-                    cardType: card,
-                    template: temp,
-                    subscriptionPlan: { 
-                        plan:Plan,
+                    occasion: req.body.occassion,
+                    cardType: cardTypeId,
+                    template: templateId,
+                    subscriptionPlan: {
+                        plan: subscriptionPlanId,
+                        expiresAt: req.body.expiresAt,
                     },
                 },
             ],
@@ -501,10 +520,109 @@ app.post('/add-user', async (req, res) => {
         // Save the user to the database
         const savedUser = await newUser.save();
 
+        // Redirect to the template page with selected values as query parameters
         const users1 = await fetchUserData();
         res.render('admin/user', { users1 });
     } catch (error) {
-        console.error('Error creating user:', error);
+        // Handle errors
+        console.error(error);
         res.status(500).send('Internal Server Error');
     }
+});
+
+  
+
+
+app.get('/edit-user/:userId', async (req, res) => {
+    try {
+        const userId = req.params.userId;
+        const user = await User.findById(userId);
+
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+        const subscriptionPlans = await SubscriptionPlan.find();
+        const cardTypes = await cardt.find();
+        const templates = await temp.find();
+    
+        res.render('admin/edit-user', { user,subscriptionPlans, cardTypes, templates });
+    } catch (error) {
+        console.error('Error fetching user for editing:', error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+
+app.post('/edit-user/:userId', async (req, res) => {
+    const userId = req.params.userId;
+
+    try {
+        // Retrieve the user by ID
+        const user = await User.findById(userId);
+
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        // Update user fields
+        user.username = req.body.username;
+        user.email = req.body.email;
+        user.number = req.body.number;
+
+        // Clear existing selectedItems array
+        user.selectedItems = [];
+
+        // Get the number of selectedItems from the hidden field
+        const selectedItemsCount = parseInt(req.body.selectedItemsCount, 10);
+
+        // Iterate over form fields to reconstruct selectedItems array
+        for (let index = 0; index < selectedItemsCount; index++) {
+            user.selectedItems.push({
+                occasion: req.body[`occasion_${index}`],
+                cardType: new ObjectId(req.body[`cardType_${index}`]),
+                template: new ObjectId(req.body[`template_${index}`]),
+                subscriptionPlan: {
+                    plan: new ObjectId(req.body[`subscriptionPlan_${index}`]),
+                },
+                // Add other fields if needed
+            });
+        }
+
+        // Save the updated user to the database
+        const updatedUser = await user.save();
+
+        // Redirect to the user listing page or any other page after successful update
+        const users1 = await fetchUserData();
+        res.render('admin/user', { users1 });
+    } catch (error) {
+        console.error('Error updating user:', error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+app.post('/delete-user/:userId', async (req, res) => {
+    const userIdToDelete = req.params.userId;
+
+    try {
+        // Find the user by ID and remove it from the database
+        const deletedUser = await User.findByIdAndDelete(userIdToDelete);
+
+        if (!deletedUser) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        // Redirect to the user listing page or any other page after successful deletion
+        const users1 = await fetchUserData(); // Replace with your data-fetching logic
+        res.render('admin/user', { users1 });
+    } catch (error) {
+        console.error('Error deleting user:', error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+
+app.post('/generate-card',async(req,res)=>
+{
+    console.log(req.body);
+    res.json(req.body);
 });
