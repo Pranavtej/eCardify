@@ -11,6 +11,7 @@ const BusinessCard = require("./models/bcard");
 const cardt = require("./models/card");
 const temp = require("./models/templates");
 const cpages = require("./models/custompages");
+const mcompany = require("./models/company");
 const bcrypt = require("bcrypt");
 const path = require('path');
 const adminModel = require('./models/admin');
@@ -20,6 +21,10 @@ const Employee = require('./models/employeeschema');
 // app.set("views", __dirname + "/views");
 // app.set("view engine", "ejs");
 const { ObjectId } = require('mongodb');
+const AWS = require('aws-sdk');
+const dotenv = require('dotenv');
+
+dotenv.config();
 
 app.set("views", __dirname + "/views");
 app.set("view engine", "ejs");
@@ -46,8 +51,14 @@ app.use(session({
     saveUninitialized: true
 }));
 
+AWS.config.update({
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+    region: process.env.AWS_REGION
+  });
+  
+const s3 = new AWS.S3();
 
-// multer confuguration
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
@@ -939,3 +950,44 @@ app.post('/custompage/:id',upload.fields([{ name: 'image', maxCount: 1 }]),async
 
 });
 
+
+app.get('/add-company',async(req,res)=>{
+res.render('admin/add-company');
+});
+
+
+app.post('/add-company-details', upload.single('logo'),async(req, res) => {
+    const { name, cname, cnum, cmail } = req.body;
+    console.log(req.body);
+    const file = req.file;
+
+    const key = `${name}`;
+  
+    const params = {
+      Bucket: process.env.S3_BUCKET_NAME,
+      Key: `company_logo/${key}`,
+      Body: file.buffer,
+      ContentType: file.mimetype
+    };
+  
+    const s3UploadResponse = await s3.upload(params).promise();
+
+    const logoUrl = s3UploadResponse.Location;
+    console.log(logoUrl);
+    try{
+    const newCompany = new mcompany({
+        logo: logoUrl,
+        name,
+        ceo: { name: cname, contact: cnum, email: cmail },
+       
+      });
+  
+      await newCompany.save();
+      res.status(201).json({ message: 'Company added successfully', company: newCompany });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Internal Server Error' });
+    }
+  });
+
+  
