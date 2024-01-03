@@ -885,4 +885,98 @@ app.post('/custompage/:id',upload.fields([{ name: 'image', maxCount: 1 }]),async
 
 });
 
+
+app.get('/add-company',async(req,res)=>{
+res.render('admin/add-company');
+});
+
+
+app.post('/company-details', upload.single('logo'),async(req, res) => {
+    const { name, cname, cnum, cmail } = req.body;
+    console.log(req.body);
+    const file = req.file;
+
+    const key = `${name}`;
   
+    const params = {
+      Bucket: process.env.S3_BUCKET_NAME,
+      Key: `company_logo/${key}`,
+      Body: file.buffer,
+      ContentType: file.mimetype
+    };
+  
+    const s3UploadResponse = await s3.upload(params).promise();
+
+    const logoUrl = s3UploadResponse.Location;
+    console.log(logoUrl);
+    try{
+    const newCompany = new mcompany({
+        logo: logoUrl,
+        name,
+        ceo: { name: cname, contact: cnum, email: cmail },
+       
+      });
+  
+      await newCompany.save();
+      res.status(201).json({ message: 'Company added successfully', company: newCompany });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Internal Server Error' });
+    }
+  });
+
+
+app.get('/add-employee', async (req, res) => {
+
+    const company= await mcompany.find();
+    res.render('admin/add-employee',{company});
+}   
+);
+
+app.post('/add-employee', upload.single('photo'), async (req, res) => {
+    try {
+      const { name, contact, email, rank, designation, teamSize, experience, achievements, company } = req.body;
+      console.log(req.body);
+
+      const file = req.file;
+      console.log(req.file);
+      
+      const key = `employee_img/${name}`;
+  
+      // Upload the file to S3 within the "employee" folder
+      const s3Params = {
+        Bucket: process.env.S3_BUCKET_NAME,
+        Key: key,
+        Body: file.buffer,
+        ContentType: file.mimetype
+         // Adjust the ACL as needed
+      };
+  
+      const s3UploadResponse = await s3.upload(s3Params).promise();
+  
+      // Data.Location contains the URL of the uploaded file on S3
+      const photoUrl = s3UploadResponse.Location;
+  
+      // Create a new Employee document
+      const newEmployee = new Employee({
+        photo: photoUrl,
+        name,
+        contact,
+        email,
+        rank,
+        designation,
+        teamSize: teamSize || 0, // Set default value to 0 if not provided
+        experience: experience || 0, // Set default value to 0 if not provided
+        achievements: achievements || '', // Set default value to empty string if not provided
+        company,
+      });
+  
+      // Save the document to the database
+      await newEmployee.save();
+  
+      res.status(201).json({ message: 'Employee added successfully', employee: newEmployee });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Internal Server Error' });
+    }
+  });

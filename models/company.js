@@ -8,6 +8,7 @@ const combinedCompanySchema = new mongoose.Schema({
     contact: String,
     email: String,
   },
+  status: { type: Number, default: 0 },
   // Add other company-related fields as needed
 });
 const CombinedCompany = mongoose.model('CombinedCompany', combinedCompanySchema);

@@ -74,7 +74,7 @@
                     <div class="col-sm-12">
                         <div class="card comman-shadow">
                             <div class="card-body">
-                                <form action="/add-user" method="post">
+                                <form action="/add-employee" method="post" enctype="multipart/form-data">
                                     <div class="row">
                                         <div class="col-12">
                                             <h5 class="form-title student-info">Employee Information</h5>
@@ -91,6 +91,18 @@
                                                 <input class="form-control" type="text" placeholder="Enter Name" id="name" name="name" required>
                                             </div>
                                         </div>
+                                        <div class="col-12 col-sm-4">
+                                            <div class="form-group local-forms">
+                                                <label >Select Company<span class="login-danger">*</span></label>
+                                                <select class="form-control select" name="company">
+                                                    <option>Select Template</option>
+                                            <% company.forEach(company => { %>
+                                              <option value="<%= company._id %>"><%= company.name %></option>
+                                            <% }); %>
+                                          </select>
+                                        </div>
+                                        </div>
+
                                         <div class="col-12 col-sm-4">
                                             <div class="form-group local-forms">
                                                 <label>Contact:</label>
@@ -118,7 +130,7 @@
                                         <div class="col-12 col-sm-4">
                                             <div class="form-group local-forms">
                                                 <label>Team Size:</label>
-                                                <input class="form-control" type="number" placeholder="Enter Team Size" id="team-size" name="team-size">
+                                                <input class="form-control" type="number" placeholder="Enter Team Size" id="teamSize" name="team-size">
                                             </div>
                                         </div>
                                         <div class="col-12 col-sm-4">
