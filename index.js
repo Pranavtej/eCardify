@@ -452,43 +452,6 @@ app.get("/delete/:id",async(req,res)=>{
           
 
 
-// app.post('/add-user', async (req, res) => {
-//     try {
-//         const { username, email, number, subscriptionPlan, occasion, cardType, template } = req.body;
-//         console.log(req.body);
-
-//         // Create a new user
-//         const Plan = new ObjectId(subscriptionPlan);
-//         const card = new ObjectId(cardType);
-//         const temp = new ObjectId(template);
-
-//         const newUser = new User({
-//             username,
-//             email,
-//             number,
-//             selectedItems: [
-//                 {
-//                     occasion,
-//                     cardType: card,
-//                     template: temp,
-//                     subscriptionPlan: {
-//                         plan: Plan,
-//                     },
-//                 },
-//             ],
-//         });
-
-//         // Save the user to the database
-//         const savedUser = await newUser.save();
-
-//         // Redirect to the edit page for the newly created user
-//         res.redirect(`/template1?userId=${savedUser._id}`);
-//     } catch (error) {
-//         console.error('Error creating user:', error);
-//         res.status(500).send('Internal Server Error');
-//     }
-// });
-
 app.get('/imageupload', async (req, res) => {
     try {
       const data = await Image.find({});
@@ -499,26 +462,6 @@ app.get('/imageupload', async (req, res) => {
     }
   });
   
-//   app.post('/imageupload', upload.single('image'), async (req, res) => {
-//     try {
-//       const obj = {
-//         name: req.body.name,
-//         desc: req.body.desc,
-//         img: {
-//           data: await fs.readFileAsync(path.join(__dirname, 'uploads', req.file.filename)),
-//           contentType: 'image/png',
-//         },
-//       };
-//       await Image.create(obj);
-//       res.redirect('/');
-//     } catch (err) {
-//       console.error(err);
-//       res.status(500).send('Internal Server Error');
-//     }
-//   });
-
-
-
 
 
   app.post('/add-user', async (req, res) => {
