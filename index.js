@@ -956,7 +956,7 @@ res.render('admin/add-company');
 });
 
 
-app.post('/add-company-details', upload.single('logo'),async(req, res) => {
+app.post('/company-details', upload.single('logo'),async(req, res) => {
     const { name, cname, cnum, cmail } = req.body;
     console.log(req.body);
     const file = req.file;
@@ -989,5 +989,6 @@ app.post('/add-company-details', upload.single('logo'),async(req, res) => {
       res.status(500).json({ message: 'Internal Server Error' });
     }
   });
+
 
   
