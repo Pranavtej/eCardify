@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+    <title>Preskool - Students</title>
+
+    <!-- Favicon -->
+
+	
+    <link rel="shortcut icon" href="/public/assets/admin/img/favicon.png">
+
+    <!-- Fontfamily -->
+    <!-- <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,700;0,900;1,400;1,500;1,700&display=swap" rel="stylesheet"> -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="/public/assets/admin/plugins/bootstrap/css/bootstrap.min.css">
+
+    <!-- Feathericon CSS -->
+    <link rel="stylesheet" href="/public/assets/admin/plugins/feather/feather.css">
+
+    <!-- Pe7 CSS -->
+    <link rel="stylesheet" href="/public/assets/admin/plugins/icons/flags/flags.css">
+
+    <!-- Datepicker CSS -->
+    <link rel="stylesheet" href="/public/assets/admin/css/bootstrap-datetimepicker.min.css">
+
+    <!-- Fontawesome CSS -->
+    <link rel="stylesheet" href="/public/assets/admin/plugins/fontawesome/css/fontawesome.min.css">
+    <link rel="stylesheet" href="/public/assets/admin/plugins/fontawesome/css/all.min.css">
+
+    <!-- Select CSS -->
+    <link rel="stylesheet" href="/public/assets/admin/plugins/select2/css/select2.min.css">
+
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="/public/assets/admin/css/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dom-to-image/2.6.0/dom-to-image.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+
+</head>
+<body>
+
+<!-- Main Wrapper -->
+<div class="main-wrapper">
+
+    <!-- Header -->
+    <div class="header">
+
+        <!-- Logo -->
+        <div class="header-left">
+            <a href="index.html" class="logo">
+                <img src="/public/assets/admin/img/logo.png" alt="Logo">
+            </a>
+            <a href="index.html" class="logo logo-small">
+                <img src="/public/assets/admin/img/logo-small.png" alt="Logo" width="30" height="30">
+            </a>
+        </div>
+        <!-- /Logo -->
+
+        <div class="menu-toggle">
+            <a href="javascript:void(0);" id="toggle_btn">
+                <i class="fas fa-bars"></i>
+            </a>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="top-nav-search">
+            <form>
+                <input type="text" class="form-control" placeholder="Search here">
+                <button class="btn" type="submit"><i class="fas fa-search"></i></button>
+            </form>
+        </div>
+        <!-- /Search Bar -->
+
+        <!-- Mobile Menu Toggle -->
+        <a class="mobile_btn" id="mobile_btn">
+            <i class="fas fa-bars"></i>
+        </a>
+        <!-- /Mobile Menu Toggle -->
+
+        <!-- Header Right Menu -->
+
+        <!-- /Header Right Menu -->
+
+    </div>
+    <!-- /Header -->
+
+    <!-- Sidebar -->
+    <%- include('sidebar.ejs') %>
+    <!-- /Sidebar -->
+
+    <!-- Page Wrapper -->
+    <div class="page-wrapper">
+        <div class="content container-fluid">
+
+            <!-- Page Header -->
+            <div class="page-header">
+                <div class="row align-items-center">
+                    <div class="col-sm-12">
+                        <div class="page-sub-header">
+                            <h3 class="page-title">Card Generation</h3>
+                            <ul class="breadcrumb">
+                                <li class="breadcrumb-item">User</li>
+                                <li class="breadcrumb-item active">ProfessionalCard</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /Page Header -->
+
+          
+            <!-- Horizontal Card -->
+            <div class="card" id="previewCard">
+				<div class="card-body" >
+					<div class="v71_14" id="frontview">
+						<span class="v75_71" id="userName"></span>
+						<div class="v75_70" id="image"></div>
+					</div>
+				</div>
+				<div class="card-body" >
+					<div class="v71_8" id="backview">
+						<span class="v71_13" id="companyName"></span>
+						<div class="v71_25" id="qrcodeContainerPreview">
+							<div class="col-12 col-sm-4">
+								<div class="form-group local-forms">
+									<div id="qrcodeContainer"></div>
+									<label><span class="login-danger"></span></label>
+									<a id='downloadLink' class='download' download="qrcode.png" style='display: none;'></a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+            <!-- /Horizontal Card -->
+
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="card comman-shadow">
+                        <div class="card-body">
+                            <form action="/businesscard/<%= user._id %>" method="post" id="userDetailsForm" enctype="multipart/form-data">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <h5 class="form-title student-info">User Information <span><a href="javascript:;"><i class="feather-more-vertical"></i></a></span></h5>
+                                    </div>
+                                    <div class="col-12 col-sm-4">
+                                        <div class="form-group local-forms">
+                                            <label>Comapany <span class="login-danger">*</span></label>
+                                            <input class="form-control" type="text" placeholder="Enter Company Name" id="Name" name="Name">
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-sm-4">
+                                        <div class="form-group local-forms">
+                                            <label for="textColor">Username Text Color</label>
+                                            <div class="input-group">
+                                                <input class="form-control" type="text" id="textColorValue" readonly>
+                                                <input class="form-control" type="color" id="textColor" name="textColor">
+                                            </div>
+                                        </div>
+                                    </div>
+                
+                                    <div class="col-12 col-sm-4">
+                                        <div class="form-group local-forms">
+                                            <label for="companyImage">Image<span class="login-danger">*</span></label>
+                                            <input class="form-control" type="file" id="Image" name="Image" accept="image/*" required>
+                                        </div>
+                                    </div>
+									
+                                    <div class="col-12 col-sm-4">
+                                        <div class="form-group local-forms">
+                                            <label for="bgImage">Background Image</label>
+                                            <input class="form-control" type="file" id="bgImage" name="bgImage" accept="image/*">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 col-sm-4">
+                                        <div class="form-group local-forms">
+                                            <label for="bgColor">Background Color</label>
+                                            <input class="form-control" type="color" id="bgColor" name="bgColor">
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-sm-4">
+										<div class="form-group local-forms">
+											<label>Link <span class="login-danger">*</span></label>
+											<input class="form-control" type="text" placeholder="eg : www.google.com" id="urlInput" name="URL" required>
+										</div>
+										<button type="button" onclick="generateQRCode()" class="btn btn-primary">Generate QR Code</button>
+									</div>
+
+									<input type="hidden" name="selectedItems" value="<%= JSON.stringify(selectedItem) %>">
+
+                                    <div class="col-12">
+                                        <div class="student-submit">
+                                            <button type="submit" class="btn btn-primary">Submit Form</button>
+                                            <button type="button" class="btn btn-success" onclick="generatePDF()">Download Card</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /Page Wrapper -->
+    <!-- /Page Wrapper -->
+
+</div>
+<!-- /Main Wrapper -->
+
+<!-- jQuery -->
+<script src="/public/assets/admin/js/jquery-3.6.0.min.js"></script>
+
+<!-- Bootstrap Core JS -->
+<script src="/public/assets/admin/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<!-- Feather Icon JS -->
+<script src="/public/assets/admin/js/feather.min.js"></script>
+
+<!-- Slimscroll JS -->
+<script src="/public/assets/admin/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+
+<!-- Select2 JS -->
+<script src="/public/assets/admin/plugins/select2/js/select2.min.js"></script>
+
+<!-- Datepicker Core JS -->
+<script src="/public/assets/admin/plugins/moment/moment.min.js"></script>
+<script src="/public/assets/admin/js/bootstrap-datetimepicker.min.js"></script>
+
+<!-- Custom JS -->
+<script src="/public/assets/admin/js/script.js"></script>
+
+
+<script>
+    function updateUserDetails() {
+        var userName = document.getElementById('Name').value;
+        var backgroundImageInput = document.getElementById('bgImage');
+        var backgroundColorInput = document.getElementById('bgColor');
+        var userName = document.getElementById('Name').value;
+    var textColorInput = document.getElementById('textColor');
+    var textColorValueInput = document.getElementById('textColorValue');
+
+
+    document.getElementById('userName').innerText = userName;
+    document.getElementById('userName').style.color = textColorInput.value;
+
+
+        document.getElementById('userName').innerText = userName;
+
+        var fileInput = document.getElementById('Image');
+        var imageDiv = document.getElementById('image');
+
+        if (fileInput.files && fileInput.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                imageDiv.style.backgroundImage = 'url(' + e.target.result + ')';
+            };
+
+            reader.readAsDataURL(fileInput.files[0]);
+        }
+
+        var bgImageInput = document.getElementById('bgImage');
+    if (bgImageInput.files && bgImageInput.files[0]) {
+        var bgImageReader = new FileReader();
+
+        bgImageReader.onload = function (e) {
+            document.getElementById('frontview').style.backgroundImage = 'url(' + e.target.result + ')';
+            document.getElementById('backview').style.backgroundImage = 'url(' + e.target.result + ')';
+        };
+
+        bgImageReader.readAsDataURL(bgImageInput.files[0]);
+    }
+
+    // Get background color input value
+    var bgColorInput = document.getElementById('bgColor');
+    var bgColor = bgColorInput.value;
+
+    document.getElementById('backview').style.backgroundColor = bgColor;
+    document.getElementById('frontview').style.backgroundColor = bgColor;
+
+
+    }
+
+    var formInputs = document.querySelectorAll('#userDetailsForm input');
+    formInputs.forEach(function (input) {
+        input.addEventListener('input', function () {
+            updateUserDetails();
+        });
+    });
+
+    function generateQRCode() {
+    var url = document.getElementById('urlInput').value;
+    var qrcodeContainer = document.getElementById('qrcodeContainer');
+    var downloadLink = document.getElementById('downloadLink');
+    var qrcodeInput = document.getElementById('qrcodeInput');
+    var cardBackgroundColor = document.getElementById('frontview').style.backgroundColor;
+    var cardBackgroundImage = document.getElementById('frontview').style.backgroundImage;
+
+    if (url.trim() !== '') {
+        qrcodeContainer.innerHTML = '';
+
+        // Create a new QR code with reversed colors and a transparent background
+        var qrcode = new QRCode(qrcodeContainer, {
+            text: url,
+            width: 100,
+            height: 100,
+            colorDark: '#ffffff',          // Set QR code color to white
+            colorLight: 'rgba(255,255,255,0)',  // Set QR code background to transparent
+            correctLevel: QRCode.CorrectLevel.H,  // Set error correction level
+        });
+
+        // Apply fixed white border to the QR code
+        var canvas = qrcodeContainer.firstChild;
+        canvas.style.border = '5px solid white';
+
+        // Apply background image to the QR code
+        canvas.style.backgroundImage = cardBackgroundImage;
+        canvas.style.backgroundSize = 'cover'; // Adjust background size if needed
+
+        // Set the download link properties
+        downloadLink.href = canvas.toDataURL("image/png");
+        downloadLink.style.display = 'block';
+
+        // Display the URL in the QR code input field
+        qrcodeInput.value = url;
+    }
+}
+
+
+
+function generatePDF() {
+    var element = document.getElementById('previewCard');
+
+    // Use dom-to-image to convert the element to an image
+    domtoimage.toBlob(element)
+        .then(function (blob) {
+            // Use FileSaver.js to save the blob as a file
+            saveAs(blob, 'myfile.png');
+        })
+        .catch(function (error) {
+            console.error('Error generating PDF:', error);
+        });
+}
+
+
+
+
+
+
+
+
+	updateUserDetails();
+	generateQRCode();
+
+
+
+</script>
+
+<!-- html2pdf library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/latest/html2pdf.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.0/html2pdf.bundle.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+
+</body>
+</html>
