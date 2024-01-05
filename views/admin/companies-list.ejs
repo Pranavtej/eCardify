@@ -131,10 +131,10 @@
 						<div class="row">
 							<div class="col-sm-12">
 								<div class="page-sub-header">
-									<h3 class="page-title">User</h3>
+									<h3 class="page-title">Company List</h3>
 									<ul class="breadcrumb">
-										<li class="breadcrumb-item"><a href="user.ejs">User</a></li>
-										<li class="breadcrumb-item active">All Users</li>
+										<li class="breadcrumb-item"><a href="user.ejs">Company</a></li>
+										<li class="breadcrumb-item active">Page Status</li>
 									</ul>
 								</div>
 							</div>
@@ -146,9 +146,10 @@
 						<div class="row">
 							<div class="col-lg-3 col-md-6">
 								<div class="form-group">
-									<input type="text" class="form-control" placeholder="Search by ID ,Name,Phone...">
+									<input type="text" class="form-control" id="searchEmployeeInput" placeholder="Search by ID, Name, Phone...">
 								</div>
 							</div>
+							
 							<!-- <div class="col-lg-3 col-md-6">  
 								<div class="form-group">
 									<input type="text" class="form-control" placeholder="Search by Name ...">
@@ -193,10 +194,10 @@
 									<div class="table-responsive">
 										<table class="table">
 											<thead>
-												<tr>
+												<tr >
 													<th>S.No</th>
 													<th>Company Name</th>
-													<th>Logo</th>
+													<th>Company logo</th>
 													<th>CEO Email</th>
 													<th>Status</th>
 												</tr>
@@ -205,21 +206,25 @@
 
 											<tbody>
 												<% companies.forEach((company, index)=> { %>
-													<tr>
+													<tr class="company-row">
 														<td>
 															<%= index + 1 %>
 														</td>
 														<td>
 															<%= company.name %>
 														</td>
-														<td><img src="<%= companies.logo %>" alt="Company Logo"
-																width="50"></td>
+														<td>
+															<img src="<%= company.logo %>" alt="Company Logo" height="50" width="50">
 														<td>
 															<%= company.ceo.email %>
 														</td>
+														<td><%= company.status === 1 ? 'Activated' : 'Deactivated' %></td>
 														<td>
-															<%= company.status %>
-														</td>
+															<button onclick="updateCompanyStatus('<%= company._id %>', this.getAttribute('data-action'))" data-action='<%= company.status === 1 ? "deactivate" : "activate" %>' class="btn btn-primary">
+																<%= company.status === 1 ? 'Deactivate' : 'Activate' %>
+															  </button>
+															  
+														  </td>
 													</tr>
 													<% }); %>
 											</tbody>
@@ -233,29 +238,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="modal fade" id="addCardModal" tabindex="-1" role="dialog"
-					aria-labelledby="addCardModalLabel" aria-hidden="true">
-					<div class="modal-dialog" role="document">
-						<div class="modal-content">
-							<div class="modal-header">
-								<h5 class="modal-title" id="addCardModalLabel">Add Card for Existing User</h5>
-								<button type="button" class="btn-close" data-bs-dismiss="modal"
-									aria-label="Close"></button>
-								<!-- <span aria-hidden="true">&times;</span> -->
-								</button>
-							</div>
-							<!-- <div class="modal-body">
-								<form action="/add-card" method="post">
-									<div class="form-group">
-										<label for="phoneNumber">Enter User's Mobile Number:</label>
-										<input type="text" class="form-control" id="phoneNumber" name="phoneNumber" required>
-									</div>
-									<button type="submit" class="btn btn-primary">Submit</button>
-								</form>
-							</div> -->
-						</div>
-					</div>
-				</div>
+				
 
 				<!-- Delete Modal -->
 
@@ -269,18 +252,60 @@
 			<!-- /Page Wrapper -->
 
 	</div>
+
+	<script>
+		function updateCompanyStatus(companyId, action) {
+		  // Send a request to the server to update the company status
+		  fetch(`/update-company-status/${companyId}`, {
+			method: 'PUT',
+			headers: {
+			  'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({ action }),
+		  })
+			.then(response => response.json())
+			.then(data => {
+			  // Handle the response, maybe update the UI if needed
+			  console.log(data);
+	  
+			  // Assuming you want to refresh the page after updating the status
+			  window.location.reload();
+			})
+			.catch(error => console.error(error));
+		}
+	  </script>
+	  
+
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	<!-- Bootstrap JavaScript -->
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 	<script>
 		$(document).ready(function () {
-			// Show modal when "Add Card" button is clicked
+			function filterEmployees(query) {
+				query = query.toLowerCase();
+				$('.company-row').hide();
+				$('.company-row').each(function () {
+					var rowData = $(this).text().toLowerCase();
+					if (rowData.indexOf(query) !== -1) {
+						$(this).show();
+					}
+				});
+			}
+	
+			$('#searchEmployeeInput').on('input', function () {
+				var searchQuery = $(this).val();
+				filterEmployees(searchQuery);
+			});
+	
+			// Additional part to show modal when "Add Card" button is clicked
 			$('#addCardBtn').click(function () {
 				$('#addCardModal').modal('show');
 			});
 		});
 	</script>
+	
+	  
 
 
 	<!-- /Main Wrapper -->

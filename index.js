@@ -12,15 +12,13 @@ const cardt = require("./models/card");
 const temp = require("./models/templates");
 const cpages = require("./models/custompages");
 const mcompany = require("./models/company");
+const emp = require("./models/employee");
 const bcrypt = require("bcrypt");
 const path = require('path');
 const adminModel = require('./models/admin');
 const multer = require('multer');
 const Image = require('./models/image');
-// const Employee = require('./models/employeeschema');
 const LogModel = require('./models/logModel');
-const emp = require('./models/employee');
-
 const { ObjectId } = require('mongodb');
 const AWS = require('aws-sdk');
 const dotenv = require('dotenv');
@@ -872,12 +870,26 @@ app.post('/custompage/:id',upload.fields([{ name: 'image', maxCount: 1 }]),async
       };
       buttons.push(button);
     }
-    
+    const uniqueid = new ObjectId();
+    const key = `${uniqueid}_${req.params.id}`;
+  
+    const params = {
+      Bucket: process.env.S3_BUCKET_NAME,
+      Key: `custompages_img/${key}`,
+      Body: file.buffer,
+      ContentType: file.mimetype
+    };
+  
+    const s3UploadResponse = await s3.upload(params).promise();
+
+    const logoUrl = s3UploadResponse.Location;
+
 
     // Save the image to MongoDB
     const customizablePage = new cpages({
+        _id: uniqueid,
         user: req.params.id,
-        image: imageFile.buffer.toString('base64'),
+        image: logoUrl,
         imageSize: formData.imageSize,
         basicInformationFields:basicInformationFields,
         contactInfoFields:contactInfoFields,
@@ -899,18 +911,17 @@ app.post('/custompage/:id',upload.fields([{ name: 'image', maxCount: 1 }]),async
 
 
 
-app.get('/company-details',async(req,res)=>{
-    res.render('admin/add-company');
-    });
+app.get('/company-details', async (req, res) => {
+  res.render('admin/add-company');
+});
+
 
 app.post('/company-details', upload.single('logo'),async(req, res) => {
     const { name, cname, cnum, cmail } = req.body;
     console.log(req.body);
     const file = req.file;
-    
-    const uniqueFilename = new ObjectId();
-    const key = `${uniqueFilename}`;
 
+    const key = `${name}`;
   
     const params = {
       Bucket: process.env.S3_BUCKET_NAME,
@@ -992,23 +1003,90 @@ app.post('/add-employee', upload.single('photo'), async (req, res) => {
     }
   });
 
-app.get('/companies-list', async (req, res) => {
-    try {
+
+  app.get('/employee-list',async(req,res)=>{
+   const employees = await emp.find();
+   const companies = await mcompany.find();
+    res.render('admin/employees-list',{employees,companies});
+    }
+  );
+
+
+  app.get('/company-list',async(req,res)=>{
+    const companies = await mcompany.find();
+    res.render('admin/companies-list',{companies});
+    }
+  );
+
+
+// Post request to update employee details
+app.post('/edit-employee/:employeeId', upload.single('photo'), async (req, res) => {
+  const employeeId = req.params.employeeId;
+
+  try {
+      // Retrieve the employee by ID
+      const employee = await emp.findById(employeeId);
+
+      if (!employee) {
+          return res.status(404).json({ error: 'Employee not found' });
+      }
+
+      // Update employee fields
+      employee.name = req.body.name;
+      employee.company = req.body.company;
+      employee.contact = req.body.contact;
+      employee.email = req.body.email;
+      employee.address = req.body.address;
+      employee.rank = req.body.rank;
+      employee.designation = req.body.designation;
+      employee.employeeid = req.body.empid;
+      employee.branchid = req.body.bid;
+      employee.area = req.body.area;
+      employee.teamSize = req.body.teamSize || 0;
+      employee.experience = req.body.experience || 0;
+      employee.achievements = req.body.achievements || '';
+
+      // Update employee photo if a new one is provided
+      if (req.file) {
+          const key = `${employee.company}_${employeeId}`;
+          const s3Params = {
+              Bucket: process.env.S3_BUCKET_NAME,
+              Key: `employee_img/${key}`,
+              Body: req.file.buffer,
+              ContentType: req.file.mimetype
+          };
+          const s3UploadResponse = await s3.upload(s3Params).promise();
+          employee.photo = s3UploadResponse.Location;
+      }
+
+      // Save the updated employee to the database
+      const updatedEmployee = await employee.save();
+
+      // Redirect to the employee listing page or any other page after successful update
+      const employees = await emp.find();
+      res.render('admin/employee', { employees });
+  } catch (error) {
+      console.error('Error updating employee:', error);
+      res.status(500).send('Internal Server Error');
+  }
+});
+
+
+// Get request to fetch employee details for editing
+app.get('/edit-employee/:employeeId', async (req, res) => {
+  try {
+      const employeeId = req.params.employeeId;
+      const employee = await emp.findById(employeeId);
       const companies = await mcompany.find();
-      res.render('admin/companies-list', { companies });
-    } catch (error) {
-      console.error(error);
-      res.status(500).send('Internal Server Error');
-    }
-  });
 
+      if (!employee) {
+          return res.status(404).json({ error: 'Employee not found' });
+      }
 
-app.get('/employees-list', async (req, res) => {
-    try {
-      const employees = await temp.find();
-      res.render('admin/employees-list', { employees });
-    } catch (error) {
-      console.error(error);
+      res.render('admin/edit-employee', { employee, companies }); // Include 'companies' here
+  } catch (error) {
+      console.error('Error fetching employee for editing:', error);
       res.status(500).send('Internal Server Error');
-    }
-  });
+  }
+});
+

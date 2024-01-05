@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+    <title>Employee Information</title>
+    <link rel="shortcut icon" href="/public/assets/admin/img/favicon.png">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,700;0,900;1,400;1,500;1,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/public/assets/admin/plugins/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/public/assets/admin/plugins/feather/feather.css">
+    <link rel="stylesheet" href="/public/assets/admin/plugins/icons/flags/flags.css">
+    <link rel="stylesheet" href="/public/assets/admin/css/bootstrap-datetimepicker.min.css">
+    <link rel="stylesheet" href="/public/assets/admin/plugins/fontawesome/css/fontawesome.min.css">
+    <link rel="stylesheet" href="/public/assets/admin/plugins/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="/public/assets/admin/plugins/select2/css/select2.min.css">
+    <link rel="stylesheet" href="/public/assets/admin/css/style.css">
+</head>
+<style>
+    .note-msg {
+      font-size: 14px;
+      color: #777; /* Adjust the color as needed */
+      margin-bottom: 10px; /* Add margin to separate the note message from the input field */
+    }
+</style>
+  
+<body>
+    <div class="main-wrapper">
+        <div class="header">
+            <div class="header-left">
+                <a href="index.html" class="logo">
+                    <img src="/public/assets/admin/img/logo.png" alt="Logo">
+                </a>
+                <a href="index.html" class="logo logo-small">
+                    <img src="/public/assets/admin/img/logo-small.png" alt="Logo" width="30" height="30">
+                </a>
+            </div>
+            <div class="menu-toggle">
+                <a href="javascript:void(0);" id="toggle_btn">
+                    <i class="fas fa-bars"></i>
+                </a>
+            </div>
+            <a class="mobile_btn" id="mobile_btn">
+                <i class="fas fa-bars"></i>
+            </a>
+            <ul class="nav user-menu">
+                <li class="nav-item zoom-screen me-2">
+                    <a href="#" class="nav-link header-nav-list">
+                        <img src="/public/assets/admin/img/icons/header-icon-04.svg" alt="">
+                    </a>
+                </li>
+                <li class="nav-item dropdown has-arrow new-user-menus">
+                    <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">
+                        <span class="user-img">
+                            <img class="rounded-circle" src="/public/assets/admin/img/profiles/avatar-01.jpg" width="31" alt="Ryan Taylor">
+                            <div class="user-text">
+                                <h6>Ryan Taylor</h6>
+                                <p class="text-muted mb-0">Administrator</p>
+                            </div>
+                        </span>
+                    </a>
+                    <div class="dropdown-menu">
+                        <div class="user-header">
+                            <div class="avatar avatar-sm">
+                                <img src="/public/assets/admin/img/profiles/avatar-01.jpg" alt="User Image" class="avatar-img rounded-circle">
+                            </div>
+                            <div class="user-text">
+                                <h6>Ryan Taylor</h6>
+                                <p class="text-muted mb-0">Administrator</p>
+                            </div>
+                        </div>
+                        <a class="dropdown-item" href="profile.ejs">My Profile</a>
+                        <a class="dropdown-item" href="inbox.ejs">Inbox</a>
+                        <a class="dropdown-item" href="login.ejs">Logout</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <%- include('sidebar.ejs') -%>
+        <div class="page-wrapper">
+            <div class="content container-fluid">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="card comman-shadow">
+                            <div class="card-body">
+                                <form action="/edit-employee/<%= employee._id %>" method="post" enctype="multipart/form-data">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <h5 class="form-title student-info">Employee Information</h5>
+                                        </div>
+                                        <div class="col-12 col-sm-4">
+                                            <div class="form-group local-forms">
+                                                <label>Photo:</label>
+                                                <input class="form-control" type="file" id="photo" name="photo" accept="image/*" required>
+                                                <!-- <img src="<%= employee.photo %>" alt="Employee Photo" width="100"> -->
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-sm-4">
+                                            <div class="form-group local-forms">
+                                                <label>Name:</label>
+                                                <input class="form-control" type="text" placeholder="Enter Name" id="name" name="name" value="<%- employee.name%>" required>
+                                                
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-sm-4">
+                                            <div class="form-group local-forms">
+                                                <label>Select Company:</label>
+                                                <select class="form-control select" name="company">
+                                                    <% companies.forEach(company => { %>
+                                                        <option value="<%= company._id %>" <%= (company._id.toString() === employee.company.toString()) ? 'selected' : '' %>><%= company.name %></option>
+                                                    <% }); %>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-12 col-sm-4">
+                                            <div class="form-group local-forms">
+                                                <label>Contact:</label>
+                                                <input class="form-control" type="tel" placeholder="Enter Contact" id="contact" name="contact" value="<%= employee.contact %>" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-sm-4">
+                                            <div class="form-group local-forms">
+                                                <label>Email:</label>
+                                                <input class="form-control" type="email" placeholder="Enter Email" id="email" name="email" value="<%= employee.email %>" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-sm-4">
+                                            <div class="form-group local-forms">
+                                                <label>Address:</label>
+                                                <input class="form-control" type="text" placeholder="Enter Address" id="email" name="address"  value="<%= employee.address %>"required>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-sm-4">
+                                            <div class="form-group local-forms">
+                                                <label>Rank:</label>
+                                                <input class="form-control" type="number" placeholder="Enter Rank" id="rank" name="rank" value="<%= employee.rank %>" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-sm-4">
+                                            <div class="form-group local-forms">
+                                                <label>Designation:</label>
+                                                <input class="form-control" type="text"  step="0.01"  placeholder="Enter Designation" id="designation" name="designation" value="<%= employee.designation %>" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-sm-4">
+                                            <div class="form-group local-forms">
+                                                <label>Employee ID:</label>
+                                                <input class="form-control" type="text" placeholder="Enter Employee ID" id="empid" name="empid" value="<%= employee.empid %>" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-sm-4">
+                                            <div class="form-group local-forms">
+                                                <label>Branch ID:</label>
+                                                <input class="form-control" type="text" placeholder="Enter Branch ID" id="bid" name="bid" value="<%= employee.bid %>" required>
+                                            </div>
+                                        </div>
+                                        <p class="note-msg">NOTE : If the employee is an agent, please enter the agent's area; otherwise, mention NA.</p>
+                                        <div class="col-12 col-sm-4">
+                                            <div class="form-group local-forms">
+                                                <label>Area:</label>
+                                                <input class="form-control" type="text" placeholder="Enter Agent Area" id="area" name="area" value="<%= employee.area %>" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-sm-4">
+                                            <div class="form-group local-forms">
+                                                <label>Team Size:</label>
+                                                <input class="form-control" type="number" placeholder="Enter Team Size" id="teamSize" name="teamSize" value="<%= employee.teamSize %>">
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-sm-4">
+                                            <div class="form-group local-forms">
+                                                <label>Experience (years):</label>
+                                                <input class="form-control" type="number" placeholder="Enter Experience" id="experience" name="experience" value="<%= employee.experience %>">
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-sm-4">
+                                            <div class="form-group local-forms">
+                                                <label>Achievements:</label>
+                                                <textarea class="form-control" id="achievements" name="achievements" rows="2" placeholder="Enter Achievements" value="<%= employee.achievements %>"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="student-submit">
+                                                <button type="submit" class="btn btn-primary">Update Employee</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="/public/assets/admin/js/jquery-3.6.0.min.js"></script>
+    <script src="/public/assets/admin/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/public/assets/admin/js/feather.min.js"></script>
+    <script src="/public/assets/admin/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="/public/assets/admin/plugins/select2/js/select2.min.js"></script>
+    <script src="/public/assets/admin/plugins/moment/moment.min.js"></script>
+    <script src="/public/assets/admin/js/bootstrap-datetimepicker.min.js"></script>
+    <script src="/public/assets/admin/js/script.js"></script>
+</body>
+</html>
