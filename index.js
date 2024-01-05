@@ -13,7 +13,6 @@ const temp = require("./models/templates");
 const cpages = require("./models/custompages");
 const mcompany = require("./models/company");
 const emp = require("./models/employee");
-const LogModel = require("./models/logModel");
 const bcrypt = require("bcrypt");
 const path = require('path');
 const adminModel = require('./models/admin');
