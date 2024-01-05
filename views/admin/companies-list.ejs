@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+	<title>Preskool - Students</title>
+
+	<!-- Favicon -->
+	<link rel="shortcut icon" href="/public/assets/admin/img/favicon.png">
+
+	<!-- Fontfamily -->
+	<link
+		href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,700;0,900;1,400;1,500;1,700&display=swap"
+		rel="stylesheet">
+
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="/public/assets/admin/plugins/bootstrap/css/bootstrap.min.css">
+
+	<!-- Feathericon CSS -->
+	<link rel="stylesheet" href="/public/assets/admin/plugins/feather/feather.css">
+
+	<!-- Pe7 CSS -->
+	<link rel="stylesheet" href="/public/assets/admin/plugins/icons/flags/flags.css">
+
+	<!-- Fontawesome CSS -->
+	<link rel="stylesheet" href="/public/assets/admin/plugins/fontawesome/css/fontawesome.min.css">
+	<link rel="stylesheet" href="/public/assets/admin/plugins/fontawesome/css/all.min.css">
+
+	<!-- Datatables CSS -->
+	<link rel="stylesheet" href="/public/assets/admin/plugins/datatables/datatables.min.css">
+
+	<!-- Main CSS -->
+	<link rel="stylesheet" href="/public/assets/admin/css/style.css">
+</head>
+
+<body>
+
+	<!-- Main Wrapper -->
+	<div class="main-wrapper">
+
+		<!-- Header -->
+		<div class="header">
+
+			<!-- Logo -->
+			<div class="header-left">
+				<a href="index.ejs" class="logo">
+					<img src="/public/assets/admin/img/logo.png" alt="Logo">
+				</a>
+				<a href="index.ejs" class="logo logo-small">
+					<img src="/public/assets/admin/img/logo-small.png" alt="Logo" width="30" height="30">
+				</a>
+			</div>
+			<!-- /Logo -->
+
+			<div class="menu-toggle">
+				<a href="javascript:void(0);" id="toggle_btn">
+					<i class="fas fa-bars"></i>
+				</a>
+			</div>
+
+			<!-- Search Bar -->
+			<!-- <div class="top-nav-search">
+					<form>
+						<input type="text" class="form-control" placeholder="Search here">
+						<button class="btn" type="submit"><i class="fas fa-search"></i></button>
+					</form>
+				</div> -->
+			<!-- /Search Bar -->
+
+			<!-- Mobile Menu Toggle -->
+			<ul class="nav user-menu">
+				<a class="mobile_btn" id="mobile_btn">
+					<i class="fas fa-bars"></i>
+				</a>
+				<li class="nav-item zoom-screen me-2">
+					<a href="#" class="nav-link header-nav-list">
+						<img src="/public/assets/admin/img/icons/header-icon-04.svg" alt="" />
+					</a>
+				</li>
+
+				<!-- User Menu -->
+
+				<li class="nav-item dropdown has-arrow new-user-menus">
+					<a href="#" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">
+						<span class="user-img">
+							<img class="rounded-circle" src="/public/assets/admin/img/profiles/avatar-01.jpg" width="31"
+								alt="Ryan Taylor">
+							<div class="user-text">
+								<h6>Ryan Taylor</h6>
+								<p class="text-muted mb-0">Administrator</p>
+							</div>
+						</span>
+					</a>
+					<div class="dropdown-menu">
+						<div class="user-header">
+							<div class="avatar avatar-sm">
+								<img src="/public/assets/admin/img/profiles/avatar-01.jpg" alt="User Image"
+									class="avatar-img rounded-circle">
+							</div>
+							<div class="user-text">
+								<h6>Ryan Taylor</h6>
+								<p class="text-muted mb-0">Administrator</p>
+							</div>
+						</div>
+						<a class="dropdown-item" href="profile.ejs">My Profile</a>
+						<a class="dropdown-item" href="inbox.ejs">Inbox</a>
+						<a class="dropdown-item" href="login.ejs">Logout</a>
+					</div>
+				</li>
+				<!-- /User Menu -->
+
+			</ul>
+			<!-- /Header Right Menu -->
+
+
+
+		</div>
+		<!-- /Header -->
+
+		<!-- Sidebar -->
+		<%- include('sidebar.ejs') %>
+			<!-- /Sidebar -->
+
+			<!-- Page Wrapper -->
+			<div class="page-wrapper">
+				<div class="content container-fluid">
+
+					<!-- Page Header -->
+					<div class="page-header">
+						<div class="row">
+							<div class="col-sm-12">
+								<div class="page-sub-header">
+									<h3 class="page-title">Company List</h3>
+									<ul class="breadcrumb">
+										<li class="breadcrumb-item"><a href="user.ejs">Company</a></li>
+										<li class="breadcrumb-item active">Page Status</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- /Page Header -->
+
+					<div class="student-group-form">
+						<div class="row">
+							<div class="col-lg-3 col-md-6">
+								<div class="form-group">
+									<input type="text" class="form-control" placeholder="Search by ID ,Name,Phone...">
+								</div>
+							</div>
+							<!-- <div class="col-lg-3 col-md-6">  
+								<div class="form-group">
+									<input type="text" class="form-control" placeholder="Search by Name ...">
+								</div>
+							</div>
+							<div class="col-lg-4 col-md-6">  
+								<div class="form-group">
+									<input type="text" class="form-control" placeholder="Search by Phone ...">
+								</div>
+							</div> -->
+							<div class="col-lg-2">
+								<div class="search-student-btn">
+									<button type="btn" class="btn btn-primary">Search</button>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-sm-12">
+
+							<div class="card card-table comman-shadow">
+								<div class="card-body">
+
+									<!-- Page Header -->
+									<div class="page-header">
+										<div class="row align-items-center">
+											<div class="col">
+												<h3 class="page-title">Students</h3>
+											</div>
+											<div class="col-auto text-end float-end ms-auto download-grp">
+												<!-- <a href="/user" class="btn btn-outline-gray me-2 active"><i class="feather-list"></i></a>
+												<a href="/user-grid" class="btn btn-outline-gray me-2"><i class="feather-grid"></i></a>
+												<a href="#" class="btn btn-outline-primary me-2"><i class="fas fa-download"></i> Download</a> -->
+												<a href="/add-company" id="addCardBtn" class="btn btn-primary"><i
+														class="fas fa-plus"></i> Add Company</a>
+											</div>
+										</div>
+									</div>
+									<!-- /Page Header -->
+
+									<div class="table-responsive">
+										<table class="table">
+											<thead>
+												<tr>
+													<th>S.No</th>
+													<th>Company Name</th>
+													<th>CEO Email</th>
+													<th>Status</th>
+												</tr>
+											</thead>
+											<!-- ... (other HTML code) ... -->
+
+											<tbody>
+												<% companies.forEach((company, index)=> { %>
+													<tr>
+														<td>
+															<%= index + 1 %>
+														</td>
+														<td>
+															<%= company.name %>
+														</td>
+														<td>
+															<%= company.ceo.email %>
+														</td>
+														<td><%= company.status === 1 ? 'Activated' : 'Deactivated' %></td>
+														<td>
+															<button onclick="updateCompanyStatus('<%= company._id %>', this.getAttribute('data-action'))" data-action='<%= company.status === 1 ? "deactivate" : "activate" %>' class="btn btn-primary">
+																<%= company.status === 1 ? 'Deactivate' : 'Activate' %>
+															  </button>
+															  
+														  </td>
+													</tr>
+													<% }); %>
+											</tbody>
+
+											<!-- ... (other HTML code) ... -->
+
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+
+				<!-- Delete Modal -->
+
+
+				<!-- Footer -->
+				<!-- <footer>
+					<p>Copyright © 2022 Dreamguys.</p>					
+				</footer> -->
+				<!-- /Footer -->
+			</div>
+			<!-- /Page Wrapper -->
+
+	</div>
+
+	<script>
+		function updateCompanyStatus(companyId, action) {
+		  // Send a request to the server to update the company status
+		  fetch(`/update-company-status/${companyId}`, {
+			method: 'PUT',
+			headers: {
+			  'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({ action }),
+		  })
+			.then(response => response.json())
+			.then(data => {
+			  // Handle the response, maybe update the UI if needed
+			  console.log(data);
+	  
+			  // Assuming you want to refresh the page after updating the status
+			  window.location.reload();
+			})
+			.catch(error => console.error(error));
+		}
+	  </script>
+	  
+
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<!-- Bootstrap JavaScript -->
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+	
+
+
+	<!-- /Main Wrapper -->
+
+	<!-- jQuery -->
+	<script src="/public/assets/admin/js/jquery-3.6.0.min.js"></script>
+
+
+
+	<!-- Bootstrap Core JS -->
+	<script src="/public/assets/admin/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+	<!-- Feather Icon JS -->
+	<script src="/public/assets/admin/js/feather.min.js"></script>
+
+	<!-- Slimscroll JS -->
+	<script src="/public/assets/admin/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+
+	<!-- Datatables JS -->
+	<script src="/public/assets/admin/plugins/datatables/datatables.min.js"></script>
+
+	<!-- Custom JS -->
+	<script src="/public/assets/admin/js/script.js"></script>
+</body>
+
+</html>

@@ -15,6 +15,14 @@
     <link rel="stylesheet" href="/public/assets/admin/plugins/select2/css/select2.min.css">
     <link rel="stylesheet" href="/public/assets/admin/css/style.css">
 </head>
+<style>
+    .note-msg {
+      font-size: 14px;
+      color: #777; /* Adjust the color as needed */
+      margin-bottom: 10px; /* Add margin to separate the note message from the input field */
+    }
+</style>
+  
 <body>
     <div class="main-wrapper">
         <div class="header">
@@ -117,6 +125,12 @@
                                         </div>
                                         <div class="col-12 col-sm-4">
                                             <div class="form-group local-forms">
+                                                <label>Address:</label>
+                                                <input class="form-control" type="text" placeholder="Enter Address" id="email" name="address" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-sm-4">
+                                            <div class="form-group local-forms">
                                                 <label>Rank:</label>
                                                 <input class="form-control" type="number" placeholder="Enter Rank" id="rank" name="rank" required>
                                             </div>
@@ -124,13 +138,32 @@
                                         <div class="col-12 col-sm-4">
                                             <div class="form-group local-forms">
                                                 <label>Designation:</label>
-                                                <input class="form-control" type="text" placeholder="Enter Designation" id="designation" name="designation" required>
+                                                <input class="form-control" type="text"  step="0.01"  placeholder="Enter Designation" id="designation" name="designation" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-sm-4">
+                                            <div class="form-group local-forms">
+                                                <label>Employee ID:</label>
+                                                <input class="form-control" type="text" placeholder="Enter Employee ID" id="empid" name="empid" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-sm-4">
+                                            <div class="form-group local-forms">
+                                                <label>Branch ID:</label>
+                                                <input class="form-control" type="text" placeholder="Enter Branch ID" id="bid" name="bid" required>
+                                            </div>
+                                        </div>
+                                        <p class="note-msg">NOTE : If the employee is an agent, please enter the agent's area; otherwise, mention NA.</p>
+                                        <div class="col-12 col-sm-4">
+                                            <div class="form-group local-forms">
+                                                <label>Area:</label>
+                                                <input class="form-control" type="text" placeholder="Enter Agent Area" id="area" name="area" required>
                                             </div>
                                         </div>
                                         <div class="col-12 col-sm-4">
                                             <div class="form-group local-forms">
                                                 <label>Team Size:</label>
-                                                <input class="form-control" type="number" placeholder="Enter Team Size" id="teamSize" name="team-size">
+                                                <input class="form-control" type="number" placeholder="Enter Team Size" id="teamSize" name="teamSize">
                                             </div>
                                         </div>
                                         <div class="col-12 col-sm-4">
