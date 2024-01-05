@@ -17,7 +17,9 @@ const path = require('path');
 const adminModel = require('./models/admin');
 const multer = require('multer');
 const Image = require('./models/image');
-const Employee = require('./models/employeeschema');
+// const Employee = require('./models/employeeschema');
+const LogModel = require('./models/logModel');
+const emp = require('./models/employee');
 
 const { ObjectId } = require('mongodb');
 const AWS = require('aws-sdk');
@@ -75,6 +77,74 @@ app.get('/register', async (req, res) => {
     res.render('register/register');
 }
 );
+
+
+
+
+
+
+
+// Log Model
+const logModel = new LogModel();
+
+// Middleware for logging route access
+app.use(async (req, res, next) => {
+    const routeAccessDetails = {
+        method: req.method,
+        path: req.path,
+        query: req.query,
+        params: req.params,
+    };
+
+    await logModel.logEvent('route_access', routeAccessDetails);
+    next();
+});
+
+
+
+// Displaying all the logs
+app.get('/_logs', async (req, res) => {
+  try {
+    const logs = await logModel.getAllLogs();
+    console.log(logs);
+    res.json(logs);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// global page for the user route 
+
+// app.get('/:id', async function (req, res) {
+//   try {
+//     // Use proper error handling for the Mongoose query
+//     const pageData = await cpages.find({ user: req.params.id });
+    
+//     // Render the page with the retrieved data
+//     res.render('admin/globalpages', { pageData: pageData[0] });
+//     console.log(pageData);
+//   } catch (error) {
+//     console.error('Error executing Mongoose query:', error);
+//     // Handle the error appropriately (send an error response, etc.)
+//     res.status(500).send('Internal Server Error');
+//   }
+// });
+
 
 
 
@@ -461,8 +531,6 @@ app.get("/delete/:id",async(req,res)=>{
 
 });
           
-
-
 app.get('/imageupload', async (req, res) => {
     try {
       const data = await Image.find({});
@@ -829,17 +897,20 @@ app.post('/custompage/:id',upload.fields([{ name: 'image', maxCount: 1 }]),async
 });
 
 
-app.get('/add-company',async(req,res)=>{
-res.render('admin/add-company');
-});
 
+
+app.get('/company-details',async(req,res)=>{
+    res.render('admin/add-company');
+    });
 
 app.post('/company-details', upload.single('logo'),async(req, res) => {
     const { name, cname, cnum, cmail } = req.body;
     console.log(req.body);
     const file = req.file;
+    
+    const uniqueFilename = new ObjectId();
+    const key = `${uniqueFilename}`;
 
-    const key = `${name}`;
   
     const params = {
       Bucket: process.env.S3_BUCKET_NAME,
@@ -854,6 +925,7 @@ app.post('/company-details', upload.single('logo'),async(req, res) => {
     console.log(logoUrl);
     try{
     const newCompany = new mcompany({
+        _id : uniqueFilename,
         logo: logoUrl,
         name,
         ceo: { name: cname, contact: cnum, email: cmail },
@@ -878,36 +950,32 @@ app.get('/add-employee', async (req, res) => {
 
 app.post('/add-employee', upload.single('photo'), async (req, res) => {
     try {
-      const { name, contact, email, rank, designation, teamSize, experience, achievements, company } = req.body;
+      const { name, company, contact, email,address,rank, designation, empid, bid, area, teamSize, experience, achievements } = req.body;
       console.log(req.body);
-
       const file = req.file;
-      console.log(req.file);
-      
-      const key = `employee_img/${name}`;
-  
-      // Upload the file to S3 within the "employee" folder
+      const employeeId = new ObjectId();
+      const key = `${company}_${employeeId}`;
       const s3Params = {
         Bucket: process.env.S3_BUCKET_NAME,
-        Key: key,
+        Key: `employee_img/${key}`,
         Body: file.buffer,
         ContentType: file.mimetype
-         // Adjust the ACL as needed
+        
       };
-  
       const s3UploadResponse = await s3.upload(s3Params).promise();
-  
-      // Data.Location contains the URL of the uploaded file on S3
       const photoUrl = s3UploadResponse.Location;
-  
-      // Create a new Employee document
-      const newEmployee = new Employee({
+      const newEmployee = new emp({
+        _id : employeeId,
         photo: photoUrl,
         name,
         contact,
         email,
+        address,
         rank,
         designation,
+        employeeid : empid,
+        branchid : bid,
+        area,
         teamSize: teamSize || 0, // Set default value to 0 if not provided
         experience: experience || 0, // Set default value to 0 if not provided
         achievements: achievements || '', // Set default value to empty string if not provided
@@ -921,5 +989,26 @@ app.post('/add-employee', upload.single('photo'), async (req, res) => {
     } catch (error) {
       console.error(error);
       res.status(500).json({ message: 'Internal Server Error' });
+    }
+  });
+
+app.get('/companies-list', async (req, res) => {
+    try {
+      const companies = await mcompany.find();
+      res.render('admin/companies-list', { companies });
+    } catch (error) {
+      console.error(error);
+      res.status(500).send('Internal Server Error');
+    }
+  });
+
+
+app.get('/employees-list', async (req, res) => {
+    try {
+      const employees = await temp.find();
+      res.render('admin/employees-list', { employees });
+    } catch (error) {
+      console.error(error);
+      res.status(500).send('Internal Server Error');
     }
   });
