@@ -12,12 +12,13 @@ const cardt = require("./models/card");
 const temp = require("./models/templates");
 const cpages = require("./models/custompages");
 const mcompany = require("./models/company");
+const emp = require("./models/employee");
 const bcrypt = require("bcrypt");
 const path = require('path');
 const adminModel = require('./models/admin');
 const multer = require('multer');
 const Image = require('./models/image');
-const Employee = require('./models/employeeschema');
+
 
 const { ObjectId } = require('mongodb');
 const AWS = require('aws-sdk');
@@ -861,12 +862,26 @@ app.post('/custompage/:id',upload.fields([{ name: 'image', maxCount: 1 }]),async
       };
       buttons.push(button);
     }
-    
+    const uniqueid = new ObjectId();
+    const key = `${uniqueid}_${req.params.id}`;
+  
+    const params = {
+      Bucket: process.env.S3_BUCKET_NAME,
+      Key: `custompages_img/${key}`,
+      Body: file.buffer,
+      ContentType: file.mimetype
+    };
+  
+    const s3UploadResponse = await s3.upload(params).promise();
+
+    const logoUrl = s3UploadResponse.Location;
+
 
     // Save the image to MongoDB
     const customizablePage = new cpages({
+        _id: uniqueid,
         user: req.params.id,
-        image: imageFile.buffer.toString('base64'),
+        image: logoUrl,
         imageSize: formData.imageSize,
         basicInformationFields:basicInformationFields,
         contactInfoFields:contactInfoFields,
@@ -895,8 +910,9 @@ app.post('/company-details', upload.single('logo'),async(req, res) => {
     const { name, cname, cnum, cmail } = req.body;
     console.log(req.body);
     const file = req.file;
-
-    const key = `${name}`;
+    
+    const uniqueFilename = new ObjectId();
+    const key = `${uniqueFilename}`;
   
     const params = {
       Bucket: process.env.S3_BUCKET_NAME,
@@ -911,6 +927,7 @@ app.post('/company-details', upload.single('logo'),async(req, res) => {
     console.log(logoUrl);
     try{
     const newCompany = new mcompany({
+        _id : uniqueFilename,
         logo: logoUrl,
         name,
         ceo: { name: cname, contact: cnum, email: cmail },
@@ -935,36 +952,32 @@ app.get('/add-employee', async (req, res) => {
 
 app.post('/add-employee', upload.single('photo'), async (req, res) => {
     try {
-      const { name, contact, email, rank, designation, teamSize, experience, achievements, company } = req.body;
+      const { name, company, contact, email,address,rank, designation, empid, bid, area, teamSize, experience, achievements } = req.body;
       console.log(req.body);
-
       const file = req.file;
-      console.log(req.file);
-      
-      const key = `employee_img/${name}`;
-  
-      // Upload the file to S3 within the "employee" folder
+      const employeeId = new ObjectId();
+      const key = `${company}_${employeeId}`;
       const s3Params = {
         Bucket: process.env.S3_BUCKET_NAME,
-        Key: key,
+        Key: `employee_img/${key}`,
         Body: file.buffer,
         ContentType: file.mimetype
-         // Adjust the ACL as needed
+        
       };
-  
       const s3UploadResponse = await s3.upload(s3Params).promise();
-  
-      // Data.Location contains the URL of the uploaded file on S3
       const photoUrl = s3UploadResponse.Location;
-  
-      // Create a new Employee document
-      const newEmployee = new Employee({
+      const newEmployee = new emp({
+        _id : employeeId,
         photo: photoUrl,
         name,
         contact,
         email,
+        address,
         rank,
         designation,
+        employeeid : empid,
+        branchid : bid,
+        area,
         teamSize: teamSize || 0, // Set default value to 0 if not provided
         experience: experience || 0, // Set default value to 0 if not provided
         achievements: achievements || '', // Set default value to empty string if not provided
@@ -975,6 +988,83 @@ app.post('/add-employee', upload.single('photo'), async (req, res) => {
       await newEmployee.save();
   
       res.status(201).json({ message: 'Employee added successfully', employee: newEmployee });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Internal Server Error' });
+    }
+  });
+
+  app.get('/:companyName/:id', async (req, res) => {
+    try {
+      const companyName = req.params.companyName;
+      const employeeid = req.params.id;
+      console.log()
+      const company = await mcompany.findOne({ name: companyName, status : 1 });
+  
+      if (!company) {
+        return res.status(404).json({ message: 'Company not found' });
+      }
+  
+      const employee = await emp.findOne({ _id: employeeid, company: company._id });
+      console.log(employee);
+      if (!employee) {
+        return res.status(404).json({ message: 'Employee not found' });
+      }
+      
+      res.render('admin/portfolio', { employee });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Internal Server Error' });
+    }
+  });
+
+app.get('/global/:name', async function (req, res) {
+    try {
+      
+      const user = await User.find({username: req.params.name});
+      console.log(user);
+      const pageData = await cpages.find( {user: user[0].id });
+      console.log(pageData[0]);
+      // Render the page with the retrieved data
+      res.render('admin/globalpage', { pageData: pageData[0] });
+    } catch (error) {
+      console.error('Error executing Mongoose query:', error);
+      // Handle the error appropriately (send an error response, etc.)
+      res.status(500).send('Internal Server Error');
+     }
+  });
+
+
+app.get('/companies-list', async (req, res) => {
+    try {
+     
+      const companies = await mcompany.find();
+  
+      res.render('admin/companies-list', { companies});
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Internal Server Error' });
+    }
+  });
+
+app.put('/update-company-status/:companyId', async (req, res) => {
+    try {
+      const companyId = req.params.companyId;
+      const { action } = req.body;
+  
+      let status;
+      if (action === 'activate') {
+        status = 1;
+      } else if (action === 'deactivate') {
+        status = 0;
+      } else {
+        return res.status(400).json({ message: 'Invalid action' });
+      }
+  
+      await mcompany.findByIdAndUpdate(companyId, { status });
+      res.json({ message: `Company ${action}d successfully` });
+      // const companies = await mcompany.find();
+      // res.render('admin/companies-list', { companies});
     } catch (error) {
       console.error(error);
       res.status(500).json({ message: 'Internal Server Error' });

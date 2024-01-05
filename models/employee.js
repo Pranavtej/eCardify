@@ -5,10 +5,17 @@ const employeeSchema = new mongoose.Schema({
   name: { type: String, required: true },
   contact: String,
   email: String,
+  address : String,
   rank: Number,
   designation: {
     type: String,
     default: 'Agent', // Default designation is set to 'Agent'
+  },
+  employeeid : String,
+  branchid : String,
+  area : {
+    type: String,
+    default: 'NA',
   },
   teamSize: Number,
   experience: Number,
@@ -20,4 +27,5 @@ const employeeSchema = new mongoose.Schema({
   },
 });
 
-module.exports = { Employee: mongoose.model('Employee', employeeSchema) };
+const Employee = mongoose.model('Employee', employeeSchema);
+module.exports = Employee;
