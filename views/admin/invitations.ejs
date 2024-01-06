@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      overflow-y: auto; /* Enable vertical scrolling */
+    }
+
+    .invitation-form {
+      max-width: 600px;
+      width: 100%;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      /* height: auto; */ /* Remove fixed height for automatic height */
+      max-height: 80vh; /* Set a maximum height */
+      overflow-y: auto; /* Enable vertical scrolling for the form */
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 16px;
+      box-sizing: border-box;
+    }
+
+    button {
+      background-color: #3498db;
+      color: #fff;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+  </style>
+  <title>Invitation Page Form</title>
+</head>
+<body>
+   
+  <form action="/invite-details" method="post" id="myInvitationForm" class="invitation-form" enctype="multipart/form-data">
+    <label for="headerMsgText">Header Message Text:</label>
+    <input type="text" id="headerMsgText" name="headerMsgText">
+
+    <label for="headerMsgStyle">Header Message Style:</label>
+    <select id="headerMsgStyle" name="headerMsgStyle">
+        <option value="normal">Normal</option>
+        <option value="italic">Italic</option>
+        <option value="bold">Bold</option>
+      </select>
+      <div class="dynamic-fields" id="headerSliderFields">
+        <label>Header Slider Images:</label>
+        <div class="slider-field">
+          <input type="file" name="headerSliderImage[]" placeholder="Choose Image" accept="image/*">
+          <input type="text" name="headerSliderText[]" placeholder="Text">
+          <select name="headerSliderStyle[]">
+            <option value="normal">Normal</option>
+            <option value="italic">Italic</option>
+            <option value="bold">Bold</option>
+          </select>
+        </div>
+      </div>
+  
+      <button type="button" onclick="addSliderField()">Add Slider Image</button>
+
+      <label for="buttonText">Button Text:</label>
+    <input type="text" id="buttonText" name="buttonText">
+
+    <label for="buttonStyle">Button Style:</label>
+    <input type="text" id="buttonStyle" name="buttonStyle">
+
+    <label for="buttonRedirect">Button Redirect:</label>
+    <input type="text" id="buttonRedirect" name="buttonRedirect">
+
+    <label for="customMsgHeadText">Custom Message Head Text:</label>
+    <input type="text" id="customMsgHeadText" name="customMsgHeadText">
+
+    <label for="customMsgHeadStyle">Custom Message Head Style:</label>
+    <input type="text" id="customMsgHeadStyle" name="customMsgHeadStyle">
+
+    <label for="customMsgText">Custom Message Text:</label>
+    <input type="text" id="customMsgText" name="customMsgText">
+
+    <label for="customMsgStyle">Custom Message Style:</label>
+    <input type="text" id="customMsgStyle" name="customMsgStyle">
+
+    <label>Slider Images:</label>
+    <div class="dynamic-fields" id="sliderImgFields">
+      <div class="slider-field">
+        <input type="file" name="sliderImgImage[]" placeholder="Choose Image" accept="image/*">
+        <input type="text" name="sliderImgText[]" placeholder="Text">
+        <select name="SliderImgStyle[]">
+            <option value="normal">Normal</option>
+            <option value="italic">Italic</option>
+            <option value="bold">Bold</option>
+          </select>
+      </div>
+    </div>
+    <button type="button" onclick="addSliderImgField()">Add Slider Image</button>
+
+    <label for="mapsLongitude">Maps Longitude:</label>
+    <input type="text" id="mapsLongitude" name="mapsLongitude" value="0">
+
+    <label for="mapsLatitude">Maps Latitude:</label>
+    <input type="text" id="mapsLatitude" name="mapsLatitude" value="0">
+
+    <label>Contact Information:</label>
+    <div class="dynamic-fields" id="contactInfoFields">
+      <div class="contact-info-field">
+        <input type="text" name="contactInfoField[]" placeholder="Field">
+        <input type="text" name="contactInfoValue[]" placeholder="Value">
+        <input type="text" name="contactInfoStyle[]" placeholder="Style">
+      </div>
+    </div>
+    <button type="button" onclick="addContactInfoField()">Add Contact Info</button>
+
+    <label>Extra Images:</label>
+    <div class="dynamic-fields" id="extraImgFields">
+      <div class="extra-img-field">
+        <input type="file" name="extraImg[]" placeholder="Choose Image" accept="image/*">
+      </div>
+    </div>
+    <button type="button" onclick="addExtraImgField()">Add Extra Image</button>
+
+    <label for="aboutText">About Text:</label>
+    <textarea id="aboutText" name="aboutText" rows="4"></textarea>
+
+    <label for="aboutStyle">About Style:</label>
+    <input type="text" id="aboutStyle" name="aboutStyle">
+
+    <!-- Repeat similar sections for other fields -->
+
+    <button type="submit" onclick="submitForm()">Submit</button>
+  </form>
+
+  <script>
+     function addSliderField() {
+      const sliderFields = document.getElementById('headerSliderFields');
+      const newField = document.createElement('div');
+      newField.className = 'slider-field';
+      newField.innerHTML = `
+        <input type="file" name="headerSliderImage[]" placeholder="Choose Image" accept="image/*">
+        <input type="text" name="headerSliderText[]" placeholder="Text">
+        <select name="headerSliderStyle[]">
+            <option value="normal">Normal</option>
+            <option value="italic">Italic</option>
+            <option value="bold">Bold</option>
+          </select>
+      `;
+      sliderFields.appendChild(newField);
+    }
+    // Add dynamic fields for slider images
+    function addSliderImgField() {
+      const sliderImgFields = document.getElementById('sliderImgFields');
+      const newField = document.createElement('div');
+      newField.className = 'slider-field';
+      newField.innerHTML = `
+        <input type="file" name="sliderImgImage[]" placeholder="Choose Image" accept="image/*">
+        <input type="text" name="sliderImgText[]" placeholder="Text">
+        <select name="sliderImgStyle[]">
+            <option value="normal">Normal</option>
+            <option value="italic">Italic</option>
+            <option value="bold">Bold</option>
+          </select>
+      `;
+      sliderImgFields.appendChild(newField);
+    }
+
+    // Add dynamic fields for contact information
+    function addContactInfoField() {
+      const contactInfoFields = document.getElementById('contactInfoFields');
+      const newField = document.createElement('div');
+      newField.className = 'contact-info-field';
+      newField.innerHTML = `
+        <input type="text" name="contactInfoField[]" placeholder="Field">
+        <input type="text" name="contactInfoValue[]" placeholder="Value">
+        <input type="text" name="contactInfoStyle[]" placeholder="Style">
+      `;
+      contactInfoFields.appendChild(newField);
+    }
+
+    // Add dynamic fields for extra images
+    function addExtraImgField() {
+      const extraImgFields = document.getElementById('extraImgFields');
+      const newField = document.createElement('div');
+      newField.className = 'extra-img-field';
+      newField.innerHTML = `
+      <input type="file" name="extraImg[]" placeholder="Choose Image" accept="image/*">
+      `;
+      extraImgFields.appendChild(newField);
+    }
+
+//     function submitForm() {
+//   const formData = new FormData(document.getElementById('myInvitationForm'));
+//   console.log('Form Data:', formData);
+//   // ... other code to submit the form
+// }
+  </script>
+</body>
+
+
+</html>

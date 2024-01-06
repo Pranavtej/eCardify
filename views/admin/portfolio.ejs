@@ -7,7 +7,9 @@
 		
 		<!-- Favicon -->
         <link rel="shortcut icon" href="/public/assets/admin/img/favicon.jpg">
-	
+	    <!-- Add this line to include the FontAwesome CSS -->
+
+
 		<!-- Fontfamily -->
 		<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,700;0,900;1,400;1,500;1,700&display=swap" rel="stylesheet">
 		
@@ -29,33 +31,17 @@
 		
 		<!-- Main CSS -->
         <link rel="stylesheet" href="/public/assets/admin/css/style.css">
+
+
     </head>
     <body>
 	
 		<!-- Main Wrapper -->
         <div class="main-wrapper">
-		
-			<!-- Header -->
             <div class="header">
-			
-				<!-- Logo -->
-                <div class="">
-                    <a href="#" class="logo">
-						<img src="/public/assets/admin/img/logo.png" alt="Logo">
+						<img src="<%= company.logo %>" alt="image"
+                        class="img-fluid rounded" width="80"/>
 					</a>
-					
-                </div>
-				<!-- /Logo -->
-				
-			
-				<!-- Mobile Menu Toggle -->
-				
-				<!-- /Mobile Menu Toggle -->
-				
-				<!-- Header Right Menu -->
-				
-				<!-- /Header Right Menu -->
-				
             </div>
 			<!-- /Header -->
 			
@@ -77,7 +63,10 @@
 														<img  src="<%= employee.photo %>"  alt="Profile">
 													</div>
 													<div class="names-profiles">
-														<h4><%= employee.name %> &#x2714;</h4>
+														<h4><%= employee.name %>  <img src="/public/assets/admin/img/icons/check-decagram.svg" alt="" alt="image"
+                                                            class="img-fluid avatar-xs rounded"></i>
+														</h4>
+														
 														<h5><%= employee.designation %></h5>
 													</div>
 												</div>
@@ -96,7 +85,7 @@
 												</div>
 												<div class="personal-activity">
 													<div class="personal-icons">
-														<i class="feather-phone-call"></i>
+														<img src="/public/assets/admin/img/icons/buliding-icon.svg" alt="">
 													</div>
 													<div class="views-personal">
 														<h4>Branch ID</h4>
@@ -105,7 +94,7 @@
 												</div>
 												<div class="personal-activity">
 													<div class="personal-icons">
-														<i class="feather-mail"></i>
+														<i class="feather-user"></i>
 													</div>
 													<div class="views-personal">
 														<h4>Employee ID</h4>
@@ -114,7 +103,7 @@
 												</div>
                          <div class="personal-activity">
 													<div class="personal-icons">
-														<i class="feather-calendar"></i>
+														<i class="feather-map"></i>
 													</div>
 													<div class="views-personal">
 														<h4>Agent Area</h4>
@@ -123,7 +112,7 @@
 												</div>
 												<div class="personal-activity">
 													<div class="personal-icons">
-														<i class="feather-italic"></i>
+														<i class="feather-phone-call"></i>
 													</div>
 													<div class="views-personal">
 														<h4>Contact Number</h4>
@@ -132,7 +121,7 @@
 												</div>
 												<div class="personal-activity mb-0">
 													<div class="personal-icons">
-														<i class="feather-map-pin"></i>
+														<i class="feather-mail"></i>
 													</div>
 													<div class="views-personal">
 														<h4>Email</h4>
