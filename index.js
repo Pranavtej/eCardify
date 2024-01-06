@@ -1027,7 +1027,7 @@ app.post('/add-employee', upload.single('photo'), async (req, res) => {
         return res.status(404).json({ message: 'Employee not found' });
       }
       
-      res.render('admin/portfolio', { employee,company });
+      res.render('templates/company-auth/index', { employee });
     } catch (error) {
       console.error(error);
       res.status(500).json({ message: 'Internal Server Error' });

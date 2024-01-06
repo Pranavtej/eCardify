@@ -2569,6 +2569,12 @@ footer p {
 	position: relative;
 	transition: all 0.4s ease;
 }
+.portfolio-wraper{
+	margin-left: 70px;
+	padding-top: 100px;
+	position: relative;
+	transition: all 0.4s ease;
+}
 .page-wrapper > .content {
 	padding: 1.875rem 1.875rem 0;
 }
@@ -3750,7 +3756,6 @@ table.table-inbox tbody tr.checked {
 }
 .profile-user-img {
 	margin-right: 20px;
-	position: relative;
     top: -30px;
 }
 .profile-user-img img {
