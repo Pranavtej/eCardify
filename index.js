@@ -18,8 +18,7 @@ const path = require('path');
 const adminModel = require('./models/admin');
 const multer = require('multer');
 const Image = require('./models/image');
-
-
+const LogModel = require('./models/logModel');
 const { ObjectId } = require('mongodb');
 const AWS = require('aws-sdk');
 const dotenv = require('dotenv');
@@ -36,7 +35,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));  
-
+const saltRounds = 10;
 
 app.use('/public', express.static(__dirname + "/public"));
 
@@ -79,6 +78,74 @@ app.get('/register', async (req, res) => {
 
 
 
+
+
+
+
+// Log Model
+const logModel = new LogModel();
+
+// Middleware for logging route access
+app.use(async (req, res, next) => {
+    const routeAccessDetails = {
+        method: req.method,
+        path: req.path,
+        query: req.query,
+        params: req.params,
+    };
+
+    await logModel.logEvent('route_access', routeAccessDetails);
+    next();
+});
+
+
+
+// Displaying all the logs
+app.get('/_logs', async (req, res) => {
+  try {
+    const logs = await logModel.getAllLogs();
+    console.log(logs);
+    res.json(logs);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// global page for the user route 
+
+// app.get('/:id', async function (req, res) {
+//   try {
+//     // Use proper error handling for the Mongoose query
+//     const pageData = await cpages.find({ user: req.params.id });
+    
+//     // Render the page with the retrieved data
+//     res.render('admin/globalpages', { pageData: pageData[0] });
+//     console.log(pageData);
+//   } catch (error) {
+//     console.error('Error executing Mongoose query:', error);
+//     // Handle the error appropriately (send an error response, etc.)
+//     res.status(500).send('Internal Server Error');
+//   }
+// });
+
+
+
+
 app.get('/about', function (req, res) {
     res.render('/views/about/about.ejs');
 });
@@ -88,8 +155,9 @@ app.get('/contact', function (req, res) {
 }
 );
 
+const port = 8000 || 5000
 
-app.listen(8000, function () {
+app.listen(port, function () {
     console.log('Server started at port 8000');
    })
 
@@ -462,45 +530,6 @@ app.get("/delete/:id",async(req,res)=>{
 
 });
           
-
-
-// app.post('/add-user', async (req, res) => {
-//     try {
-//         const { username, email, number, subscriptionPlan, occasion, cardType, template } = req.body;
-//         console.log(req.body);
-
-//         // Create a new user
-//         const Plan = new ObjectId(subscriptionPlan);
-//         const card = new ObjectId(cardType);
-//         const temp = new ObjectId(template);
-
-//         const newUser = new User({
-//             username,
-//             email,
-//             number,
-//             selectedItems: [
-//                 {
-//                     occasion,
-//                     cardType: card,
-//                     template: temp,
-//                     subscriptionPlan: {
-//                         plan: Plan,
-//                     },
-//                 },
-//             ],
-//         });
-
-//         // Save the user to the database
-//         const savedUser = await newUser.save();
-
-//         // Redirect to the edit page for the newly created user
-//         res.redirect(`/template1?userId=${savedUser._id}`);
-//     } catch (error) {
-//         console.error('Error creating user:', error);
-//         res.status(500).send('Internal Server Error');
-//     }
-// });
-
 app.get('/imageupload', async (req, res) => {
     try {
       const data = await Image.find({});
@@ -511,26 +540,6 @@ app.get('/imageupload', async (req, res) => {
     }
   });
   
-//   app.post('/imageupload', upload.single('image'), async (req, res) => {
-//     try {
-//       const obj = {
-//         name: req.body.name,
-//         desc: req.body.desc,
-//         img: {
-//           data: await fs.readFileAsync(path.join(__dirname, 'uploads', req.file.filename)),
-//           contentType: 'image/png',
-//         },
-//       };
-//       await Image.create(obj);
-//       res.redirect('/');
-//     } catch (err) {
-//       console.error(err);
-//       res.status(500).send('Internal Server Error');
-//     }
-//   });
-
-
-
 
 
   app.post('/add-user', async (req, res) => {
@@ -901,8 +910,10 @@ app.post('/custompage/:id',upload.fields([{ name: 'image', maxCount: 1 }]),async
 });
 
 
-app.get('/add-company',async(req,res)=>{
-res.render('admin/add-company');
+
+
+app.get('/company-details', async (req, res) => {
+  res.render('admin/add-company');
 });
 
 
@@ -910,9 +921,8 @@ app.post('/company-details', upload.single('logo'),async(req, res) => {
     const { name, cname, cnum, cmail } = req.body;
     console.log(req.body);
     const file = req.file;
-    
-    const uniqueFilename = new ObjectId();
-    const key = `${uniqueFilename}`;
+
+    const key = `${name}`;
   
     const params = {
       Bucket: process.env.S3_BUCKET_NAME,
@@ -954,6 +964,20 @@ app.post('/add-employee', upload.single('photo'), async (req, res) => {
     try {
       const { name, company, contact, email,address,rank, designation, empid, bid, area, teamSize, experience, achievements } = req.body;
       console.log(req.body);
+      const hashedEmail = await bcrypt.hash(email, saltRounds);
+      const hashedName = await bcrypt.hash(name, saltRounds);
+      const hashedContact = await bcrypt.hash(contact,saltRounds);
+
+      const hashedAddress = await bcrypt.hash(address,saltRounds);
+      
+      const hashedDesignation = await bcrypt.hash(designation,saltRounds);
+      const hashedEmpid = await bcrypt.hash(empid,saltRounds);
+      const hashedBid = await bcrypt.hash(bid,saltRounds);
+      const hashedArea = await bcrypt.hash(area,saltRounds);
+      
+      const hashedAchievements = await bcrypt.hash(achievements,saltRounds);
+
+
       const file = req.file;
       const employeeId = new ObjectId();
       const key = `${company}_${employeeId}`;
@@ -969,104 +993,137 @@ app.post('/add-employee', upload.single('photo'), async (req, res) => {
       const newEmployee = new emp({
         _id : employeeId,
         photo: photoUrl,
-        name,
-        contact,
-        email,
-        address,
-        rank,
-        designation,
-        employeeid : empid,
-        branchid : bid,
-        area,
-        teamSize: teamSize || 0, // Set default value to 0 if not provided
-        experience: experience || 0, // Set default value to 0 if not provided
-        achievements: achievements || '', // Set default value to empty string if not provided
-        company,
+        name: hashedName,
+        company: company,
+        contact: hashedContact,
+        email: hashedEmail,
+        address: hashedAddress,
+        rank : rank,
+        designation: hashedDesignation,
+        employeeid: hashedEmpid,
+        branchid: hashedBid,
+        area: hashedArea,
+        teamSize : teamSize,
+        experience : experience ,
+        achievements:achievements ,
+
       });
   
       // Save the document to the database
       await newEmployee.save();
   
-      res.status(201).json({ message: 'Employee added successfully', employee: newEmployee });
+      res.redirect('/employee-list');
     } catch (error) {
       console.error(error);
       res.status(500).json({ message: 'Internal Server Error' });
     }
   });
 
-  app.get('/:companyName/:id', async (req, res) => {
-    try {
-      const companyName = req.params.companyName;
-      const employeeid = req.params.id;
-      console.log()
-      const company = await mcompany.findOne({ name: companyName, status : 1 });
-  
-      if (!company) {
-        return res.status(404).json({ message: 'Company not found' });
-      }
-  
-      const employee = await emp.findOne({ _id: employeeid, company: company._id });
-      console.log(employee);
-      if (!employee) {
-        return res.status(404).json({ message: 'Employee not found' });
-      }
-      
-      res.render('admin/portfolio', { employee });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: 'Internal Server Error' });
+
+  app.get('/employee-list',async(req,res)=>{
+   const employees = await emp.find();
+   const companies = await mcompany.find();
+    res.render('admin/employees-list',{employees,companies});
     }
-  });
-
-app.get('/global/:name', async function (req, res) {
-    try {
-      
-      const user = await User.find({username: req.params.name});
-      console.log(user);
-      const pageData = await cpages.find( {user: user[0].id });
-      console.log(pageData[0]);
-      // Render the page with the retrieved data
-      res.render('admin/globalpage', { pageData: pageData[0] });
-    } catch (error) {
-      console.error('Error executing Mongoose query:', error);
-      // Handle the error appropriately (send an error response, etc.)
-      res.status(500).send('Internal Server Error');
-     }
-  });
+  );
 
 
-app.get('/companies-list', async (req, res) => {
-    try {
-     
+  app.get('/company-list',async(req,res)=>{
+    const companies = await mcompany.find();
+    res.render('admin/companies-list',{companies});
+    }
+  );
+
+
+// Post request to update employee details
+app.post('/edit-employee/:employeeId', upload.single('photo'), async (req, res) => {
+  const employeeId = req.params.employeeId;
+
+  try {
+      // Retrieve the employee by ID
+      const employee = await emp.findById(employeeId);
       const companies = await mcompany.find();
-  
-      res.render('admin/companies-list', { companies});
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: 'Internal Server Error' });
-    }
-  });
 
-app.put('/update-company-status/:companyId', async (req, res) => {
-    try {
-      const companyId = req.params.companyId;
-      const { action } = req.body;
-  
-      let status;
-      if (action === 'activate') {
-        status = 1;
-      } else if (action === 'deactivate') {
-        status = 0;
-      } else {
-        return res.status(400).json({ message: 'Invalid action' });
+      if (!employee) {
+          return res.status(404).json({ error: 'Employee not found' });
       }
-  
-      await mcompany.findByIdAndUpdate(companyId, { status });
-      res.json({ message: `Company ${action}d successfully` });
-      // const companies = await mcompany.find();
-      // res.render('admin/companies-list', { companies});
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: 'Internal Server Error' });
+
+      // Update employee fields
+      employee.name = req.body.name;
+      employee.company = req.body.company;
+      employee.contact = req.body.contact;
+      employee.email = req.body.email;
+      employee.address = req.body.address;
+      employee.rank = req.body.rank;
+      employee.designation = req.body.designation;
+      employee.employeeid = req.body.empid;
+      employee.branchid = req.body.bid;
+      employee.area = req.body.area;
+      employee.teamSize = req.body.teamSize || 0;
+      employee.experience = req.body.experience || 0;
+      employee.achievements = req.body.achievements || '';
+
+      // Update employee photo if a new one is provided
+      if (req.file) {
+          const key = `${employee.company}_${employeeId}`;
+          const s3Params = {
+              Bucket: process.env.S3_BUCKET_NAME,
+              Key: `employee_img/${key}`,
+              Body: req.file.buffer,
+              ContentType: req.file.mimetype
+          };
+          const s3UploadResponse = await s3.upload(s3Params).promise();
+          employee.photo = s3UploadResponse.Location;
+      }
+
+      // Save the updated employee to the database
+      const updatedEmployee = await employee.save();
+
+      // Redirect to the employee listing page or any other page after successful update
+      const employees = await emp.find();
+      res.render('admin/employees-list', { employees ,companies});
+  } catch (error) {
+      console.error('Error updating employee:', error);
+      res.status(500).send('Internal Server Error');
+  }
+});
+
+
+// Get request to fetch employee details for editing
+app.get('/edit-employee/:employeeId', async (req, res) => {
+  try {
+      const employeeId = req.params.employeeId;
+      const employee = await emp.findById(employeeId);
+      const companies = await mcompany.find();
+
+      if (!employee) {
+          return res.status(404).json({ error: 'Employee not found' });
+      }
+
+      res.render('admin/edit-employee', { employee, companies }); // Include 'companies' here
+  } catch (error) {
+      console.error('Error fetching employee for editing:', error);
+      res.status(500).send('Internal Server Error');
+  }
+});
+
+// delete employee by using id 
+app.get('/delete-employee/:employeeId', async (req, res) => {
+  try {
+    const employeeId = req.params.employeeId;
+    const employee = await emp.findByIdAndDelete(employeeId);
+
+    if (!employee) {
+      return res.status(404).json({ error: 'Employee not found' });
     }
-  });
+
+    // Fetch companies data
+    const companies = await mcompany.find(); // Assuming you have a model named Company
+
+    const employees = await emp.find();
+    res.render('admin/employees-list', { employees, companies });
+  } catch (error) {
+    console.error('Error deleting employee:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});

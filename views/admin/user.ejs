@@ -143,7 +143,7 @@
 						<div class="row">
 							<div class="col-lg-3 col-md-6">  
 								<div class="form-group">
-									<input type="text" class="form-control" placeholder="Search by ID ,Name,Phone...">
+									<input type="text" class="form-control"id="searchUserInput" placeholder="Search by ID ,Name,Phone...">
 								</div>
 							</div>
 							<!-- <div class="col-lg-3 col-md-6">  
@@ -202,7 +202,7 @@
 											</thead>
 											<tbody>
 												<% users1.forEach((user,index) => { %>
-													<tr> 
+													<tr class="user-row"> 
 	
 													  <td><%= index + 1 %></td>
 													  <td><%= user.username %></td>
@@ -347,6 +347,31 @@
 			});
 		</script>
 
+
+<script>
+	$(document).ready(function () {
+		function filterEmployees(query) {
+			query = query.toLowerCase();
+			$('.user-row').hide();
+			$('.user-row').each(function () {
+				var rowData = $(this).text().toLowerCase();
+				if (rowData.indexOf(query) !== -1) {
+					$(this).show();
+				}
+			});
+		}
+
+		$('#searchUserInput').on('input', function () {
+			var searchQuery = $(this).val();
+			filterEmployees(searchQuery);
+		});
+
+		// Additional part to show modal when "Add Card" button is clicked
+		$('#addCardBtn').click(function () {
+			$('#addCardModal').modal('show');
+		});
+	});
+</script>
 
 		<!-- /Main Wrapper -->
 		
