@@ -146,9 +146,11 @@
 						<div class="row">
 							<div class="col-lg-3 col-md-6">
 								<div class="form-group">
-									<input type="text" class="form-control" placeholder="Search by ID ,Name,Phone...">
+									<input type="text" class="form-control" id="searchEmployeeInput"
+										placeholder="Search by ID, Name, Phone...">
 								</div>
 							</div>
+
 							<!-- <div class="col-lg-3 col-md-6">  
 								<div class="form-group">
 									<input type="text" class="form-control" placeholder="Search by Name ...">
@@ -183,7 +185,7 @@
 												<!-- <a href="/user" class="btn btn-outline-gray me-2 active"><i class="feather-list"></i></a>
 												<a href="/user-grid" class="btn btn-outline-gray me-2"><i class="feather-grid"></i></a>
 												<a href="#" class="btn btn-outline-primary me-2"><i class="fas fa-download"></i> Download</a> -->
-												<a href="/add-company" id="addCardBtn" class="btn btn-primary"><i
+												<a href="/company-details" id="addCardBtn" class="btn btn-primary"><i
 														class="fas fa-plus"></i> Add Company</a>
 											</div>
 										</div>
@@ -196,6 +198,7 @@
 												<tr>
 													<th>S.No</th>
 													<th>Company Name</th>
+													<th>Company logo</th>
 													<th>CEO Email</th>
 													<th>Status</th>
 												</tr>
@@ -204,7 +207,7 @@
 
 											<tbody>
 												<% companies.forEach((company, index)=> { %>
-													<tr>
+													<tr class="company-row">
 														<td>
 															<%= index + 1 %>
 														</td>
@@ -212,15 +215,23 @@
 															<%= company.name %>
 														</td>
 														<td>
+															<img src="<%= company.logo %>" alt="Company Logo"
+																height="50" width="50">
+														<td>
 															<%= company.ceo.email %>
 														</td>
-														<td><%= company.status === 1 ? 'Activated' : 'Deactivated' %></td>
 														<td>
-															<button onclick="updateCompanyStatus('<%= company._id %>', this.getAttribute('data-action'))" data-action='<%= company.status === 1 ? "deactivate" : "activate" %>' class="btn btn-primary">
-																<%= company.status === 1 ? 'Deactivate' : 'Activate' %>
-															  </button>
-															  
-														  </td>
+															<%= company.status===1 ? 'Activated' : 'Deactivated' %>
+														</td>
+														<td>
+															<button
+																onclick="updateCompanyStatus('<%= company._id %>', this.getAttribute('data-action'))"
+																data-action='<%= company.status === 1 ? "deactivate" : "activate" %>'
+																class="btn btn-primary">
+																<%= company.status===1 ? 'Deactivate' : 'Activate' %>
+															</button>
+
+														</td>
 													</tr>
 													<% }); %>
 											</tbody>
@@ -234,7 +245,7 @@
 						</div>
 					</div>
 				</div>
-				
+
 
 				<!-- Delete Modal -->
 
@@ -251,32 +262,57 @@
 
 	<script>
 		function updateCompanyStatus(companyId, action) {
-		  // Send a request to the server to update the company status
-		  fetch(`/update-company-status/${companyId}`, {
-			method: 'PUT',
-			headers: {
-			  'Content-Type': 'application/json',
-			},
-			body: JSON.stringify({ action }),
-		  })
-			.then(response => response.json())
-			.then(data => {
-			  // Handle the response, maybe update the UI if needed
-			  console.log(data);
-	  
-			  // Assuming you want to refresh the page after updating the status
-			  window.location.reload();
+			// Send a request to the server to update the company status
+			fetch(`/update-company-status/${companyId}`, {
+				method: 'PUT',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({ action }),
 			})
-			.catch(error => console.error(error));
+				.then(response => response.json())
+				.then(data => {
+					// Handle the response, maybe update the UI if needed
+					console.log(data);
+
+					// Assuming you want to refresh the page after updating the status
+					window.location.reload();
+				})
+				.catch(error => console.error(error));
 		}
-	  </script>
-	  
+	</script>
+
 
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	<!-- Bootstrap JavaScript -->
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-	
+	<script>
+		$(document).ready(function () {
+			function filterEmployees(query) {
+				query = query.toLowerCase();
+				$('.company-row').hide();
+				$('.company-row').each(function () {
+					var rowData = $(this).text().toLowerCase();
+					if (rowData.indexOf(query) !== -1) {
+						$(this).show();
+					}
+				});
+			}
+
+			$('#searchEmployeeInput').on('input', function () {
+				var searchQuery = $(this).val();
+				filterEmployees(searchQuery);
+			});
+
+			// Additional part to show modal when "Add Card" button is clicked
+			$('#addCardBtn').click(function () {
+				$('#addCardModal').modal('show');
+			});
+		});
+	</script>
+
+
 
 
 	<!-- /Main Wrapper -->

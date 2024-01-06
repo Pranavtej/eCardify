@@ -1091,3 +1091,104 @@ app.put('/update-company-status/:companyId', async (req, res) => {
   app.get('/invitation',async(req,res)=>{
     res.render('admin/invitations');
   });
+
+
+app.get('/employee-list',async(req,res)=>{
+   const employees = await emp.find();
+   const companies = await mcompany.find();
+    res.render('admin/employees-list',{employees,companies});
+
+    }
+  );
+
+// Post request to update employee details
+app.post('/edit-employee/:employeeId', upload.single('photo'), async (req, res) => {
+  const employeeId = req.params.employeeId;
+
+  try {
+      // Retrieve the employee by ID
+      const employee = await emp.findById(employeeId);
+      const companies = await mcompany.find();
+
+      if (!employee) {
+          return res.status(404).json({ error: 'Employee not found' });
+      }
+
+      // Update employee fields
+      employee.name = req.body.name;
+      employee.company = req.body.company;
+      employee.contact = req.body.contact;
+      employee.email = req.body.email;
+      employee.address = req.body.address;
+      employee.rank = req.body.rank;
+      employee.designation = req.body.designation;
+      employee.employeeid = req.body.empid;
+      employee.branchid = req.body.bid;
+      employee.area = req.body.area;
+      employee.teamSize = req.body.teamSize || 0;
+      employee.experience = req.body.experience || 0;
+      employee.achievements = req.body.achievements || '';
+
+      // Update employee photo if a new one is provided
+      if (req.file) {
+          const key = `${employee.company}_${employeeId}`;
+          const s3Params = {
+              Bucket: process.env.S3_BUCKET_NAME,
+              Key: `employee_img/${key}`,
+              Body: req.file.buffer,
+              ContentType: req.file.mimetype
+          };
+          const s3UploadResponse = await s3.upload(s3Params).promise();
+          employee.photo = s3UploadResponse.Location;
+      }
+
+      // Save the updated employee to the database
+      const updatedEmployee = await employee.save();
+
+      // Redirect to the employee listing page or any other page after successful update
+      const employees = await emp.find();
+      res.render('admin/employees-list', { employees ,companies});
+  } catch (error) {
+      console.error('Error updating employee:', error);
+      res.status(500).send('Internal Server Error');
+  }
+});
+
+
+app.get('/edit-employee/:employeeId', async (req, res) => {
+  try {
+      const employeeId = req.params.employeeId;
+      const employee = await emp.findById(employeeId);
+      const companies = await mcompany.find();
+
+      if (!employee) {
+          return res.status(404).json({ error: 'Employee not found' });
+      }
+
+      res.render('admin/edit-employee', { employee, companies }); // Include 'companies' here
+  } catch (error) {
+      console.error('Error fetching employee for editing:', error);
+      res.status(500).send('Internal Server Error');
+  }
+});
+
+
+app.get('/delete-employee/:employeeId', async (req, res) => {
+  try {
+    const employeeId = req.params.employeeId;
+    const employee = await emp.findByIdAndDelete(employeeId);
+
+    if (!employee) {
+      return res.status(404).json({ error: 'Employee not found' });
+    }
+
+    // Fetch companies data
+    const companies = await mcompany.find(); // Assuming you have a model named Company
+
+    const employees = await emp.find();
+    res.render('admin/employees-list', { employees, companies });
+  } catch (error) {
+    console.error('Error deleting employee:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});

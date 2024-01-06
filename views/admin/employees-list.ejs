@@ -144,11 +144,7 @@
 
 					<div class="student-group-form">
 						<div class="row">
-							<div class="col-lg-3 col-md-6">
-								<div class="form-group">
-									<input type="text" class="form-control" placeholder="Search by ID ,Name,Phone...">
-								</div>
-							</div>
+
 							<!-- <div class="col-lg-3 col-md-6">  
 								<div class="form-group">
 									<input type="text" class="form-control" placeholder="Search by Name ...">
@@ -159,11 +155,13 @@
 									<input type="text" class="form-control" placeholder="Search by Phone ...">
 								</div>
 							</div> -->
-							<div class="col-lg-2">
-								<div class="search-student-btn">
-									<button type="btn" class="btn btn-primary">Search</button>
+							<div class="col-lg-3 col-md-6">
+								<div class="form-group">
+									<input type="text" class="form-control" id="searchEmployeeInput"
+										placeholder="Search by ID, Name, Phone...">
 								</div>
 							</div>
+
 						</div>
 					</div>
 
@@ -177,13 +175,13 @@
 									<div class="page-header">
 										<div class="row align-items-center">
 											<div class="col">
-												<h3 class="page-title">Students</h3>
+												<h3 class="page-title">Employees</h3>
 											</div>
 											<div class="col-auto text-end float-end ms-auto download-grp">
 												<!-- <a href="/user" class="btn btn-outline-gray me-2 active"><i class="feather-list"></i></a>
 												<a href="/user-grid" class="btn btn-outline-gray me-2"><i class="feather-grid"></i></a>
 												<a href="#" class="btn btn-outline-primary me-2"><i class="fas fa-download"></i> Download</a> -->
-												<a href="/new-employee" id="addCardBtn" class="btn btn-primary"><i
+												<a href="/add-employee" id="addCardBtn" class="btn btn-primary"><i
 														class="fas fa-plus"></i> Add Employee</a>
 											</div>
 										</div>
@@ -191,39 +189,67 @@
 									<!-- /Page Header -->
 
 									<div class="table-responsive">
-                                        <table class="table">
-                                            <thead>
-                                                <tr>
-                                                    <th>S.No</th>
-                                                    <th>Photo</th>
-                                                    <th>Name</th>
-                                                    <th>Contact</th>
-                                                    <th>Designation</th>
-                                                    <th>Company</th>
-                                                </tr>
-                                            </thead>
-                                    
-                                            <tbody>
-                                                <% employees.forEach((employee, index) => { %>
-                                                    <tr>
-                                                        <td><%= index + 1 %></td>
-                                                        <td><img src="<%= employee.photo %>" alt="Employee Photo" width="50"></td>
-                                                        <td><%= employee.name %></td>
-                                                        <td><%= employee.contact %></td>
-                                                        <td><%= employee.designation %></td>
-                                                        <td><%= employee.company ? employee.company.name : 'N/A' %></td>
-                                                    </tr>
-                                                <% }); %>
-                                            </tbody>
-                                            
-                                        </table>
-                                    </div>
+										<table class="table">
+											<thead>
+												<tr>
+													<th>S.No</th>
+													<th>Photo</th>
+													<th>Name</th>
+													<th>Contact</th>
+													<th>Designation</th>
+													<th>Company</th>
+													<th class="text-end">Edit/Delete</th>
+												</tr>
+											</thead>
+
+											<tbody>
+												<% employees.forEach((employee, index)=> { %>
+													<tr class="employee-row">
+														<td>
+															<%= index + 1 %>
+														</td>
+														<td><img src="<%= employee.photo %>" alt="Employee Photo"
+																width="50"></td>
+														<td>
+															<%= employee.name %>
+														</td>
+														<td>
+															<%= employee.contact %>
+														</td>
+														<td>
+															<%= employee.designation %>
+														</td>
+														<td>
+															<% const company=companies.find(c=> c._id.toString() ===
+																(employee.company ? employee.company.toString() : ''));
+																%>
+																<%= company ? company.name : 'Unknown Company' %>
+
+														</td>
+														<td class="text-end">
+															<div class="actions">
+																<a href="/edit-employee/<%= employee._id %>"
+																	class="btn btn-sm btn-warning">
+																	<i class="feather-edit"></i>
+																</a>
+																<a href="/delete-employee/<%= employee._id %>"
+																	class="btn btn-sm btn-danger">
+																	<i class="feather-trash-2"></i>
+																</a>
+															</div>
+														</td>
+													</tr>
+													<% }); %>
+											</tbody>
+
+										</table>
+									</div>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
-				<div class="modal fade" id="addCardModal" tabindex="-1" role="dialog"
+				<!-- <div class="modal fade" id="addCardModal" tabindex="-1" role="dialog"
 					aria-labelledby="addCardModalLabel" aria-hidden="true">
 					<div class="modal-dialog" role="document">
 						<div class="modal-content">
@@ -232,9 +258,9 @@
 								<button type="button" class="btn-close" data-bs-dismiss="modal"
 									aria-label="Close"></button>
 								<!-- <span aria-hidden="true">&times;</span> -->
-								</button>
-							</div>
-							<!-- <div class="modal-body">
+				<!-- </button>
+							</div> -->
+				<!-- <div class="modal-body">
 								<form action="/add-card" method="post">
 									<div class="form-group">
 										<label for="phoneNumber">Enter User's Mobile Number:</label>
@@ -243,9 +269,9 @@
 									<button type="submit" class="btn btn-primary">Submit</button>
 								</form>
 							</div> -->
-						</div>
+				<!-- </div>
 					</div>
-				</div>
+				</div> -->
 
 				<!-- Delete Modal -->
 
@@ -272,6 +298,37 @@
 		});
 	</script>
 
+	<script>
+		$(document).ready(function () {
+			// Function to filter employees based on the search query
+			function filterEmployees(query) {
+				// Convert the query to lowercase for case-insensitive matching
+				query = query.toLowerCase();
+
+				// Hide all rows
+				$('.employee-row').hide();
+
+				// Loop through each row and show if it matches the query
+				$('.employee-row').each(function () {
+					var rowData = $(this).text().toLowerCase();
+					if (rowData.indexOf(query) !== -1) {
+						$(this).show();
+					}
+				});
+			}
+
+			// Event listener for the search input
+			$('#searchEmployeeInput').on('input', function () {
+				var searchQuery = $(this).val();
+				filterEmployees(searchQuery);
+			});
+
+			// Show modal when "Add Card" button is clicked
+			$('#addCardBtn').click(function () {
+				$('#addCardModal').modal('show');
+			});
+		});
+	</script>
 
 	<!-- /Main Wrapper -->
 
