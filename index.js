@@ -13,7 +13,6 @@ const temp = require("./models/templates");
 const cpages = require("./models/custompages");
 const mcompany = require("./models/company");
 const emp = require("./models/employee");
-const LogModel = require("./models/logModel");
 const bcrypt = require("bcrypt");
 const path = require('path');
 const adminModel = require('./models/admin');
@@ -748,28 +747,43 @@ app.get('/cardlist', async (req, res) => {
 });
 
 
-app.post('/businesscard/:userId',  upload.fields([  { name: 'Image', maxCount: 1 }, { name: 'bgImage', maxCount: 1 }
-  ]), async (req, res) => {
+app.post('/businesscard/:userId',  upload.fields([  { name: 'Image', maxCount: 1 }, { name: 'bgImage', maxCount: 1 }]), async (req, res) => {
      try {
-        const  userId  = req.params.userId;
-        const  selectedItems = req.body.selectedItems;       
-        const selectedItemsObject = JSON.parse(selectedItems);
-        const subscriptionPlan = selectedItemsObject.subscriptionPlan || {};
-        const plan = subscriptionPlan.plan || '';
-        const templateId=selectedItemsObject.template;
-        const cardid=selectedItemsObject.cardType;
-        const template =await temp.findById(templateId).lean();
-
-        const imageUrl = req.files['Image'] ? req.files['Image'][0] : null;
-        // path to the uploaded image
-        const bgImage = req.files['bgImage'] ? req.files['bgImage'][0]: null; // path to the uploaded background image
-        
-        console.log(template);
-        
-const templateFields = template.fields && template.fields.map(field => ({
-    fieldName: field.name,
-    fieldValue: req.body[field.name] || '',
-  }));
+      const userId = req.params.userId;
+      const selectedItems = req.body.selectedItems;
+      const selectedItemsObject = JSON.parse(selectedItems);
+      const subscriptionPlan = selectedItemsObject.subscriptionPlan || {};
+      const plan = subscriptionPlan.plan || '';
+      const templateId = selectedItemsObject.template;
+      const cardid = selectedItemsObject.cardType;
+      const occasion = selectedItemsObject.occasion;
+      const template = await temp.findById(templateId).lean();
+  
+      // Extract the files from req.files
+      const images = req.files['Image'] ? req.files['Image'][0] : null;
+      const bgImage = req.files['bgImage'] ? req.files['bgImage'][0] : null;
+  
+      const templateFields = template.fields && template.fields.map(field => ({
+        fieldName: field.name,
+        fieldValue: req.body[field.name] || '',
+      }));
+  
+      const uploadToS3 = async (file, folder, filenamePrefix) => {
+        const key = `${userId}_${cardid}_${templateId}_${plan}_${occasion}_${filenamePrefix}`;
+        const s3Params = {
+          Bucket: process.env.S3_BUCKET_NAME,
+          Key: `${folder}/${key}`,
+          Body: file.buffer,
+          ContentType: file.mimetype,
+        };
+        const s3UploadResponse = await s3.upload(s3Params).promise();
+        return s3UploadResponse.Location;
+      };
+  
+      const image1Url = images ? await uploadToS3(images, 'cards_img', 'image') : null;
+      const image2Url = bgImage ? await uploadToS3(bgImage, 'cards_img', 'bgimage') : null;
+  
+  
   console.log(templateFields);
         const businessCard = new BusinessCard({
             user: userId,
@@ -777,14 +791,15 @@ const templateFields = template.fields && template.fields.map(field => ({
             selectedTemplate: templateId,
             selectedSubscriptionPlan: plan,
             templateFields: templateFields,
-            Image:imageUrl.buffer.toString('base64'),
-            bgImg:bgImage.buffer.toString('base64'),
+            Image:image1Url,
+            bgImg:image2Url,
             bgColor:req.body.bgColor || '',
         });
 
         const savedBusinessCard = await businessCard.save();
         console.log(savedBusinessCard);
-        res.render('admin/custompages',{userId});
+        const users1 = await fetchUserData();
+        res.render('admin/user', { users1 });
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Internal Server Error' });
@@ -1012,7 +1027,7 @@ app.post('/add-employee', upload.single('photo'), async (req, res) => {
         return res.status(404).json({ message: 'Employee not found' });
       }
       
-      res.render('admin/portfolio', { employee });
+      res.render('admin/portfolio', { employee,company });
     } catch (error) {
       console.error(error);
       res.status(500).json({ message: 'Internal Server Error' });
@@ -1070,4 +1085,9 @@ app.put('/update-company-status/:companyId', async (req, res) => {
       console.error(error);
       res.status(500).json({ message: 'Internal Server Error' });
     }
+  });
+
+  
+  app.get('/invitation',async(req,res)=>{
+    res.render('admin/invitations');
   });
