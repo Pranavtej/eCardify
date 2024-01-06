@@ -35,7 +35,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));  
-
+const saltRounds = 10;
 
 app.use('/public', express.static(__dirname + "/public"));
 
@@ -155,8 +155,9 @@ app.get('/contact', function (req, res) {
 }
 );
 
+const port = 8000 || 5000
 
-app.listen(8000, function () {
+app.listen(port, function () {
     console.log('Server started at port 8000');
    })
 
@@ -963,6 +964,20 @@ app.post('/add-employee', upload.single('photo'), async (req, res) => {
     try {
       const { name, company, contact, email,address,rank, designation, empid, bid, area, teamSize, experience, achievements } = req.body;
       console.log(req.body);
+      const hashedEmail = await bcrypt.hash(email, saltRounds);
+      const hashedName = await bcrypt.hash(name, saltRounds);
+      const hashedContact = await bcrypt.hash(contact,saltRounds);
+
+      const hashedAddress = await bcrypt.hash(address,saltRounds);
+      
+      const hashedDesignation = await bcrypt.hash(designation,saltRounds);
+      const hashedEmpid = await bcrypt.hash(empid,saltRounds);
+      const hashedBid = await bcrypt.hash(bid,saltRounds);
+      const hashedArea = await bcrypt.hash(area,saltRounds);
+      
+      const hashedAchievements = await bcrypt.hash(achievements,saltRounds);
+
+
       const file = req.file;
       const employeeId = new ObjectId();
       const key = `${company}_${employeeId}`;
@@ -978,25 +993,26 @@ app.post('/add-employee', upload.single('photo'), async (req, res) => {
       const newEmployee = new emp({
         _id : employeeId,
         photo: photoUrl,
-        name,
-        contact,
-        email,
-        address,
-        rank,
-        designation,
-        employeeid : empid,
-        branchid : bid,
-        area,
-        teamSize: teamSize || 0, // Set default value to 0 if not provided
-        experience: experience || 0, // Set default value to 0 if not provided
-        achievements: achievements || '', // Set default value to empty string if not provided
-        company,
+        name: hashedName,
+        company: company,
+        contact: hashedContact,
+        email: hashedEmail,
+        address: hashedAddress,
+        rank : rank,
+        designation: hashedDesignation,
+        employeeid: hashedEmpid,
+        branchid: hashedBid,
+        area: hashedArea,
+        teamSize : teamSize,
+        experience : experience ,
+        achievements:achievements ,
+
       });
   
       // Save the document to the database
       await newEmployee.save();
   
-      res.status(201).json({ message: 'Employee added successfully', employee: newEmployee });
+      res.redirect('/employee-list');
     } catch (error) {
       console.error(error);
       res.status(500).json({ message: 'Internal Server Error' });
@@ -1026,6 +1042,7 @@ app.post('/edit-employee/:employeeId', upload.single('photo'), async (req, res) 
   try {
       // Retrieve the employee by ID
       const employee = await emp.findById(employeeId);
+      const companies = await mcompany.find();
 
       if (!employee) {
           return res.status(404).json({ error: 'Employee not found' });
@@ -1064,7 +1081,7 @@ app.post('/edit-employee/:employeeId', upload.single('photo'), async (req, res) 
 
       // Redirect to the employee listing page or any other page after successful update
       const employees = await emp.find();
-      res.render('admin/employee', { employees });
+      res.render('admin/employees-list', { employees ,companies});
   } catch (error) {
       console.error('Error updating employee:', error);
       res.status(500).send('Internal Server Error');
@@ -1090,3 +1107,23 @@ app.get('/edit-employee/:employeeId', async (req, res) => {
   }
 });
 
+// delete employee by using id 
+app.get('/delete-employee/:employeeId', async (req, res) => {
+  try {
+    const employeeId = req.params.employeeId;
+    const employee = await emp.findByIdAndDelete(employeeId);
+
+    if (!employee) {
+      return res.status(404).json({ error: 'Employee not found' });
+    }
+
+    // Fetch companies data
+    const companies = await mcompany.find(); // Assuming you have a model named Company
+
+    const employees = await emp.find();
+    res.render('admin/employees-list', { employees, companies });
+  } catch (error) {
+    console.error('Error deleting employee:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});

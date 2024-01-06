@@ -22,7 +22,7 @@
                         <!-- <li><a href="/user-edit">User Edit</a></li> -->
                     </ul>
                 </li>
-                <li class="submenu">
+                <li class="submenu" active>
                     <a href="#">
                         <i class="fa fa-credit-card"></i><span> Subscription</span> <span class="menu-arrow"></span></a>
                     <ul>
@@ -201,10 +201,52 @@
     </div>
 </div>
 
+
+
 <script>
-    $(document).ready(function() {
-        $('.submenu-link').click(function(e) {
-            e.stopPropagation(); // Prevents the event from reaching the parent elements
+    $(document).ready(function () {
+        // Prevent default behavior and stop event propagation
+        $('.submenu-link').on('click', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            // Add any additional logic here if needed
+
+            // Redirect manually if needed
+            window.location.href = $(this).attr('href');
+        });
+
+        // Optionally, close the submenu on clicking outside of it
+        $(document).on('click', function () {
+            $('.submenu ul').slideUp();
+        });
+
+        // Keep the submenu open when clicking on it
+        $('.submenu').on('click', function (e) {
+            e.stopPropagation(); // Prevent closing when clicking inside the submenu
+            $(this).find('ul').slideToggle();
+        });
+    });
+</script> <script>
+    $(document).ready(function () {
+        // Prevent default behavior and stop event propagation
+        $('.submenu-link').on('click', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            // Add any additional logic here if needed
+
+            // Redirect manually if needed
+            window.location.href = $(this).attr('href');
+        });
+
+        // Optionally, close the submenu on clicking outside of it
+        $(document).on('click', function () {
+            $('.submenu ul').slideUp();
+        });
+
+        // Keep the submenu open when clicking on it
+        $('.submenu').on('click', function (e) {
+            e.stopPropagation(); // Prevent closing when clicking inside the submenu
+            $(this).find('ul').slideToggle();
         });
     });
 </script>

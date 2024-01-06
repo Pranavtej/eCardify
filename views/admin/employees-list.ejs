@@ -144,7 +144,7 @@
 
 					<div class="student-group-form">
 						<div class="row">
-							
+
 							<!-- <div class="col-lg-3 col-md-6">  
 								<div class="form-group">
 									<input type="text" class="form-control" placeholder="Search by Name ...">
@@ -198,7 +198,7 @@
 													<th>Contact</th>
 													<th>Designation</th>
 													<th>Company</th>
-													<th>Edit</th>
+													<th class="text-end">Edit/Delete</th>
 												</tr>
 											</thead>
 
@@ -221,16 +221,23 @@
 														</td>
 														<td>
 															<% const company=companies.find(c=> c._id.toString() ===
-																employee.company.toString()); %>
+																(employee.company ? employee.company.toString() : ''));
+																%>
 																<%= company ? company.name : 'Unknown Company' %>
+
 														</td>
-														<td>
-															<div>
-														  <a href="/edit-employee/<%= employee._id %>" class="btn btn-sm btn-warning">
-															<i class="feather-edit"></i> Edit
-														  </a>
-														</div>
-													  </td>
+														<td class="text-end">
+															<div class="actions">
+																<a href="/edit-employee/<%= employee._id %>"
+																	class="btn btn-sm btn-warning">
+																	<i class="feather-edit"></i>
+																</a>
+																<a href="/delete-employee/<%= employee._id %>"
+																	class="btn btn-sm btn-danger">
+																	<i class="feather-trash-2"></i>
+																</a>
+															</div>
+														</td>
 													</tr>
 													<% }); %>
 											</tbody>
@@ -242,7 +249,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="modal fade" id="addCardModal" tabindex="-1" role="dialog"
+				<!-- <div class="modal fade" id="addCardModal" tabindex="-1" role="dialog"
 					aria-labelledby="addCardModalLabel" aria-hidden="true">
 					<div class="modal-dialog" role="document">
 						<div class="modal-content">
@@ -251,9 +258,9 @@
 								<button type="button" class="btn-close" data-bs-dismiss="modal"
 									aria-label="Close"></button>
 								<!-- <span aria-hidden="true">&times;</span> -->
-								</button>
-							</div>
-							<!-- <div class="modal-body">
+				<!-- </button>
+							</div> -->
+				<!-- <div class="modal-body">
 								<form action="/add-card" method="post">
 									<div class="form-group">
 										<label for="phoneNumber">Enter User's Mobile Number:</label>
@@ -262,9 +269,9 @@
 									<button type="submit" class="btn btn-primary">Submit</button>
 								</form>
 							</div> -->
-						</div>
+				<!-- </div>
 					</div>
-				</div>
+				</div> -->
 
 				<!-- Delete Modal -->
 
