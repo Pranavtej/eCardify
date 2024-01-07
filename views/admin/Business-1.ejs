@@ -108,7 +108,7 @@
                             <form action="/businesscard/<%= user._id %>" method="post" id="userDetailsForm" enctype="multipart/form-data">
                                 <div class="row">
                                     <div class="col-12">
-                                        <h5 class="form-title student-info">User Information <span><a href="javascript:;"><i class="feather-more-vertical"></i></a></span></h5>
+                                        <h5 class="form-title student-info">Company Information <span><a href="javascript:;"><i class="feather-more-vertical"></i></a></span></h5>
                                     </div>
                                     <div class="col-12 col-sm-4">
                                         <div class="form-group local-forms">
@@ -116,15 +116,7 @@
                                             <input class="form-control" type="text" placeholder="Enter Company Name" id="Name" name="Name">
                                         </div>
                                     </div>
-                                    <div class="col-12 col-sm-4">
-                                        <div class="form-group local-forms">
-                                            <label for="textColor">Username Text Color</label>
-                                            <div class="input-group">
-                                                <input class="form-control" type="text" id="textColorValue" readonly>
-                                                <input class="form-control" type="color" id="textColor" name="textColor">
-                                            </div>
-                                        </div>
-                                    </div>
+                    
                 
                                     <div class="col-12 col-sm-4">
                                         <div class="form-group local-forms">
@@ -133,6 +125,14 @@
                                         </div>
                                     </div>
 									
+									<div class="col-12 col-sm-4">
+										<div class="form-group local-forms">
+											<label>Link <span class="login-danger">*</span></label>
+											<input class="form-control" type="text" placeholder="eg : www.google.com" id="urlInput" name="URL" required>
+										</div>
+										<button type="button" onclick="generateQRCode()" class="btn btn-primary">Generate QR Code</button>
+									</div>
+
                                     <div class="col-12 col-sm-4">
                                         <div class="form-group local-forms">
                                             <label for="bgImage">Background Image</label>
@@ -146,13 +146,6 @@
                                             <input class="form-control" type="color" id="bgColor" name="bgColor">
                                         </div>
                                     </div>
-                                    <div class="col-12 col-sm-4">
-										<div class="form-group local-forms">
-											<label>Link <span class="login-danger">*</span></label>
-											<input class="form-control" type="text" placeholder="eg : www.google.com" id="urlInput" name="URL" required>
-										</div>
-										<button type="button" onclick="generateQRCode()" class="btn btn-primary">Generate QR Code</button>
-									</div>
 
 									<input type="hidden" name="selectedItems" value="<%= JSON.stringify(selectedItem) %>">
 
@@ -204,16 +197,9 @@
         var userName = document.getElementById('Name').value;
         var backgroundImageInput = document.getElementById('bgImage');
         var backgroundColorInput = document.getElementById('bgColor');
-        var userName = document.getElementById('Name').value;
-    var textColorInput = document.getElementById('textColor');
-    var textColorValueInput = document.getElementById('textColorValue');
-
-
-    document.getElementById('userName').innerText = userName;
-    document.getElementById('userName').style.color = textColorInput.value;
-
 
         document.getElementById('userName').innerText = userName;
+        document.getElementById('userName').style.textAlign = 'center';
 
         var fileInput = document.getElementById('Image');
         var imageDiv = document.getElementById('image');
@@ -294,9 +280,6 @@
         qrcodeInput.value = url;
     }
 }
-
-
-
 function generatePDF() {
     var element = document.getElementById('previewCard');
 
@@ -310,19 +293,8 @@ function generatePDF() {
             console.error('Error generating PDF:', error);
         });
 }
-
-
-
-
-
-
-
-
 	updateUserDetails();
 	generateQRCode();
-
-
-
 </script>
 
 <!-- html2pdf library -->

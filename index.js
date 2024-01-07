@@ -35,7 +35,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));  
-const saltRounds = 10;
+
 
 app.use('/public', express.static(__dirname + "/public"));
 
@@ -78,6 +78,19 @@ app.get('/register', async (req, res) => {
 
 
 
+app.get('/about', function (req, res) {
+    res.render('/views/about/about.ejs');
+});
+
+app.get('/contact', function (req, res) {
+    res.render('/views/contact/contact.ejs');
+}
+);
+
+
+app.listen(8000, function () {
+    console.log('Server started at port 8000');
+   })
 
 
 
@@ -111,55 +124,6 @@ app.get('/_logs', async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// global page for the user route 
-
-// app.get('/:id', async function (req, res) {
-//   try {
-//     // Use proper error handling for the Mongoose query
-//     const pageData = await cpages.find({ user: req.params.id });
-    
-//     // Render the page with the retrieved data
-//     res.render('admin/globalpages', { pageData: pageData[0] });
-//     console.log(pageData);
-//   } catch (error) {
-//     console.error('Error executing Mongoose query:', error);
-//     // Handle the error appropriately (send an error response, etc.)
-//     res.status(500).send('Internal Server Error');
-//   }
-// });
-
-
-
-
-app.get('/about', function (req, res) {
-    res.render('/views/about/about.ejs');
-});
-
-app.get('/contact', function (req, res) {
-    res.render('/views/contact/contact.ejs');
-}
-);
-
-const port = 8000 || 5000
-
-app.listen(port, function () {
-    console.log('Server started at port 8000');
-   })
 
 
 
@@ -476,13 +440,37 @@ app.get('/get-cards/:userId', async (req, res) => {
 //card deletion code
 app.post('/delete-card/:userId', async (req, res) => {
   try {
-    const userId = req.params.userId;
-    const cardId = req.body.cardId;
-
-    await User.findByIdAndUpdate(userId, {
-      $pull: { selectedItems: { _id: cardId } }
-    });
-
+        const userId = req.params.userId;
+        const cardId = req.body.cardId;
+        const businessCard = await BusinessCard.findByIdAndDelete(cardId);
+    
+        if (businessCard) {
+          const s3 = new AWS.S3();
+        
+          const deleteObject = async (objectKey) => {
+            const decodedObjectKey = decodeURIComponent(objectKey);
+            const key1 = decodedObjectKey.split('.com/')[1];
+            const params = {
+              Bucket: process.env.S3_BUCKET_NAME,
+              Key: key1, // Specify the folder path
+            };
+        
+            try {
+              await s3.deleteObject(params).promise();
+              console.log(`Object deleted successfully: ${key1}`);
+            } catch (error) {
+              console.error(`Error deleting object: ${key1}`, error);
+              throw error;
+            }
+          };
+        
+          await deleteObject(businessCard.Image);
+          await deleteObject(businessCard.bgImg);
+        }
+        await User.findByIdAndUpdate(userId, {
+          $pull: { selectedItems: { _id: cardId } }
+        });
+    
     const users1 = await fetchUserData();
     res.render('admin/user', { users1 }); // Redirect to home or any desired route
   } catch (error) {
@@ -530,6 +518,45 @@ app.get("/delete/:id",async(req,res)=>{
 
 });
           
+
+
+// app.post('/add-user', async (req, res) => {
+//     try {
+//         const { username, email, number, subscriptionPlan, occasion, cardType, template } = req.body;
+//         console.log(req.body);
+
+//         // Create a new user
+//         const Plan = new ObjectId(subscriptionPlan);
+//         const card = new ObjectId(cardType);
+//         const temp = new ObjectId(template);
+
+//         const newUser = new User({
+//             username,
+//             email,
+//             number,
+//             selectedItems: [
+//                 {
+//                     occasion,
+//                     cardType: card,
+//                     template: temp,
+//                     subscriptionPlan: {
+//                         plan: Plan,
+//                     },
+//                 },
+//             ],
+//         });
+
+//         // Save the user to the database
+//         const savedUser = await newUser.save();
+
+//         // Redirect to the edit page for the newly created user
+//         res.redirect(`/template1?userId=${savedUser._id}`);
+//     } catch (error) {
+//         console.error('Error creating user:', error);
+//         res.status(500).send('Internal Server Error');
+//     }
+// });
+
 app.get('/imageupload', async (req, res) => {
     try {
       const data = await Image.find({});
@@ -540,7 +567,23 @@ app.get('/imageupload', async (req, res) => {
     }
   });
   
-
+//   app.post('/imageupload', upload.single('image'), async (req, res) => {
+//     try {
+//       const obj = {
+//         name: req.body.name,
+//         desc: req.body.desc,
+//         img: {
+//           data: await fs.readFileAsync(path.join(__dirname, 'uploads', req.file.filename)),
+//           contentType: 'image/png',
+//         },
+//       };
+//       await Image.create(obj);
+//       res.redirect('/');
+//     } catch (err) {
+//       console.error(err);
+//       res.status(500).send('Internal Server Error');
+//     }
+//   });
 
   app.post('/add-user', async (req, res) => {
     try {
@@ -756,48 +799,84 @@ app.get('/cardlist', async (req, res) => {
 });
 
 
-app.post('/businesscard/:userId',  upload.fields([  { name: 'Image', maxCount: 1 }, { name: 'bgImage', maxCount: 1 }
-  ]), async (req, res) => {
-     try {
-        const  userId  = req.params.userId;
-        const  selectedItems = req.body.selectedItems;       
-        const selectedItemsObject = JSON.parse(selectedItems);
-        const subscriptionPlan = selectedItemsObject.subscriptionPlan || {};
-        const plan = subscriptionPlan.plan || '';
-        const templateId=selectedItemsObject.template;
-        const cardid=selectedItemsObject.cardType;
-        const template =await temp.findById(templateId).lean();
+app.post('/businesscard/:userId', upload.fields([
+  { name: 'Image', maxCount: 1 },
+  { name: 'bgImage', maxCount: 1 }
+]), async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const selectedItems = req.body.selectedItems;
+    const selectedItemsObject = JSON.parse(selectedItems);
+    const businessid = selectedItemsObject._id;
 
-        const imageUrl = req.files['Image'] ? req.files['Image'][0] : null;
-        // path to the uploaded image
-        const bgImage = req.files['bgImage'] ? req.files['bgImage'][0]: null; // path to the uploaded background image
-        
-        console.log(template);
-        
-const templateFields = template.fields && template.fields.map(field => ({
-    fieldName: field.name,
-    fieldValue: req.body[field.name] || '',
-  }));
-  console.log(templateFields);
-        const businessCard = new BusinessCard({
-            user: userId,
-            selectedCardType: cardid,
-            selectedTemplate: templateId,
-            selectedSubscriptionPlan: plan,
-            templateFields: templateFields,
-            Image:imageUrl.buffer.toString('base64'),
-            bgImg:bgImage.buffer.toString('base64'),
-            bgColor:req.body.bgColor || '',
-        });
+    const subscriptionPlan = selectedItemsObject.subscriptionPlan || {};
+    const plan = subscriptionPlan.plan || '';
+    const templateId = selectedItemsObject.template;
+    const cardid = selectedItemsObject.cardType;
+    const occasion = selectedItemsObject.occasion;
+    const template = await temp.findById(templateId).lean();
 
-        const savedBusinessCard = await businessCard.save();
-        console.log(savedBusinessCard);
-        res.render('admin/custompages',{userId});
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Internal Server Error' });
-    }
+    // Extract the files from req.files
+    const images = req.files['Image'] ? req.files['Image'][0] : null;
+    const bgImage = req.files['bgImage'] ? req.files['bgImage'][0] : null;
+
+    const templateFields = template.fields && template.fields.map(field => ({
+      fieldName: field.name,
+      fieldValue: req.body[field.name] || '',
+    }));
+
+    const uploadToS3 = async (file, folder, filenamePrefix) => {
+      const key = `${userId}_${cardid}_${templateId}_${plan}_${occasion}_${filenamePrefix}`;
+      const s3Params = {
+        Bucket: process.env.S3_BUCKET_NAME,
+        Key: `${folder}/${key}`,
+        Body: file.buffer,
+        ContentType: file.mimetype,
+      };
+      const s3UploadResponse = await s3.upload(s3Params).promise();
+      return s3UploadResponse.Location;
+    };
+
+    const image1Url = images ? await uploadToS3(images, 'cards_img', 'image') : null;
+    const image2Url = bgImage ? await uploadToS3(bgImage, 'cards_img', 'bgimage') : null;
+
+    console.log(templateFields);
+
+    const filter = {
+      user: userId,
+      selectedCardType: cardid,
+      selectedTemplate: templateId,
+      selectedSubscriptionPlan: plan,
+      _id: businessid
+    };
+
+    const update = {
+      user: userId,
+      selectedCardType: cardid,
+      selectedTemplate: templateId,
+      selectedSubscriptionPlan: plan,
+      templateFields: templateFields,
+      Image: image1Url,
+      bgImg: image2Url,
+      bgColor: req.body.bgColor || '',
+    };
+
+    const options = {
+      upsert: true, // Creates a new document if no documents match the filter
+      new: true, // Returns the modified document if found or the upserted document if created
+    };
+
+    const savedBusinessCard = await BusinessCard.findOneAndUpdate(filter, update, options);
+    console.log(savedBusinessCard);
+
+    const users1 = await fetchUserData();
+    res.render('admin/user', { users1 });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 });
+
 
 
 app.post('/delete-user/:userId', async (req, res) => {
@@ -910,10 +989,8 @@ app.post('/custompage/:id',upload.fields([{ name: 'image', maxCount: 1 }]),async
 });
 
 
-
-
-app.get('/company-details', async (req, res) => {
-  res.render('admin/add-company');
+app.get('/add-company',async(req,res)=>{
+res.render('admin/add-company');
 });
 
 
@@ -921,8 +998,9 @@ app.post('/company-details', upload.single('logo'),async(req, res) => {
     const { name, cname, cnum, cmail } = req.body;
     console.log(req.body);
     const file = req.file;
-
-    const key = `${name}`;
+    
+    const uniqueFilename = new ObjectId();
+    const key = `${uniqueFilename}`;
   
     const params = {
       Bucket: process.env.S3_BUCKET_NAME,
@@ -977,10 +1055,24 @@ app.post('/add-employee', upload.single('photo'), async (req, res) => {
         
       };
       const s3UploadResponse = await s3.upload(s3Params).promise();
+      console.log(s3UploadResponse);
       const photoUrl = s3UploadResponse.Location;
       const newEmployee = new emp({
         _id : employeeId,
         photo: photoUrl,
+        name,
+        contact,
+        email,
+        address,
+        rank,
+        designation,
+        employeeid : empid,
+        branchid : bid,
+        area,
+        teamSize: teamSize || 0, // Set default value to 0 if not provided
+        experience: experience || 0, // Set default value to 0 if not provided
+        achievements: achievements || '', // Set default value to empty string if not provided
+        company,
         name:name,
         company:company,
         contact:contact,
@@ -999,29 +1091,107 @@ app.post('/add-employee', upload.single('photo'), async (req, res) => {
   
       // Save the document to the database
       await newEmployee.save();
-  
-      res.redirect('/employee-list');
+      const employees = await emp.find();
+      const companies = await mcompany.find();
+      res.render('admin/employees-list',{employees,companies});
+      res.status(201).json({ message: 'Employee added successfully', employee: newEmployee });
     } catch (error) {
       console.error(error);
       res.status(500).json({ message: 'Internal Server Error' });
     }
   });
 
+  app.get('/:companyName/:id', async (req, res) => {
+    try {
+      const companyName = req.params.companyName;
+      const employeeid = req.params.id;
+      const company = await mcompany.findOne({
+        name: companyName,status: 1
+      });
+      console.log(company)
+      if (!company) {
+        return res.status(404).json({ message: 'Company not found' });
+      }
+  
+      const employee = await emp.findOne({ _id: employeeid, company: company._id });
+      console.log(employee);
+      if (!employee) {
+        return res.status(404).json({ message: 'Employee not found' });
+      }
+      
+      res.render('templates/company-auth/index', { employee,company });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Internal Server Error' });
+    }
+  });
 
-  app.get('/employee-list',async(req,res)=>{
+app.get('/global/:name', async function (req, res) {
+    try {
+      
+      const user = await User.find({username: req.params.name});
+      console.log(user);
+      const pageData = await cpages.find( {user: user[0].id });
+      console.log(pageData[0]);
+      // Render the page with the retrieved data
+      res.render('admin/globalpage', { pageData: pageData[0] });
+    } catch (error) {
+      console.error('Error executing Mongoose query:', error);
+      // Handle the error appropriately (send an error response, etc.)
+      res.status(500).send('Internal Server Error');
+     }
+  });
+
+
+app.get('/companies-list', async (req, res) => {
+    try {
+     
+      const companies = await mcompany.find();
+  
+      res.render('admin/companies-list', { companies});
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Internal Server Error' });
+    }
+  });
+
+app.put('/update-company-status/:companyId', async (req, res) => {
+    try {
+      const companyId = req.params.companyId;
+      const { action } = req.body;
+  
+      let status;
+      if (action === 'activate') {
+        status = 1;
+      } else if (action === 'deactivate') {
+        status = 0;
+      } else {
+        return res.status(400).json({ message: 'Invalid action' });
+      }
+  
+      await mcompany.findByIdAndUpdate(companyId, { status });
+      res.json({ message: `Company ${action}d successfully` });
+      // const companies = await mcompany.find();
+      // res.render('admin/companies-list', { companies});
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Internal Server Error' });
+    }
+  });
+
+  
+  app.get('/invitation',async(req,res)=>{
+    res.render('admin/invitations');
+  });
+
+
+app.get('/employee-list',async(req,res)=>{
    const employees = await emp.find();
    const companies = await mcompany.find();
     res.render('admin/employees-list',{employees,companies});
+
     }
   );
-
-
-  app.get('/company-list',async(req,res)=>{
-    const companies = await mcompany.find();
-    res.render('admin/companies-list',{companies});
-    }
-  );
-
 
 // Post request to update employee details
 app.post('/edit-employee/:employeeId', upload.single('photo'), async (req, res) => {
@@ -1077,7 +1247,6 @@ app.post('/edit-employee/:employeeId', upload.single('photo'), async (req, res) 
 });
 
 
-// Get request to fetch employee details for editing
 app.get('/edit-employee/:employeeId', async (req, res) => {
   try {
       const employeeId = req.params.employeeId;
@@ -1095,7 +1264,7 @@ app.get('/edit-employee/:employeeId', async (req, res) => {
   }
 });
 
-// delete employee by using id 
+
 app.get('/delete-employee/:employeeId', async (req, res) => {
   try {
     const employeeId = req.params.employeeId;
@@ -1126,6 +1295,57 @@ app.get('/delete-employee/:employeeId', async (req, res) => {
   }
 });
 
+app.get('/user-manager', async (req, res) => {
+  try {
+      const users1 = await fetchUserData();
+      res.render('admin/user-manager', { users1 });
+  } catch (error) {
+      console.error(error);
+      res.status(500).send("Internal Server Error");
+  }
+});
+
+app.post('/user-manager/:userId', async (req, res) => {
+const userId = req.params.userId;
+
+try {
+    // Find and delete the user by ID
+    const deletedUser = await User.findByIdAndDelete(userId);
+
+    if (!deletedUser) {
+        return res.status(404).json({ error: 'User not found' });
+    }
+
+    // Redirect back to the current page (admin/user-manager)
+    res.redirect('/admin/user-manager');
+} catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'Internal server error' });
+}
+});
+
+
+
+
+app.get('/view-user/:userId', async (req, res) => {
+const userId = req.params.userId;
+
+try {
+  const user = await User.findById(userId)
+    .populate('selectedItems.cardType')
+    .populate('selectedItems.template');
+
+  if (!user) {
+    return res.status(404).json({ message: 'User not found' });
+  }
+
+  // Render the view with the user data and populated cardType and template
+  res.render('admin/view-user', { user });
+} catch (error) {
+  console.error(error);
+  return res.status(500).json({ error: 'Internal server error' });
+}
+});
 
 app.get('/invitations',async(req,res)=>{
   const employees = await emp.find();
