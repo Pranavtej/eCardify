@@ -18,8 +18,7 @@ const path = require('path');
 const adminModel = require('./models/admin');
 const multer = require('multer');
 const Image = require('./models/image');
-
-
+const LogModel = require('./models/logModel');
 const { ObjectId } = require('mongodb');
 const AWS = require('aws-sdk');
 const dotenv = require('dotenv');
@@ -92,6 +91,39 @@ app.get('/contact', function (req, res) {
 app.listen(8000, function () {
     console.log('Server started at port 8000');
    })
+
+
+
+
+// Log Model
+const logModel = new LogModel();
+
+// Middleware for logging route access
+app.use(async (req, res, next) => {
+    const routeAccessDetails = {
+        method: req.method,
+        path: req.path,
+        query: req.query,
+        params: req.params,
+    };
+
+    await logModel.logEvent('route_access', routeAccessDetails);
+    next();
+});
+
+
+
+// Displaying all the logs
+app.get('/_logs', async (req, res) => {
+  try {
+    const logs = await logModel.getAllLogs();
+    console.log(logs);
+    res.json(logs);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Internal Server Error');
+  }
+});
 
 
 
