@@ -1041,6 +1041,9 @@ app.get('/add-employee', async (req, res) => {
 app.post('/add-employee', upload.single('photo'), async (req, res) => {
     try {
       const { name, company, contact, email,address,rank, designation, empid, bid, area, teamSize, experience, achievements } = req.body;
+      console.log(req.body);
+      
+
       const file = req.file;
       const employeeId = new ObjectId();
       const key = `${company}_${employeeId}`;
@@ -1070,6 +1073,20 @@ app.post('/add-employee', upload.single('photo'), async (req, res) => {
         experience: experience || 0, // Set default value to 0 if not provided
         achievements: achievements || '', // Set default value to empty string if not provided
         company,
+        name:name,
+        company:company,
+        contact:contact,
+        email:email,
+        address:address,
+        rank:rank,
+        designation:designation,
+        employeeid:empid,
+        branchid:bid,
+        area:area,
+        teamSize:teamSize,
+        experience:experience,
+        achievements:achievements,
+
       });
   
       // Save the document to the database
@@ -1257,6 +1274,16 @@ app.get('/delete-employee/:employeeId', async (req, res) => {
       return res.status(404).json({ error: 'Employee not found' });
     }
 
+    // Delete the image from S3
+    const key = `employee_img/${employee.company}_${employee._id}`;
+    const s3DeleteParams = {
+      Bucket: process.env.S3_BUCKET_NAME,
+      Key: key,
+    };
+
+    await s3.deleteObject(s3DeleteParams).promise();
+
+
     // Fetch companies data
     const companies = await mcompany.find(); // Assuming you have a model named Company
 
@@ -1319,3 +1346,15 @@ try {
   return res.status(500).json({ error: 'Internal server error' });
 }
 });
+
+app.get('/invitations',async(req,res)=>{
+  const employees = await emp.find();
+  res.render('admin/invitations',{employees});
+  });
+
+
+app.get("/custompages",async(req,res)=>{
+  const employees = await emp.find();
+  res.render('admin/custompages',{employees});
+}
+);

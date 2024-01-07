@@ -1,262 +1,201 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
-        <title>Preskool - Students</title>
-		
-		<!-- Favicon -->
-        <link rel="shortcut icon" href="/public/assets/admin/img/favicon.png">
-	
-		<!-- Fontfamily -->
-		<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,700;0,900;1,400;1,500;1,700&display=swap" rel="stylesheet">
-		
-		<!-- Bootstrap CSS -->
-        <link rel="stylesheet" href="/public/assets/admin/plugins/bootstrap/css/bootstrap.min.css">
-		
-		<!-- Feathericon CSS -->
-        <link rel="stylesheet" href="/public/assets/admin/plugins/feather/feather.css">
-		
-		<!-- Pe7 CSS -->
-		<link rel="stylesheet" href="/public/assets/admin/plugins/icons/flags/flags.css">
-		
-		<!-- Datepicker CSS -->
-		<link rel="stylesheet" href="/public/assets/admin/css/bootstrap-datetimepicker.min.css">
-		
-		<!-- Fontawesome CSS -->
-		<link rel="stylesheet" href="/public/assets/admin/plugins/fontawesome/css/fontawesome.min.css">
-		<link rel="stylesheet" href="/public/assets/admin/plugins/fontawesome/css/all.min.css">
 
-		<!-- Select CSS -->
-		<link rel="stylesheet" href="/public/assets/admin/plugins/select2/css/select2.min.css">
-		
-		<!-- Main CSS -->
-        <link rel="stylesheet" href="/public/assets/admin/css/style.css">
-    </head>
-    <body>
-		
-		<!-- Main Wrapper -->
-        <div class="main-wrapper">
-		
-			<!-- Header -->
-            <div class="header">
-			
-				<!-- Logo -->
-                <div class="header-left">
-                    <a href="index.html" class="logo">
-						<img src="/public/assets/admin/img/logo.png" alt="Logo">
-					</a>
-					<a href="index.html" class="logo logo-small">
-						<img src="/public/assets/admin/img/logo-small.png" alt="Logo" width="30" height="30">
-					</a>
-                </div>
-				<!-- /Logo -->
-				
-				<div class="menu-toggle">
-					<a href="javascript:void(0);" id="toggle_btn">
-						<i class="fas fa-bars"></i>
-					</a>
-				</div>
-				
-				<!-- Search Bar -->
-				<div class="top-nav-search">
-					<form>
-						<input type="text" class="form-control" placeholder="Search here">
-						<button class="btn" type="submit"><i class="fas fa-search"></i></button>
-					</form>
-				</div>
-				<!-- /Search Bar -->
-				
-				<!-- Mobile Menu Toggle -->
-				<a class="mobile_btn" id="mobile_btn">
-					<i class="fas fa-bars"></i>
-				</a>
-				<!-- /Mobile Menu Toggle -->
-				
-				<!-- Header Right Menu -->
-				
-				<!-- /Header Right Menu -->
-				
-            </div>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+	<title>Preskool - Students</title>
+
+	<!-- Favicon -->
+	<link rel="shortcut icon" href="/public/assets/admin/img/favicon.png">
+
+	<!-- Fontfamily -->
+	<link
+		href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,700;0,900;1,400;1,500;1,700&display=swap"
+		rel="stylesheet">
+
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="/public/assets/admin/plugins/bootstrap/css/bootstrap.min.css">
+
+	<!-- Feathericon CSS -->
+	<link rel="stylesheet" href="/public/assets/admin/plugins/feather/feather.css">
+
+	<!-- Pe7 CSS -->
+	<link rel="stylesheet" href="/public/assets/admin/plugins/icons/flags/flags.css">
+
+	<!-- Datepicker CSS -->
+	<link rel="stylesheet" href="/public/assets/admin/css/bootstrap-datetimepicker.min.css">
+
+	<!-- Fontawesome CSS -->
+	<link rel="stylesheet" href="/public/assets/admin/plugins/fontawesome/css/fontawesome.min.css">
+	<link rel="stylesheet" href="/public/assets/admin/plugins/fontawesome/css/all.min.css">
+
+	<!-- Select CSS -->
+	<link rel="stylesheet" href="/public/assets/admin/plugins/select2/css/select2.min.css">
+
+	<!-- Main CSS -->
+	<link rel="stylesheet" href="/public/assets/admin/css/style.css">
+</head>
+
+<body>
+
+	<!-- Main Wrapper -->
+	<div class="main-wrapper">
+
+		<!-- Header -->
+		<%- include('header.ejs') %>
 			<!-- /Header -->
-			
+
 			<!-- Sidebar -->
-            <%- include('sidebar.ejs') %>
-			<!-- /Sidebar -->
-			
-			<!-- Page Wrapper -->
-            <div class="page-wrapper">
-                <div class="content container-fluid">
-				
-					<!-- Page Header -->
-					<div class="page-header">
-						<div class="row align-items-center">
+			<%- include('sidebar.ejs') %>
+				<!-- /Sidebar -->
+
+				<!-- Page Wrapper -->
+				<div class="page-wrapper">
+					<div class="content container-fluid">
+
+						<!-- Page Header -->
+						<div class="page-header">
+							<div class="row align-items-center">
+								<div class="col-sm-12">
+									<div class="page-sub-header">
+										<h3 class="page-title">Add Users</h3>
+										<ul class="breadcrumb">
+											<li class="breadcrumb-item"><a href="/user">User</a></li>
+											<li class="breadcrumb-item active">Add Users</li>
+										</ul>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- /Page Header -->
+
+						<div class="row">
 							<div class="col-sm-12">
-								<div class="page-sub-header">
-									<h3 class="page-title">Add Users</h3>
-									<ul class="breadcrumb">
-										<li class="breadcrumb-item"><a href="/user">User</a></li>
-										<li class="breadcrumb-item active">Add Users</li>
-									</ul>
+
+								<div class="card comman-shadow">
+									<div class="card-body">
+										<form action="/update-cards" method="post">
+											<div class="row">
+												<div class="col-12">
+													<h5 class="form-title student-info">User Information <span><a
+																href="javascript:;"><i
+																	class="feather-more-vertical"></i></a></span></h5>
+												</div>
+												<div class="col-12 col-sm-4">
+													<div class="form-group local-forms">
+														<label>Name <span class="login-danger">*</span></label>
+														<input class="form-control" type="text" placeholder="Enter Name"
+															id="username" name="username"
+															value="<%=existingUser.username%>" readonly>
+													</div>
+												</div>
+												<div class="col-12 col-sm-4">
+													<div class="form-group local-forms">
+														<label>Email</label>
+														<input class="form-control" type="text"
+															placeholder="Enter Email" id="email" name="email"
+															value="<%=existingUser.email%>" readonly>
+													</div>
+												</div>
+												<div class="col-12 col-sm-4">
+													<div class="form-group local-forms">
+														<label>Phone number<span class="login-danger">*</span></label>
+														<input class="form-control" type="text"
+															placeholder="Enter Phone number" id="password" name="number"
+															value="<%=existingUser.number%>" readonly>
+													</div>
+												</div>
+												<div class="col-12 col-sm-4">
+													<div class="form-group local-forms">
+														<label>Subscription Plan<span
+																class="login-danger">*</span></label>
+														<select class="form-control select" name="subscriptionPlan">
+															<option>Select Plan</option>
+															<% subscriptionPlans.forEach(plan=> { %>
+																<option value="<%= plan._id %>">
+																	<%= plan.name %>
+																</option>
+																<% }); %>
+														</select>
+													</div>
+												</div>
+
+												<div class="col-12 col-sm-4">
+													<div class="form-group local-forms">
+														<label>Occassion </label>
+														<input class="form-control" type="text"
+															placeholder="Enter Occassion" name="occassion">
+													</div>
+												</div>
+												<div class="col-12 col-sm-4">
+													<div class="form-group local-forms">
+														<label>Card Type<span class="login-danger">*</span></label>
+														<select class="form-control select" name="cardType">
+															<option>Select card</option>
+															<% cardTypes.forEach(cardType=> { %>
+																<option value="<%= cardType._id %>">
+																	<%= cardType.name %>
+																</option>
+																<% }); %>
+														</select>
+													</div>
+												</div>
+												<div class="col-12 col-sm-4">
+													<div class="form-group local-forms">
+														<label>Template<span class="login-danger">*</span></label>
+														<select class="form-control select" name="template">
+															<option>Select Template</option>
+															<% templates.forEach(template=> { %>
+																<option value="<%= template._id %>">
+																	<%= template.name %>
+																</option>
+																<% }); %>
+														</select>
+													</div>
+												</div>
+												<div class="col-12">
+													<div class="student-submit">
+														<button type="submit" class="btn btn-primary">Create
+															User</button>
+													</div>
+												</div>
+											</div>
+										</form>
+									</div>
 								</div>
 							</div>
 						</div>
 					</div>
-					<!-- /Page Header -->
-				
-					<div class="row">
-						<div class="col-sm-12">
-						
-							<div class="card comman-shadow">
-								<div class="card-body">
-									<form action="/update-cards" method="post">
-										<div class="row">
-											<div class="col-12">
-												<h5 class="form-title student-info">User Information <span><a href="javascript:;"><i class="feather-more-vertical"></i></a></span></h5>
-											</div>
-											<div class="col-12 col-sm-4">  
-												<div class="form-group local-forms">
-													<label >Name <span class="login-danger">*</span></label>
-													<input class="form-control" type="text" placeholder="Enter Name" id="username"  name="username" value="<%=existingUser.username%>" readonly>
-												</div>
-											</div>
-											<div class="col-12 col-sm-4">
-												<div class="form-group local-forms">
-													<label>Email</label>
-													<input class="form-control" type="text" placeholder="Enter Email" id="email" name="email" value="<%=existingUser.email%>" readonly>
-												</div>
-											</div>
-											<div class="col-12 col-sm-4">
-												<div class="form-group local-forms">
-													<label >Phone number<span class="login-danger">*</span></label>
-													<input class="form-control" type="text" placeholder="Enter Phone number" id="password" name="number" value="<%=existingUser.number%>" readonly>
-												</div>
-											</div>
-											<div class="col-12 col-sm-4">
-												<div class="form-group local-forms">
-													<label >Subscription Plan<span class="login-danger">*</span></label>
-													<select class="form-control select" name="subscriptionPlan">
-														<option>Select Plan</option>
-														<% subscriptionPlans.forEach(plan => { %>
-															<option value="<%= plan._id %>"><%= plan.name %></option>
-														<% }); %>
-													</select>
-												</div>
-											</div>
-											
-											<div class="col-12 col-sm-4">
-												<div class="form-group local-forms">
-													<label >Occassion </label>
-													<input class="form-control" type="text" placeholder="Enter Occassion" name="occassion" >
-												</div>
-											</div> 
-											<div class="col-12 col-sm-4">
-												<div class="form-group local-forms">
-													<label >Card Type<span class="login-danger">*</span></label>
-													<select class="form-control select" name="cardType">
-														<option>Select card</option>
-														<% cardTypes.forEach(cardType => { %>
-															<option value="<%= cardType._id %>"><%= cardType.name %></option>
-														<% }); %>
-													</select>
-												</div>
-											</div>
-											<div class="col-12 col-sm-4">
-												<div class="form-group local-forms">
-													<label >Template<span class="login-danger">*</span></label>
-													<select class="form-control select" name="template">
-														<option>Select Template</option>
-														<% templates.forEach(template => { %>
-															<option value="<%= template._id %>"><%= template.name %></option>
-														<% }); %>
-													</select>
-												</div>
-											</div>
-											<!-- <div class="col-12 col-sm-4">
-												<div class="form-group local-forms">
-													<label >E-Mail <span class="login-danger">*</span></label>
-													<input class="form-control" type="text" placeholder="Enter Email Address" >
-												</div>
-											</div> -->
-											<!-- <div class="col-12 col-sm-4">
-												<div class="form-group local-forms">
-													<label >Class <span class="login-danger">*</span></label>
-													<select class="form-control select">
-														<option>Please Select Class  </option>
-														<option>12</option>
-														<option>11</option>
-														<option>10</option>
-													  </select>
-												</div>
-											</div> -->
-											<!-- <div class="col-12 col-sm-4">
-												<div class="form-group local-forms">
-													<label >Section <span class="login-danger">*</span></label>
-													<select class="form-control select">
-														<option>Please Select Section   </option>
-														<option>B</option>
-														<option>A</option>
-														<option>C</option>
-													  </select>
-												</div>
-											</div> -->
-											
-											<!-- <div class="col-12 col-sm-4">
-												<div class="form-group local-forms">
-													<label >Phone </label>
-													<input class="form-control" type="text" placeholder="Enter Phone Number" >
-												</div>
-											</div> -->
-											<!-- <div class="col-12 col-sm-4">
-												<div class="form-group students-up-files">
-													<label>Upload User Photo (150px X 150px)</label>
-													<div class="uplod">
-														<label class="file-upload image-upbtn mb-0">
-															Choose File <input type="file">
-														</label>
-													</div>
-												</div>
-											</div> -->
-											<div class="col-12">
-												<div class="student-submit">
-													<button type="submit" class="btn btn-primary">Create User</button>
-												</div>
-											</div>
-										</div>
-									</form>
-								</div>
-							</div>							
-						</div>					
-					</div>					
-				</div>				
-			</div>
-			<!-- /Page Wrapper -->
-			<!-- /Page Wrapper -->
-			
-        </div>
-		<!-- /Main Wrapper -->
-		
-		<!-- jQuery -->
-        <script src="/public/assets/admin/js/jquery-3.6.0.min.js"></script>
-		
-		<!-- Bootstrap Core JS -->
-        <script src="/public/assets/admin/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-		
-		<!-- Feather Icon JS -->
-		<script src="/public/assets/admin/js/feather.min.js"></script>
-		
-		<!-- Slimscroll JS -->
-		<script src="/public/assets/admin/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+				</div>
+				<!-- /Page Wrapper -->
+				<!-- /Page Wrapper -->
 
-		<!-- Select2 JS -->
-		<script src="/public/assets/admin/plugins/select2/js/select2.min.js"></script>
-		
-		<!-- Datepicker Core JS -->
-		<script src="/public/assets/admin/plugins/moment/moment.min.js"></script>
-		<script src="/public/assets/admin/js/bootstrap-datetimepicker.min.js"></script>
+	</div>
+	<!-- /Main Wrapper -->
 
-		<!-- Custom JS -->
-		<script src="/public/assets/admin/js/script.js"></script>
-		
-    </body>
+	<!-- jQuery -->
+	<script src="/public/assets/admin/js/jquery-3.6.0.min.js"></script>
+
+	<!-- Bootstrap Core JS -->
+	<script src="/public/assets/admin/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+	<!-- Feather Icon JS -->
+	<script src="/public/assets/admin/js/feather.min.js"></script>
+
+	<!-- Slimscroll JS -->
+	<script src="/public/assets/admin/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+
+	<!-- Select2 JS -->
+	<script src="/public/assets/admin/plugins/select2/js/select2.min.js"></script>
+
+	<!-- Datepicker Core JS -->
+	<script src="/public/assets/admin/plugins/moment/moment.min.js"></script>
+	<script src="/public/assets/admin/js/bootstrap-datetimepicker.min.js"></script>
+
+	<!-- Custom JS -->
+	<script src="/public/assets/admin/js/script.js"></script>
+
+</body>
+
 </html>

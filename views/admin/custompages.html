@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    form {
+      max-width: 800px;
+      margin: 20px auto;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+      color: #333;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+      color: #555;
+    }
+
+    input,
+    select,
+    button {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+
+    .addFieldButton {
+      background-color: #FC8955;
+      color: #fff;
+      border: none;
+      padding: 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      width: 100px;
+      margin-left: 95px;
+      margin-top: -45px;
+    }
+
+    .removeFieldButton {
+      background-color: #4FD6F7;
+      color: #fff;
+      border: none;
+      padding: 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      width: 100px;
+      margin: -10px;
+    }
+
+    .fieldGroup {
+      margin-bottom: 20px;
+    }
+
+    .fieldGroup label {
+      margin-bottom: 5px;
+    }
+
+    img.preview {
+      max-width: 100%;
+      margin-top: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    .row::after {
+      content: "";
+      display: table;
+      clear: both;
+    }
+
+    .col-25 {
+      float: left;
+      width: 15%;
+      margin-top: 15px;
+    }
+
+    .col-75 {
+      float: left;
+      width: 80%;
+      margin-top: 6px;
+    }
+
+    .submit-btn {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .submit-btn button {
+      width: 100px;
+      background-color: #006400;
+      color: #fff;
+    }
+
+    .submit-btn button:active {
+      background-color: #4CBB17;
+    }
+
+    .fields-btn socialMediaFields {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 200px;
+      justify-content: space-between;
+      margin: 20px;
+    }
+
+    .fields-btn {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 200px;
+      justify-content: space-between;
+      margin: 20px;
+    }
+
+    .fields-btn button:active {
+      width: 100px;
+      border: 2px solid black;
+
+    }
+  </style>
+  <title>Customizable Form</title>
+</head>
+<!-- Page Wrapper -->
+<div class="page-wrapper">
+  <div class="content container-fluid">
+
+    <!-- Page Header -->
+    <div class="page-header">
+      <div class="row">
+      </div>
+    </div>
+    <!-- /Page Header -->
+
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="card-body">
+            <form action="#">
+              <div class="form-group row">
+                <h2 class="card-title">Customizable Form</h2>
+                <div class="row">
+                  <div class="col-25">
+                    <label for="fname">File Input</label>
+                  </div>
+                  <div class="col-75">
+                    <input type="file" id="image" name="image" accept="image/*">
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-25">
+                    <label for="fname">Image Size</label>
+                  </div>
+                  <div class="col-75">
+                    <input type="text" id="imageSize" name="imageSize" placeholder="Enter Image Size here..">
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-body">
+            <form action="#">
+              <div class="fieldGroup" id="basicInformationFields">
+                <div class="field">
+                  <div class="form-group row">
+                    <h2 class="card-title">Basic Information</h2>
+                    <div class="row">
+                      <div class="col-25">
+                        <label for="fname">Field Name</label>
+                      </div>
+                      <div class="col-75">
+                        <input type="text" name="fieldNames[]" placeholder="Enter Field Name here..">
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-25">
+                        <label for="fname">Value</label>
+                      </div>
+                      <div class="col-75">
+                        <input type="text" name="fieldValues[]" placeholder="Enter Value here..">
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-25">
+                        <label for="fname">Choose Colour</label>
+                      </div>
+                      <div class="col-75">
+                        <input type="color" placeholder="Select Color" name="fieldTextColors[]" value="#000000">
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-25">
+                        <label for="fname">Normal</label>
+                      </div>
+                      <div class="col-75">
+                        <select name="fieldTextStyles[]">
+                          <option>-- Select --</option>
+                          <option value="normal">Normal</option>
+                          <option value="italic">Italic</option>
+                          <option value="bold">Bold</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-25">
+                        <label for="fname">text Size</label>
+                      </div>
+                      <div class="col-75">
+                        <input type="number" name="fieldTextSizes[]" placeholder="Enter text Size here..">
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    <button class="removeFieldButton" type="button" onclick="removeField(this)">Remove</button>
+                  </div>
+                </div>
+                <div class="fields-btn">
+                  <button class="addFieldButton" type="button" onclick="addField('basicInformationFields')">Add
+                    Field</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+
+
+        <div class="card">
+          <div class="card-body">
+            <form action="#">
+              <div class="fieldGroup" id="contactInfoFields">
+                <div class="field">
+                  <div class="form-group row">
+                    <h2 class="card-title">Contact Info</h2>
+                    <div class="row">
+                      <div class="col-25">
+                        <label for="fname">Field Name</label>
+                      </div>
+                      <div class="col-75">
+                        <input type="text" name="contactFieldNames[]" placeholder="Enter Field Name here..">
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-25">
+                        <label for="fname">Value</label>
+                      </div>
+                      <div class="col-75">
+                        <input type="text" name="contactFieldValues[]" placeholder="Enter Value here..">
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-25">
+                        <label for="fname">Choose Colour</label>
+                      </div>
+                      <div class="col-75">
+                        <input type="color" placeholder="Select Color" name="fieldTextColors[]" value="#000000">
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-25">
+                        <label for="fname">Normal</label>
+                      </div>
+                      <div class="col-75">
+                        <select name="fieldTextStyles[]">
+                          <option>-- Select --</option>
+                          <option value="normal">Normal</option>
+                          <option value="italic">Italic</option>
+                          <option value="bold">Bold</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-25">
+                        <label for="fname">Icon</label>
+                      </div>
+                      <div class="col-75">
+                        <input type="text" name="contactFieldIcons[]" placeholder="Icon">
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-25">
+                        <label for="fname">Text Size</label>
+                      </div>
+                      <div class="col-75">
+                        <input type="number" name="fieldTextSizes[]" placeholder="Enter text Size here..">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="fields-btn">
+                    <button class="removeFieldButton" type="button" onclick="removeField(this)">Remove</button>
+                  </div>
+                </div>
+                <div class="fields-btn">
+                  <button class="addFieldButton" type="button" onclick="addField('contactInfoFields')">Add
+                    Field</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+
+
+        <div class="card">
+          <div class="card-body">
+            <form action="#">
+              <div class="fieldGroup" id="buttonsFields">
+                <div class="field">
+                  <div class="form-group row">
+                    <h2 class="card-title">Buttons</h2>
+                    <div class="row">
+                      <div class="col-25">
+                        <label for="fname">Field Name</label>
+                      </div>
+                      <div class="col-75">
+                        <input type="text" name="buttonFieldNames[]" placeholder="Field Name">
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-25" <label for="fname">Value</label>
+                      </div>
+                      <div class="col-75">
+                        <input type="text" name="buttonValues[]" placeholder="Value">
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-25">
+                        <label for="fname">Choose Colour</label>
+                      </div>
+                      <div class="col-75">
+                        <input type="color" placeholder="Select Color" name="fieldTextColors[]" value="#000000">
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-25">
+                        <label for="fname">Normal</label>
+                      </div>
+                      <div class="col-75">
+                        <select name="fieldTextStyles[]">
+                          <option>-- Select --</option>
+                          <option value="normal">Normal</option>
+                          <option value="italic">Italic</option>
+                          <option value="bold">Bold</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-25">
+                        <label for="fname">Button Size</label>
+                      </div>
+                      <div class="col-75">
+                        <input type="number" name="fieldTextSizes[]" placeholder="Enter Button Size here...">
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="fields-btn">
+                    <button class="removeFieldButton" type="button" onclick="removeField(this)">Remove</button>
+                  </div>
+                </div>
+                <div class="fields-btn">
+                  <button class="addFieldButton" type="button" onclick="addField('buttonsFields')">Add Field</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+
+
+
+        <div class="card">
+          <div class="card-body">
+            <form action="#">
+              <div class="fieldGroup" id="socialMediaFields">
+                <div class="field">
+                  <div class="form-group row">
+                    <h2 class="card-title">Social Media</h2>
+                    <div class="row">
+                      <div class="col-25">
+                        <label for="fname">Field Name</label>
+                      </div>
+                      <div class="col-75">
+                        <input type="text" name="socialFieldNames[]" placeholder="Field Name">
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-25">
+                        <label for="fname">Value</label>
+                      </div>
+                      <div class="col-75">
+                        <input type="text" name="socialFieldValues[]" placeholder="Value">
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-25">
+                        <label for="fname">Choose Colour</label>
+                      </div>
+                      <div class="col-75">
+                        <input type="color" placeholder="Select Color" name="fieldTextColors[]" value="#000000">
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-25">
+                        <label for="fname">Normal</label>
+                      </div>
+                      <div class="col-75">
+                        <select name="fieldTextStyles[]">
+                          <option>-- Select --</option>
+                          <option value="normal">Normal</option>
+                          <option value="italic">Italic</option>
+                          <option value="bold">Bold</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-25">
+                        <label for="fname">Text Size</label>
+                      </div>
+                      <div class="col-75">
+                        <input type="number" name="fieldTextSizes[]" placeholder="Enter text Size here..">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="fields-btn">
+                    <button class="removeFieldButton" type="button" onclick="removeField(this)">Remove</button>
+                  </div>
+                </div>
+
+                <div class="fields-btn">
+                  <button class="addFieldButton" type="button" onclick="addField('socialMediaFields')">Add
+                    Field</button>
+                </div>
+              </div>
+              <div id="imagePreview"></div>
+              <div class="submit-btn">
+                <button type="submit">Submit</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+    <!-- /Page Wrapper -->
+
+  </div>
+  <!-- /Main Wrapper -->
+
+  <script>
+    function addField(fieldGroup) {
+      const originalField = document.querySelector(`#${fieldGroup} .field`);
+      const newField = originalField.cloneNode(true);
+      const removeButton = document.createElement('button');
+      removeButton.className = 'removeFieldButton';
+      removeButton.type = 'button';
+      removeButton.textContent = 'Remove';
+      removeButton.onclick = function () {
+        removeField(this);
+      };
+
+      // Remove any existing remove buttons in the new field
+      const existingRemoveButtons = newField.querySelectorAll('.removeFieldButton');
+      existingRemoveButtons.forEach(button => button.parentNode.removeChild(button));
+
+      // Append the new remove button to the new field
+      newField.appendChild(removeButton);
+
+      document.querySelector(`#${fieldGroup}`).appendChild(newField);
+    }
+
+    function removeField(button) {
+      const parentFieldGroup = button.parentNode.parentNode;
+      parentFieldGroup.removeChild(button.parentNode);
+
+      // If all fields are removed, add an empty field back
+      if (!parentFieldGroup.querySelector('.field')) {
+        addField(parentFieldGroup.id);
+      }
+    }
+
+    document.getElementById('image').addEventListener('change', function (e) {
+      const imagePreview = document.getElementById('imagePreview');
+      const file = e.target.files[0];
+
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          const img = document.createElement('img');
+          img.classList.add('preview');
+          img.src = e.target.result;
+          imagePreview.innerHTML = '';
+          imagePreview.appendChild(img);
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    document.addEventListener('click', function (event) {
+      if (event.target.classList.contains('addFieldButton')) {
+        const fieldGroup = event.target.getAttribute('data-field-group');
+        addField(fieldGroup);
+      }
+    });
+
+    // Initialize the form with an empty field for each section
+    addField('basicInfoFields');
+    addField('contactInfoFields');
+    addField('buttonsFields');
+    addField('socialMediaFields');
+  </script>
+
+  </body>
+
+</html>

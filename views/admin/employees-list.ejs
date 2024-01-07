@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
-	<title>Preskool - Students</title>
+	<title>Ecardify - Dashboard</title>
 
 	<!-- Favicon -->
 	<link rel="shortcut icon" href="/public/assets/admin/img/favicon.png">
@@ -40,82 +40,7 @@
 	<div class="main-wrapper">
 
 		<!-- Header -->
-		<div class="header">
-
-			<!-- Logo -->
-			<div class="header-left">
-				<a href="index.ejs" class="logo">
-					<img src="/public/assets/admin/img/logo.png" alt="Logo">
-				</a>
-				<a href="index.ejs" class="logo logo-small">
-					<img src="/public/assets/admin/img/logo-small.png" alt="Logo" width="30" height="30">
-				</a>
-			</div>
-			<!-- /Logo -->
-
-			<div class="menu-toggle">
-				<a href="javascript:void(0);" id="toggle_btn">
-					<i class="fas fa-bars"></i>
-				</a>
-			</div>
-
-			<!-- Search Bar -->
-			<!-- <div class="top-nav-search">
-					<form>
-						<input type="text" class="form-control" placeholder="Search here">
-						<button class="btn" type="submit"><i class="fas fa-search"></i></button>
-					</form>
-				</div> -->
-			<!-- /Search Bar -->
-
-			<!-- Mobile Menu Toggle -->
-			<ul class="nav user-menu">
-				<a class="mobile_btn" id="mobile_btn">
-					<i class="fas fa-bars"></i>
-				</a>
-				<li class="nav-item zoom-screen me-2">
-					<a href="#" class="nav-link header-nav-list">
-						<img src="/public/assets/admin/img/icons/header-icon-04.svg" alt="" />
-					</a>
-				</li>
-
-				<!-- User Menu -->
-
-				<li class="nav-item dropdown has-arrow new-user-menus">
-					<a href="#" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">
-						<span class="user-img">
-							<img class="rounded-circle" src="/public/assets/admin/img/profiles/avatar-01.jpg" width="31"
-								alt="Ryan Taylor">
-							<div class="user-text">
-								<h6>Ryan Taylor</h6>
-								<p class="text-muted mb-0">Administrator</p>
-							</div>
-						</span>
-					</a>
-					<div class="dropdown-menu">
-						<div class="user-header">
-							<div class="avatar avatar-sm">
-								<img src="/public/assets/admin/img/profiles/avatar-01.jpg" alt="User Image"
-									class="avatar-img rounded-circle">
-							</div>
-							<div class="user-text">
-								<h6>Ryan Taylor</h6>
-								<p class="text-muted mb-0">Administrator</p>
-							</div>
-						</div>
-						<a class="dropdown-item" href="profile.ejs">My Profile</a>
-						<a class="dropdown-item" href="inbox.ejs">Inbox</a>
-						<a class="dropdown-item" href="login.ejs">Logout</a>
-					</div>
-				</li>
-				<!-- /User Menu -->
-
-			</ul>
-			<!-- /Header Right Menu -->
-
-
-
-		</div>
+		<%- include('header.ejs') %>
 		<!-- /Header -->
 
 		<!-- Sidebar -->
@@ -249,38 +174,8 @@
 						</div>
 					</div>
 				</div>
-				<!-- <div class="modal fade" id="addCardModal" tabindex="-1" role="dialog"
-					aria-labelledby="addCardModalLabel" aria-hidden="true">
-					<div class="modal-dialog" role="document">
-						<div class="modal-content">
-							<div class="modal-header">
-								<h5 class="modal-title" id="addCardModalLabel">Add Card for Existing User</h5>
-								<button type="button" class="btn-close" data-bs-dismiss="modal"
-									aria-label="Close"></button>
-								<!-- <span aria-hidden="true">&times;</span> -->
-				<!-- </button>
-							</div> -->
-				<!-- <div class="modal-body">
-								<form action="/add-card" method="post">
-									<div class="form-group">
-										<label for="phoneNumber">Enter User's Mobile Number:</label>
-										<input type="text" class="form-control" id="phoneNumber" name="phoneNumber" required>
-									</div>
-									<button type="submit" class="btn btn-primary">Submit</button>
-								</form>
-							</div> -->
-				<!-- </div>
-					</div>
-				</div> -->
-
-				<!-- Delete Modal -->
-
-
-				<!-- Footer -->
-				<!-- <footer>
-					<p>Copyright © 2022 Dreamguys.</p>					
-				</footer> -->
-				<!-- /Footer -->
+				
+				
 			</div>
 			<!-- /Page Wrapper -->
 
