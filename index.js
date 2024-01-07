@@ -964,19 +964,7 @@ app.post('/add-employee', upload.single('photo'), async (req, res) => {
     try {
       const { name, company, contact, email,address,rank, designation, empid, bid, area, teamSize, experience, achievements } = req.body;
       console.log(req.body);
-      const hashedEmail = await bcrypt.hash(email, saltRounds);
-      const hashedName = await bcrypt.hash(name, saltRounds);
-      const hashedContact = await bcrypt.hash(contact,saltRounds);
-
-      const hashedAddress = await bcrypt.hash(address,saltRounds);
       
-      const hashedDesignation = await bcrypt.hash(designation,saltRounds);
-      const hashedEmpid = await bcrypt.hash(empid,saltRounds);
-      const hashedBid = await bcrypt.hash(bid,saltRounds);
-      const hashedArea = await bcrypt.hash(area,saltRounds);
-      
-      const hashedAchievements = await bcrypt.hash(achievements,saltRounds);
-
 
       const file = req.file;
       const employeeId = new ObjectId();
@@ -993,19 +981,19 @@ app.post('/add-employee', upload.single('photo'), async (req, res) => {
       const newEmployee = new emp({
         _id : employeeId,
         photo: photoUrl,
-        name: hashedName,
-        company: company,
-        contact: hashedContact,
-        email: hashedEmail,
-        address: hashedAddress,
-        rank : rank,
-        designation: hashedDesignation,
-        employeeid: hashedEmpid,
-        branchid: hashedBid,
-        area: hashedArea,
-        teamSize : teamSize,
-        experience : experience ,
-        achievements:achievements ,
+        name:name,
+        company:company,
+        contact:contact,
+        email:email,
+        address:address,
+        rank:rank,
+        designation:designation,
+        employeeid:empid,
+        branchid:bid,
+        area:area,
+        teamSize:teamSize,
+        experience:experience,
+        achievements:achievements,
 
       });
   
@@ -1117,6 +1105,16 @@ app.get('/delete-employee/:employeeId', async (req, res) => {
       return res.status(404).json({ error: 'Employee not found' });
     }
 
+    // Delete the image from S3
+    const key = `employee_img/${employee.company}_${employee._id}`;
+    const s3DeleteParams = {
+      Bucket: process.env.S3_BUCKET_NAME,
+      Key: key,
+    };
+
+    await s3.deleteObject(s3DeleteParams).promise();
+
+
     // Fetch companies data
     const companies = await mcompany.find(); // Assuming you have a model named Company
 
@@ -1127,3 +1125,16 @@ app.get('/delete-employee/:employeeId', async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 });
+
+
+app.get('/invitations',async(req,res)=>{
+  const employees = await emp.find();
+  res.render('admin/invitations',{employees});
+  });
+
+
+app.get("/custompages",async(req,res)=>{
+  const employees = await emp.find();
+  res.render('admin/custompages',{employees});
+}
+);
