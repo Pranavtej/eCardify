@@ -408,13 +408,37 @@ app.get('/get-cards/:userId', async (req, res) => {
 //card deletion code
 app.post('/delete-card/:userId', async (req, res) => {
   try {
-    const userId = req.params.userId;
-    const cardId = req.body.cardId;
-
-    await User.findByIdAndUpdate(userId, {
-      $pull: { selectedItems: { _id: cardId } }
-    });
-
+        const userId = req.params.userId;
+        const cardId = req.body.cardId;
+        const businessCard = await BusinessCard.findByIdAndDelete(cardId);
+    
+        if (businessCard) {
+          const s3 = new AWS.S3();
+        
+          const deleteObject = async (objectKey) => {
+            const decodedObjectKey = decodeURIComponent(objectKey);
+            const key1 = decodedObjectKey.split('.com/')[1];
+            const params = {
+              Bucket: process.env.S3_BUCKET_NAME,
+              Key: key1, // Specify the folder path
+            };
+        
+            try {
+              await s3.deleteObject(params).promise();
+              console.log(`Object deleted successfully: ${key1}`);
+            } catch (error) {
+              console.error(`Error deleting object: ${key1}`, error);
+              throw error;
+            }
+          };
+        
+          await deleteObject(businessCard.Image);
+          await deleteObject(businessCard.bgImg);
+        }
+        await User.findByIdAndUpdate(userId, {
+          $pull: { selectedItems: { _id: cardId } }
+        });
+    
     const users1 = await fetchUserData();
     res.render('admin/user', { users1 }); // Redirect to home or any desired route
   } catch (error) {
@@ -528,10 +552,6 @@ app.get('/imageupload', async (req, res) => {
 //       res.status(500).send('Internal Server Error');
 //     }
 //   });
-
-
-
-
 
   app.post('/add-user', async (req, res) => {
     try {
@@ -747,64 +767,84 @@ app.get('/cardlist', async (req, res) => {
 });
 
 
-app.post('/businesscard/:userId',  upload.fields([  { name: 'Image', maxCount: 1 }, { name: 'bgImage', maxCount: 1 }]), async (req, res) => {
-     try {
-      const userId = req.params.userId;
-      const selectedItems = req.body.selectedItems;
-      const selectedItemsObject = JSON.parse(selectedItems);
-      const subscriptionPlan = selectedItemsObject.subscriptionPlan || {};
-      const plan = subscriptionPlan.plan || '';
-      const templateId = selectedItemsObject.template;
-      const cardid = selectedItemsObject.cardType;
-      const occasion = selectedItemsObject.occasion;
-      const template = await temp.findById(templateId).lean();
-  
-      // Extract the files from req.files
-      const images = req.files['Image'] ? req.files['Image'][0] : null;
-      const bgImage = req.files['bgImage'] ? req.files['bgImage'][0] : null;
-  
-      const templateFields = template.fields && template.fields.map(field => ({
-        fieldName: field.name,
-        fieldValue: req.body[field.name] || '',
-      }));
-  
-      const uploadToS3 = async (file, folder, filenamePrefix) => {
-        const key = `${userId}_${cardid}_${templateId}_${plan}_${occasion}_${filenamePrefix}`;
-        const s3Params = {
-          Bucket: process.env.S3_BUCKET_NAME,
-          Key: `${folder}/${key}`,
-          Body: file.buffer,
-          ContentType: file.mimetype,
-        };
-        const s3UploadResponse = await s3.upload(s3Params).promise();
-        return s3UploadResponse.Location;
-      };
-  
-      const image1Url = images ? await uploadToS3(images, 'cards_img', 'image') : null;
-      const image2Url = bgImage ? await uploadToS3(bgImage, 'cards_img', 'bgimage') : null;
-  
-  
-  console.log(templateFields);
-        const businessCard = new BusinessCard({
-            user: userId,
-            selectedCardType: cardid,
-            selectedTemplate: templateId,
-            selectedSubscriptionPlan: plan,
-            templateFields: templateFields,
-            Image:image1Url,
-            bgImg:image2Url,
-            bgColor:req.body.bgColor || '',
-        });
+app.post('/businesscard/:userId', upload.fields([
+  { name: 'Image', maxCount: 1 },
+  { name: 'bgImage', maxCount: 1 }
+]), async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const selectedItems = req.body.selectedItems;
+    const selectedItemsObject = JSON.parse(selectedItems);
+    const businessid = selectedItemsObject._id;
 
-        const savedBusinessCard = await businessCard.save();
-        console.log(savedBusinessCard);
-        const users1 = await fetchUserData();
-        res.render('admin/user', { users1 });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Internal Server Error' });
-    }
+    const subscriptionPlan = selectedItemsObject.subscriptionPlan || {};
+    const plan = subscriptionPlan.plan || '';
+    const templateId = selectedItemsObject.template;
+    const cardid = selectedItemsObject.cardType;
+    const occasion = selectedItemsObject.occasion;
+    const template = await temp.findById(templateId).lean();
+
+    // Extract the files from req.files
+    const images = req.files['Image'] ? req.files['Image'][0] : null;
+    const bgImage = req.files['bgImage'] ? req.files['bgImage'][0] : null;
+
+    const templateFields = template.fields && template.fields.map(field => ({
+      fieldName: field.name,
+      fieldValue: req.body[field.name] || '',
+    }));
+
+    const uploadToS3 = async (file, folder, filenamePrefix) => {
+      const key = `${userId}_${cardid}_${templateId}_${plan}_${occasion}_${filenamePrefix}`;
+      const s3Params = {
+        Bucket: process.env.S3_BUCKET_NAME,
+        Key: `${folder}/${key}`,
+        Body: file.buffer,
+        ContentType: file.mimetype,
+      };
+      const s3UploadResponse = await s3.upload(s3Params).promise();
+      return s3UploadResponse.Location;
+    };
+
+    const image1Url = images ? await uploadToS3(images, 'cards_img', 'image') : null;
+    const image2Url = bgImage ? await uploadToS3(bgImage, 'cards_img', 'bgimage') : null;
+
+    console.log(templateFields);
+
+    const filter = {
+      user: userId,
+      selectedCardType: cardid,
+      selectedTemplate: templateId,
+      selectedSubscriptionPlan: plan,
+      _id: businessid
+    };
+
+    const update = {
+      user: userId,
+      selectedCardType: cardid,
+      selectedTemplate: templateId,
+      selectedSubscriptionPlan: plan,
+      templateFields: templateFields,
+      Image: image1Url,
+      bgImg: image2Url,
+      bgColor: req.body.bgColor || '',
+    };
+
+    const options = {
+      upsert: true, // Creates a new document if no documents match the filter
+      new: true, // Returns the modified document if found or the upserted document if created
+    };
+
+    const savedBusinessCard = await BusinessCard.findOneAndUpdate(filter, update, options);
+    console.log(savedBusinessCard);
+
+    const users1 = await fetchUserData();
+    res.render('admin/user', { users1 });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 });
+
 
 
 app.post('/delete-user/:userId', async (req, res) => {
@@ -969,7 +1009,6 @@ app.get('/add-employee', async (req, res) => {
 app.post('/add-employee', upload.single('photo'), async (req, res) => {
     try {
       const { name, company, contact, email,address,rank, designation, empid, bid, area, teamSize, experience, achievements } = req.body;
-      console.log(req.body);
       const file = req.file;
       const employeeId = new ObjectId();
       const key = `${company}_${employeeId}`;
@@ -981,6 +1020,7 @@ app.post('/add-employee', upload.single('photo'), async (req, res) => {
         
       };
       const s3UploadResponse = await s3.upload(s3Params).promise();
+      console.log(s3UploadResponse);
       const photoUrl = s3UploadResponse.Location;
       const newEmployee = new emp({
         _id : employeeId,
@@ -1002,7 +1042,9 @@ app.post('/add-employee', upload.single('photo'), async (req, res) => {
   
       // Save the document to the database
       await newEmployee.save();
-  
+      const employees = await emp.find();
+      const companies = await mcompany.find();
+      res.render('admin/employees-list',{employees,companies});
       res.status(201).json({ message: 'Employee added successfully', employee: newEmployee });
     } catch (error) {
       console.error(error);
@@ -1014,9 +1056,10 @@ app.post('/add-employee', upload.single('photo'), async (req, res) => {
     try {
       const companyName = req.params.companyName;
       const employeeid = req.params.id;
-      console.log()
-      const company = await mcompany.findOne({ name: companyName, status : 1 });
-  
+      const company = await mcompany.findOne({
+        name: companyName,status: 1
+      });
+      console.log(company)
       if (!company) {
         return res.status(404).json({ message: 'Company not found' });
       }
@@ -1027,7 +1070,7 @@ app.post('/add-employee', upload.single('photo'), async (req, res) => {
         return res.status(404).json({ message: 'Employee not found' });
       }
       
-      res.render('templates/company-auth/index', { employee });
+      res.render('templates/company-auth/index', { employee,company });
     } catch (error) {
       console.error(error);
       res.status(500).json({ message: 'Internal Server Error' });
@@ -1191,4 +1234,56 @@ app.get('/delete-employee/:employeeId', async (req, res) => {
     console.error('Error deleting employee:', error);
     res.status(500).send('Internal Server Error');
   }
+});
+
+app.get('/user-manager', async (req, res) => {
+  try {
+      const users1 = await fetchUserData();
+      res.render('admin/user-manager', { users1 });
+  } catch (error) {
+      console.error(error);
+      res.status(500).send("Internal Server Error");
+  }
+});
+
+app.post('/user-manager/:userId', async (req, res) => {
+const userId = req.params.userId;
+
+try {
+    // Find and delete the user by ID
+    const deletedUser = await User.findByIdAndDelete(userId);
+
+    if (!deletedUser) {
+        return res.status(404).json({ error: 'User not found' });
+    }
+
+    // Redirect back to the current page (admin/user-manager)
+    res.redirect('/admin/user-manager');
+} catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'Internal server error' });
+}
+});
+
+
+
+
+app.get('/view-user/:userId', async (req, res) => {
+const userId = req.params.userId;
+
+try {
+  const user = await User.findById(userId)
+    .populate('selectedItems.cardType')
+    .populate('selectedItems.template');
+
+  if (!user) {
+    return res.status(404).json({ message: 'User not found' });
+  }
+
+  // Render the view with the user data and populated cardType and template
+  res.render('admin/view-user', { user });
+} catch (error) {
+  console.error(error);
+  return res.status(500).json({ error: 'Internal server error' });
+}
 });

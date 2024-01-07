@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
-        <title>eCardify - Company Name</title>
+        <title>eCardify - <%= company.name %></title>
 		<%- include('header.ejs') %>
     </head>
     <body>
@@ -16,7 +16,7 @@
 				<!-- Logo -->
                 <div class="">
                     <a href="#" class="logo">
-						<img src="/public/assets/admin/img/logo.png" width="200" height="50" alt="Logo">
+						<img src="<%= company.logo %>" alt="image" class="img-fluid rounded" width="60"/>
 					</a>
 					
                 </div>
@@ -86,7 +86,7 @@
 												</div>
 												<div class="personal-activity">
 													<div class="personal-icons">
-														<i class="feather-phone-call"></i>
+														<span class="iconify" data-icon="tabler:building" style="color: #ff914d;" data-width="16" data-height="16"></span>
 													</div>
 													<div class="views-personal">
 														<h4>Branch ID</h4>
@@ -95,25 +95,27 @@
 												</div>
 												<div class="personal-activity">
 													<div class="personal-icons">
-														<i class="feather-mail"></i>
+														<i class="feather-user"></i>
 													</div>
 													<div class="views-personal">
 														<h4>Employee ID</h4>
 														<h5><%= employee.employeeid %></h5>
 													</div>
 												</div>
-                         						<div class="personal-activity">
-													<div class="personal-icons">
-														<i class="feather-calendar"></i>
-													</div>
-													<div class="views-personal">
+												<% if (employee.area !== 'NA') { %>
+													<div class="personal-activity">
+													  <div class="personal-icons">
+														<i class="feather-map"></i>
+													  </div>
+													  <div class="views-personal">
 														<h4>Agent Area</h4>
 														<h5><%= employee.area %></h5>
+													  </div>
 													</div>
-												</div>
+												  <% } %>
 												<div class="personal-activity">
 													<div class="personal-icons">
-														<i class="feather-italic"></i>
+														<i class="feather-phone-call"></i>
 													</div>
 													<div class="views-personal">
 														<h4>Contact Number</h4>
@@ -122,7 +124,7 @@
 												</div>
 												<div class="personal-activity mb-0">
 													<div class="personal-icons">
-														<i class="feather-map-pin"></i>
+														<i class="feather-mail"></i>
 													</div>
 													<div class="views-personal">
 														<h4>Email</h4>
