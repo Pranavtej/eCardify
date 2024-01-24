@@ -1192,3 +1192,16 @@ app.get('/delete-employee/:employeeId', async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 });
+
+
+// const fetchDataFromDB = require('user');
+
+//app.get('/getData', async (req, res) => {
+//     try {
+//         const data = await User();
+//         res.json(data);
+//     } catch (error) {
+//         console.error(error);
+//         res.status(500).send('Internal Server Error');
+//     }
+// });

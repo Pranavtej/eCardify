@@ -24,6 +24,7 @@
     "bcrypt": "^5.1.1",
     "body-parser": "^1.20.2",
     "bson": "^6.2.0",
+    "chart.js": "^4.4.1",
     "connect-memcached": "^2.0.0",
     "crypto": "^1.0.1",
     "dotenv": "^16.3.1",
