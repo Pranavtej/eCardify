@@ -59,62 +59,25 @@
 				</div>
 				
 				<!-- Search Bar -->
-				<!-- <div class="top-nav-search">
+				<div class="top-nav-search">
 					<form>
 						<input type="text" class="form-control" placeholder="Search here">
 						<button class="btn" type="submit"><i class="fas fa-search"></i></button>
 					</form>
-				</div> -->
+				</div>
 				<!-- /Search Bar -->
 				
 				<!-- Mobile Menu Toggle -->
 				<a class="mobile_btn" id="mobile_btn">
 					<i class="fas fa-bars"></i>
 				</a>
-				<ul class="nav user-menu">
-				<li class="nav-item zoom-screen me-2">
-					<a href="#" class="nav-link header-nav-list">
-					  <img
-						src="/public/assets/admin/img/icons/header-icon-04.svg"
-						alt=""
-					  />
-					</a>
-				  </li>
+				<!-- /Mobile Menu Toggle -->
 				
-				<!-- User Menu -->
-				<li class="nav-item dropdown has-arrow new-user-menus">
-					<a href="#" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">
-						<span class="user-img">
-							<img class="rounded-circle" src="/public/assets/admin/img/profiles/avatar-01.jpg" width="31" alt="Ryan Taylor">
-							<div class="user-text">
-								<h6>Ryan Taylor</h6>
-								<p class="text-muted mb-0">Administrator</p>
-							</div>
-						</span>
-					</a>
-					<div class="dropdown-menu">
-						<div class="user-header">
-							<div class="avatar avatar-sm">
-								<img src="/public/assets/admin/img/profiles/avatar-01.jpg" alt="User Image" class="avatar-img rounded-circle">
-							</div>
-							<div class="user-text">
-								<h6>Ryan Taylor</h6>
-								<p class="text-muted mb-0">Administrator</p>
-							</div>
-						</div>
-						<a class="dropdown-item" href="profile.ejs">My Profile</a>
-						<a class="dropdown-item" href="inbox.ejs">Inbox</a>
-						<a class="dropdown-item" href="login.ejs">Logout</a>
-					</div>
-				</li>
-				<!-- /User Menu -->
+				<!-- Header Right Menu -->
 				
-			</ul>
-			<!-- /Header Right Menu -->
-			
-		</div>
+				<!-- /Header Right Menu -->
 				
-            
+            </div>
 			<!-- /Header -->
 			
 			<!-- Sidebar -->
@@ -146,7 +109,7 @@
 						
 							<div class="card comman-shadow">
 								<div class="card-body">
-									<form action="/add-user" method="post">
+									<form action="/user-edit" method="PUT">
 										<div class="row">
 											<div class="col-12">
 												<h5 class="form-title student-info">User Information <span><a href="javascript:;"><i class="feather-more-vertical"></i></a></span></h5>
@@ -154,59 +117,59 @@
 											<div class="col-12 col-sm-4">  
 												<div class="form-group local-forms">
 													<label >Name <span class="login-danger">*</span></label>
-													<input class="form-control" type="text" placeholder="Enter Name" id="username"  name="username" required>
+													<input class="form-control" type="text" placeholder="Enter Name" id="username"  name="username" value="<%= user.username %>"required>
 												</div>
 											</div>
 											<div class="col-12 col-sm-4">
 												<div class="form-group local-forms">
-													<label >Last Name <span class="login-danger">*</span></label>
-													<input class="form-control" type="text" placeholder="Enter First Name" >
+													<label>Email</label>
+													<input class="form-control" type="text" placeholder="Enter Email" id="email" name="email" value="<%= user.email %>" required>
 												</div>
 											</div>
 											<div class="col-12 col-sm-4">
 												<div class="form-group local-forms">
-													<label >Gender <span class="login-danger">*</span></label>
-													<select class="form-control select">
-														<option>Select Gender</option>
-														<option>Female</option>
-														<option>Male</option>
-														<option>Others</option>
-													  </select>
+													<label >Phone number<span class="login-danger">*</span></label>
+													<input class="form-control" type="text" placeholder="Enter password" id="password" name="number" value="<%=password%>" required>
 												</div>
 											</div>
 											<div class="col-12 col-sm-4">
-												<div class="form-group local-forms calendar-icon">
-													<label >Date Of Birth  <span class="login-danger">*</span></label>
-													<input class="form-control datetimepicker" type="text"  placeholder="DD-MM-YYYY" >
+												<div class="form-group local-forms">
+													<label >Subscription Plan<span class="login-danger">*</span></label>
+													<select class="form-control select" name="subscriptionPlan">
+														<option>Select Plan</option>
+														<% subscriptionPlans.forEach(plan => { %>
+															<option value="<%= plan._id %>"> <%= (user.subscriptionPlan == plan._id) ? 'selected' : ''%>><%= plan.name %></option>
+														<% }); %>
+													</select>
 												</div>
 											</div>
 											
-											 <div class="col-12 col-sm-4">
-												<div class="form-group local-forms">
-													<label >Purpose </label>
-													<input class="form-control" type="text" placeholder="Enter Purpose" name="occassion" >
-												</div>
-											</div> 
 											<div class="col-12 col-sm-4">
 												<div class="form-group local-forms">
-													<label >Blood Group <span class="login-danger">*</span></label>
-													<select class="form-control select">
-														<option>Please Select Group </option>
-														<option>B+</option>
-														<option>A+</option>
-														<option>O+</option>
-													  </select>
+													<label >Occassion </label>
+													<input class="form-control" type="text" placeholder="Enter Occassion" name="occassion" value="<%= user.occasion %>" >
 												</div>
 											</div>
 											<div class="col-12 col-sm-4">
 												<div class="form-group local-forms">
-													<label >Religion <span class="login-danger">*</span></label>
-													<select class="form-control select">
-														<option>Please Select Religion  </option>
-														<option>Hindu</option>
-														<option>Christian</option>
-														<option>Others</option>
-													  </select>
+													<label >Card Type<span class="login-danger">*</span></label>
+													<select class="form-control select" name="cardType">
+														<option>Select card</option>
+														<% cardTypes.forEach(cardType => { %>
+															<option value="<%= cardType._id %>"> <%= (user.cardType == cardType._id) ? 'selected' : '' %>><%= cardType.name %></option>
+														<% }); %>
+													</select>
+												</div>
+											</div>
+											<div class="col-12 col-sm-4">
+												<div class="form-group local-forms">
+													<label >Template<span class="login-danger">*</span></label>
+													<select class="form-control select" name="template">
+														<option>Select Template</option>
+														<% templates.forEach(template => { %>
+															<option value="<%= template._id %>"><%= (user.template == template._id) ? 'selected' : '' %>><%= template.name %></option>
+														<% }); %>
+													</select>
 												</div>
 											</div>
 											<!-- <div class="col-12 col-sm-4">
@@ -236,14 +199,9 @@
 														<option>C</option>
 													  </select>
 												</div>
-											</div>
-											<div class="col-12 col-sm-4">
-												<div class="form-group local-forms">
-													<label >Admission ID </label>
-													<input class="form-control" type="text" placeholder="Enter Admission ID" >
-												</div>
-											</div>
-											<div class="col-12 col-sm-4">
+											</div> -->
+											
+											<!-- <div class="col-12 col-sm-4">
 												<div class="form-group local-forms">
 													<label >Phone </label>
 													<input class="form-control" type="text" placeholder="Enter Phone Number" >
